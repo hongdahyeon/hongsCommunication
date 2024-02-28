@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="hongs.community.hongsCommunity.domain.test.TestMapper">	<!-- mapper 인터페이스가 위치하는 풀경로 -->
+    <select id="testList" resultType="TestVo" parameterType="TestDto">	    <!-- id: mapper 인터페이스에서 선언한 메서드 이름과 동일 -->
+        SELECT *
+          FROM test_table
+        <if test="name != null">
+         where name = #{name}
+        </if>
+    </select>
+</mapper>
