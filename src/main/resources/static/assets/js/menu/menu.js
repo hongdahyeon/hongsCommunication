@@ -1,4 +1,3 @@
-
 /* side bar menu toggle js file */
 window.addEventListener('DOMContentLoaded', event => {
     // Toggle the side navigation
