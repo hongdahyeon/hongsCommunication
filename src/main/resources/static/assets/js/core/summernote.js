@@ -69,13 +69,7 @@ class Summernote {
     uploadSummernoteImageFile(file){
         let data = new FormData();
         data.append("file", file);
-        $.ajax({
-            type: 'POST',
-            url: "/upload/summernote/img",
-            data: data,
-            contentType: false,
-            processData: false
-        }).then((res) => {
+        Http.filePost("/upload/summernote/img", data).then((res) => {
             this._editor.summernote('insertImage', res.url)
         })
     }
