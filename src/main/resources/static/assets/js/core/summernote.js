@@ -84,4 +84,20 @@ class Summernote {
         return this._editor.summernote('code')
     }
 
+    reset(){
+        this._editor.summernote('reset')
+    }
+
+    enable() {
+        this._editor.summernote('enable')
+    }
+
+    disable(){
+        this._editor.summernote('disable')
+    }
+
+    setCode(code){
+        this._editor.summernote('code', code)
+    }
+
 }
