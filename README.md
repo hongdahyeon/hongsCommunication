@@ -21,3 +21,5 @@
 // html : <div class="form-control" rows="10" style="height: 500px;" wrap="soft" id="view-content" name="view-content" readonly></div>
 $("#view-content").html(code)
 ```
+
+(4) 24-02-29: util.js 추가
