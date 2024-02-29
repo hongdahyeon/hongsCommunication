@@ -15,3 +15,9 @@
 - swagger 추가
 - summernote 구현
 - css, js 일단 풀어서 추가 (추후 min.js로 묶기)
+
+```js
+// 추후 view 화면
+// html : <div class="form-control" rows="10" style="height: 500px;" wrap="soft" id="view-content" name="view-content" readonly></div>
+$("#view-content").html(code)
+```
