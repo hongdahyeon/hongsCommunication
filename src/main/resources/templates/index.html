@@ -9,9 +9,18 @@
         <div class="card-header">
             <h1 class="mt-4">Simple Sidebar</h1>
             <button id="test-btn" class="btn btn-primary">test</button>
+            <button id="test-btn1" class="btn btn-primary">temp-file</button>
+            <button id="test-btn2" class="btn btn-primary">del-file</button>
+            <button id="test-btn3" class="btn btn-primary">save</button>
         </div>
         <div class="card-body">
             <div class="form-control summernote" rows="5" id="content" name="content" required></div>
+        </div>
+        <div class="card-body">
+            <label class="form-label" for="upload-container">첨부파일</label>
+            <div>
+                <div id="upload-container" class="mt-1"></div>
+            </div>
         </div>
     </div>
 </th:block>
@@ -22,9 +31,38 @@
 
         const summernote = new Summernote("content")
 
+
         $("#test-btn").on('click', () => {
             console.log("-> ", summernote.getCode())
         })
+
+
+        const upload = new Upload("#upload-container")
+        const fileUid = null
+        upload.setUid(fileUid)
+
+        $("#test-btn1").on('click', () => {
+            console.log("->t ", upload.getTempFileUrls())
+        })
+        $("#test-btn2").on('click', () => {
+            console.log("->r ", upload.getRemoveFileUrls())
+        })
+
+        $("#test-btn3").on('click', () => {
+            const obj = {
+                 'name': 'test-upload'
+                ,'fileUid': fileUid
+                ,'addFile': upload.getTempFileUrls()
+                ,'delFile': upload.getRemoveFileUrls()
+            }
+
+            Http.post('/api/test/save.json', obj)
+                .then(() => {
+                    console.log("location href")
+                    window.location.href = "/"
+                })
+        })
+
 
     </script>
 </th:block>

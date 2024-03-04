@@ -10,4 +10,26 @@
          where name = #{name}
         </if>
     </select>
+
+    <insert id="testSave" parameterType="TestFileDto">
+        insert into test_table (
+            name
+        <if test="fileUid != null">
+            ,file_uid
+        </if>
+            ,reg_id
+            ,reg_dt
+            ,mdfr_id
+            ,mdfr_dt
+        ) values (
+            #{name}
+        <if test="fileUid != null">
+            ,#{fileUid}
+        </if>
+            ,#{regId}
+            ,now()
+            ,#{mdfrId}
+            ,now()
+        )
+    </insert>
 </mapper>

@@ -7,4 +7,6 @@ import java.util.List;
 @Mapper
 public interface TestMapper {
     List<TestVo> testList(TestDto testDto);
+
+    void testSave(TestFileDto dto);
 }

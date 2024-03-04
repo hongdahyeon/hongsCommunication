@@ -1,6 +1,7 @@
 package hongs.community.hongsCommunity.domain;
 
 
+import hongs.community.hongsCommunity.global.util.FileUtil;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,7 @@ public class ImageUploadRestController {
     public Map<String, Object> uploadSummernoteImg(@RequestParam("file") MultipartFile multipartFile) {
         Map<String, Object> map = new HashMap<>();
         String originalFileName = multipartFile.getOriginalFilename();
-        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        String extension = FileUtil.extension(originalFileName, true);
         UUID uuid = UUID.randomUUID();
         String savedFileName = uuid + extension;
 
