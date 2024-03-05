@@ -35,12 +35,11 @@ public class HongCommonFileService {
 
     public ResponseEntity<Resource> download(HttpServletRequest req) {
         String fileUrl = req.getParameter("fileUrl");
-        log.info("fileUrl : {} ", fileUrl);
 
         HongFileViewVo view = this.view(fileUrl);
 
         String download = req.getParameter("download");
-        if("Y".equals(download)) updateDownCntAndLog(view.getHongFileUid(), fileUrl);
+        if("Y".equals(download)) this.updateDownCntAndLog(view.getHongFileUid(), fileUrl);
 
         File targetFile = new File(String.format("%s%s%s%s%s%s%s", tusStoragePath, File.separator, "uploads" ,  File.separator, view.getFileId(), File.separator, "data"));
         Resource resource = new FileSystemResource(targetFile.getPath());
@@ -63,7 +62,7 @@ public class HongCommonFileService {
     }
 
     @Transactional
-    private void updateDownCntAndLog(Long fileUid, String fileUrl) {
+    public void updateDownCntAndLog(Long fileUid, String fileUrl) {
         fileMapper.updateDownCnt(new HongCommonFileDownloadDto(fileUid, fileUrl));
         fileMapper.insertLog(new HongCommonFileDownloadDto(fileUid, fileUrl));
     }
