@@ -6,6 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+* @fileName HongSaveFileDto
+* @author dahyeon
+* @version 1.0.0
+* @date 2024-03-05
+* @summary  파일 임시저장 dto
+**/
+
 @Getter
 @NoArgsConstructor
 public class HongSaveFileDto extends Creator {

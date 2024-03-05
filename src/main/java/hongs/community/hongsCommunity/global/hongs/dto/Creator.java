@@ -3,6 +3,13 @@ package hongs.community.hongsCommunity.global.hongs.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+* @fileName Creator
+* @author dahyeon
+* @version 1.0.0
+* @date 2024-03-05
+* @summary  생성자 및 수정자 dto
+**/
 @Getter @Setter
 public class Creator {
 

@@ -5,6 +5,14 @@ import hongs.community.hongsCommunity.global.hongs.file.HongFileState;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+* @fileName HongChangeStateFileDto
+* @author dahyeon
+* @version 1.0.0
+* @date 2024-03-05
+* @summary  임시저장된 파일들 최종 저장 및 파일 삭제 dto
+**/
+
 @Getter
 @NoArgsConstructor
 public class HongChangeStateFileDto extends Creator {

@@ -1,6 +1,6 @@
 package hongs.community.hongsCommunity.domain;
 
-import hongs.community.hongsCommunity.domain.test.TestVo;
+import hongs.community.hongsCommunity.domain.test.vo.TestVo;
 import hongs.community.hongsCommunity.domain.test.TestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
