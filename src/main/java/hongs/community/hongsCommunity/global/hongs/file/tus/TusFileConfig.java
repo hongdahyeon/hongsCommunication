@@ -1,4 +1,4 @@
-package hongs.community.hongsCommunity.global.hongs.file;
+package hongs.community.hongsCommunity.global.hongs.file.tus;
 
 import jakarta.annotation.PreDestroy;
 import me.desair.tus.server.TusFileUploadService;

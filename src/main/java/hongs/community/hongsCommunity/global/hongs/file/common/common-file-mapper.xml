@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="hongs.community.hongsCommunity.global.hongs.file.common.HongCommonFileMapper">
+    <select id="list" parameterType="java.lang.Long">
+        select hong_file_uid
+              ,file_url
+              ,file_path
+              ,file_name
+              ,file_type
+              ,file_size
+              ,extension
+              ,down_cnt
+              ,reg_dt
+              ,saved
+          from hong_file
+         where hong_file_uid = #{hongFileUid}
+           and delete_yn = 'N'
+    </select>
+
+    <select id="view" parameterType="String">
+        select hong_file_uid
+             ,file_url
+             ,file_path
+             ,file_name
+             ,file_type
+             ,file_size
+             ,extension
+             ,down_cnt
+             ,reg_dt
+        from hong_file
+        where file_url = #{fileUrl}
+          and saved = 'SAVED'
+          and delete_yn = 'N'
+    </select>
+
+    <update id="updateDownCnt" parameterType="HongCommonFileDownloadDto">
+        update hong_file
+           set down_cnt = down_cnt + 1
+         where hong_file_uid = #{hongFileUid}
+           and file_url = #{fileUrl}
+    </update>
+
+    <insert id="insertLog" parameterType="HongCommonFileDownloadDto">
+        insert into hong_file_log (
+             hong_file_uid
+            ,file_url
+            ,reg_id
+            ,reg_dt
+        ) values (
+             #{hongFileUid}
+            ,#{fileUrl}
+            ,#{regId}
+            ,now()
+        )
+    </insert>
+</mapper>

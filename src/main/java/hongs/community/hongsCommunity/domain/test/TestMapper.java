@@ -12,4 +12,8 @@ public interface TestMapper {
     List<TestVo> testList(TestDto testDto);
 
     void testSave(TestFileDto dto);
+
+    void testEdit(TestFileDto dto);
+
+    TestVo view(Long uid);
 }

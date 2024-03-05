@@ -1,4 +1,4 @@
-package hongs.community.hongsCommunity.global.hongs.file.dto;
+package hongs.community.hongsCommunity.global.hongs.file.tus.dto;
 
 import hongs.community.hongsCommunity.global.hongs.dto.Creator;
 import hongs.community.hongsCommunity.global.hongs.file.HongFileState;

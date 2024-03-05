@@ -3,6 +3,7 @@ package hongs.community.hongsCommunity.domain.test.dto;
 import hongs.community.hongsCommunity.global.hongs.dto.FileDto;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
 * @fileName TestFileDto
@@ -13,8 +14,10 @@ import lombok.Setter;
 **/
 @Getter
 @Setter
+@ToString
 public class TestFileDto extends FileDto {
 
+    private Long uid;
     private Long fileUid;
     private String name;
 

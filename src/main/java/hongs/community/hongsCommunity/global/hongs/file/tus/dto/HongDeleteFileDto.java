@@ -1,4 +1,4 @@
-package hongs.community.hongsCommunity.global.hongs.file.dto;
+package hongs.community.hongsCommunity.global.hongs.file.tus.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

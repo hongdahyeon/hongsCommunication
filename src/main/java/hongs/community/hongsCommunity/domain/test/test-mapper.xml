@@ -11,7 +11,7 @@
         </if>
     </select>
 
-    <insert id="testSave" parameterType="TestFileDto">
+    <insert id="testSave" parameterType="TestFileDto" useGeneratedKeys="true" keyProperty="uid">
         insert into test_table (
             name
         <if test="fileUid != null">
@@ -32,4 +32,23 @@
             ,now()
         )
     </insert>
+
+    <update id="testEdit" parameterType="TestFileDto">
+        update test_table
+           set name = #{name}
+            <if test="fileUid != null">
+              ,file_uid = #{fileUid}
+            </if>
+              ,mdfr_id = #{mdfrId}
+              ,mdfr_dt = now()
+         where uid = #{uid}
+    </update>
+
+    <select id="view" resultType="TestVo" parameterType="java.lang.Long">
+        select uid
+              ,name
+              ,file_uid
+          from test_table
+         where uid = #{uid}
+    </select>
 </mapper>

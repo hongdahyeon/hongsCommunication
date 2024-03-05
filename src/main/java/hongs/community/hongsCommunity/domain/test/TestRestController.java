@@ -1,10 +1,9 @@
 package hongs.community.hongsCommunity.domain.test;
 
+import hongs.community.hongsCommunity.domain.test.dto.TestFileDto;
+import hongs.community.hongsCommunity.global.response.Response;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,8 +13,14 @@ public class TestRestController {
     private final TestService testService;
 
     @PostMapping("/save.json")
-    public int save(@RequestBody TestFileDto dto) {
-        testService.save(dto);
-        return 1;
+    public Response save(@RequestBody TestFileDto dto) {
+        Long fileUid = testService.save(dto);
+        return Response.created(fileUid);
+    }
+
+    @PutMapping("/edit.json")
+    public Response edit(@RequestBody TestFileDto dto) {
+        Long fileUid = testService.edit(dto);
+        return Response.ok(fileUid);
     }
 }

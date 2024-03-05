@@ -19,4 +19,5 @@ public class TestVo {
 
     private Long uid;
     private String name;
+    private Long fileUid;
 }

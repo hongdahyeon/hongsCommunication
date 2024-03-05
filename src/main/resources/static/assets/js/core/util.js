@@ -74,6 +74,7 @@ class Http {
         return $.ajax({
             type: method,
             url: url,
+            data: data,
             contentType: 'application/json'
         })
     }
