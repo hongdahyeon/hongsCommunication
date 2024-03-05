@@ -22,7 +22,6 @@ public class HongSaveFileDto extends Creator {
     private String fileName;
     private String fileUrl;
     private String fileId;
-    private String filePath;
     private String fileType;
     private Long fileSize;
     private String extension;
@@ -31,12 +30,11 @@ public class HongSaveFileDto extends Creator {
     private String deleteYn;
 
     @Builder(builderMethodName = "insertProgressFile")
-    public HongSaveFileDto(Long hongFileUid, String fileName, String fileUrl,String fileId, String filePath, String fileType, Long fileSize, String extension) {
+    public HongSaveFileDto(Long hongFileUid, String fileName, String fileUrl,String fileId, String fileType, Long fileSize, String extension) {
         this.hongFileUid = hongFileUid;
         this.fileName = fileName;
         this.fileUrl = fileUrl;
         this.fileId = fileId;
-        this.filePath = filePath;
         this.fileType = fileType;
         this.fileSize = fileSize;
         this.extension = extension;

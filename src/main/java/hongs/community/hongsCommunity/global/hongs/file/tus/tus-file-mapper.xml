@@ -15,7 +15,6 @@
            ,file_name
            ,file_url
            ,file_id
-           ,file_path
            ,file_type
            ,file_size
            ,extension
@@ -31,7 +30,6 @@
            ,#{fileName}
            ,#{fileUrl}
            ,#{fileId}
-           ,#{filePath}
            ,#{fileType}
            ,#{fileSize}
            ,#{extension}

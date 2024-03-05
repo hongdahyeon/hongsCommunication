@@ -11,11 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import me.desair.tus.server.TusFileUploadService;
 import me.desair.tus.server.exception.TusException;
 import me.desair.tus.server.upload.UploadInfo;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.io.IOException;
 
 @Service
@@ -25,9 +23,6 @@ public class HongTusFileService {
 
     private final TusFileUploadService uploadService;
     private final HongTusFileMapper fileMapper;
-
-    @Value("${hong.tus.file.download}")
-    private String tusFileDownloadPath;
 
     private Long generateKey(){
         return fileMapper.generateKey();
@@ -43,14 +38,11 @@ public class HongTusFileService {
         String uid = info.getMetadata().get("uid");
         Long fileUid = ( uid != null ) ? Long.parseLong(uid) :  0L;
 
-        File targetFile = new File(String.format("%s%s%s%s%s", tusFileDownloadPath, File.separator, info.getId(), File.separator, "data"));
-
         HongSaveFileDto fileDto = HongSaveFileDto.insertProgressFile()
                 .hongFileUid(fileUid)
                 .fileName(info.getFileName())
                 .fileUrl(uploadURI)
                 .fileId(info.getId().toString())
-                .filePath(targetFile.getAbsolutePath())
                 .fileType(info.getFileMimeType())
                 .fileSize(info.getLength())
                 .extension(FileUtil.extension(info.getFileName(), false))

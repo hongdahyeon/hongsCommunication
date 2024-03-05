@@ -5,6 +5,7 @@ import hongs.community.hongsCommunity.global.hongs.file.common.vo.HongFileViewVo
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -23,6 +24,10 @@ import java.util.List;
 public class HongCommonFileService {
 
     private final HongCommonFileMapper fileMapper;
+
+    @Value("${hong.tus.file.root}")
+    private String tusStoragePath;
+
     @Transactional(readOnly = true)
     public List<HongFileViewVo> list(Long fileUid){
         return fileMapper.list(fileUid);
@@ -37,7 +42,8 @@ public class HongCommonFileService {
         String download = req.getParameter("download");
         if("Y".equals(download)) updateDownCntAndLog(view.getHongFileUid(), fileUrl);
 
-        Resource resource = new FileSystemResource(view.getFilePath());
+        File targetFile = new File(String.format("%s%s%s%s%s%s%s", tusStoragePath, File.separator, "uploads" ,  File.separator, view.getFileId(), File.separator, "data"));
+        Resource resource = new FileSystemResource(targetFile.getPath());
 
         String fileName = "";
         try{

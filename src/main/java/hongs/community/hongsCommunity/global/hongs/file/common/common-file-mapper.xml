@@ -3,10 +3,10 @@
 
 
 <mapper namespace="hongs.community.hongsCommunity.global.hongs.file.common.HongCommonFileMapper">
-    <select id="list" parameterType="java.lang.Long">
+    <select id="list" parameterType="java.lang.Long" resultType="HongFileViewVo">
         select hong_file_uid
               ,file_url
-              ,file_path
+              ,file_id
               ,file_name
               ,file_type
               ,file_size
@@ -17,12 +17,13 @@
           from hong_file
          where hong_file_uid = #{hongFileUid}
            and delete_yn = 'N'
+           and saved = 'SAVED'
     </select>
 
-    <select id="view" parameterType="String">
+    <select id="view" parameterType="String" resultType="HongFileViewVo">
         select hong_file_uid
              ,file_url
-             ,file_path
+             ,file_id
              ,file_name
              ,file_type
              ,file_size

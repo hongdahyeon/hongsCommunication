@@ -105,7 +105,7 @@ class Upload {
                 const list = res.message
                 if (list.length !== 0) {
                     file.container.html('')
-                    list.forEach(data => upload._addStaticFile(data, (data.saved !== 'SAVED')))
+                    list.forEach(data => upload._addStaticFile(data))
                 } else file.container.html(file.textEmpty)
             })
         } else {
@@ -114,37 +114,35 @@ class Upload {
         }
     }
 
-    _addStaticFile(file, isTemp) {
+    _addStaticFile(file) {
         const options = {}
 
+        let fileData;
         if( file.fileType.toString().includes('image') ) {
             options.preview = `/api/hong/files/download?fileUrl=${file.fileUrl}`
-        }
+            fileData = new File([options.preview], file.fileName, {
+                lastModified: new Date(file.regDt).getTime(),
+                type: file.fileType
+            });
 
-        const name = `${isTemp? '[임시]' : ''}${file.fileName}`
+        } else fileData =  { size: file.fileSize, lastModified: new Date(file.regDt).getTime()}
+
         const id = this._uppy.addFile({
             id: file.fileId,
-            name: name,
+            name: file.fileName,
             type: file.fileType,
-            data: {
-                size: file.fileSize,
-                lastModified: new Date(file.regDt).getTime()
-            },
+            data: fileData,
             meta:{
                 url: file.fileUrl,
-                saved: !isTemp,
+                saved: true,
                 fileId: file.fileId
             },
             ...options
         })
 
-        this._uppy.setFileSate(id, {
-            progress:{
-                uploadComplete: true,
-                uploadStarted: true
-            }
+        this._uppy.setFileState(id, {
+            progress: { uploadComplete: true, uploadStarted: true }
         })
-
     }
 
 }
