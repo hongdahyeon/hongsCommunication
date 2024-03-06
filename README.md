@@ -54,3 +54,8 @@ $("#view-content").html(code)
   - 이로 인해 temp file에 대해 db에서 삭제 로직 삭제
   - 한번에 최종저장을 위해 파일 업로드 완료 시점에 fileId를 header을 통해 넘겨줌
 3. tus, common file 영역 확실히 구분
+
+
+(10) 24-03-06
+1. 이메일 구현
+2. response 더 세분화
