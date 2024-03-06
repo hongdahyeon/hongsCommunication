@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <settings>
+        <!-- 매개변수로 null값을 전달할때 JDBC 타입 설정 (기본: OTHER) -->
+        <setting name="jdbcTypeForNull" value="VARCHAR"/>
+        <!-- 카멜케이스와 스네이크 케이스를 자동 매핑할지 여부를 설정 (기본: false) -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias alias="Long" type="java.lang.Long"/>
+    </typeAliases>
+
+    <plugins>
+        <plugin interceptor="hongs.community.hongsCommunity.global.interceptor.MybatisInterceptor"></plugin>
+    </plugins>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+</configuration>

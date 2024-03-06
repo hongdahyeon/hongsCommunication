@@ -6,7 +6,7 @@
 
     <select id="generateKey" resultType="Long">
         SELECT NVL(MAX(hong_file_uid)+1, 1) as uid
-        FROM hong_file
+          FROM hong_file
     </select>
 
     <insert id="saveFile" parameterType="HongSaveFileDto">
@@ -52,7 +52,7 @@
         where file_url = #{fileUrl}
     </update>
 
-    <select id="list" parameterType="java.lang.Long" resultType="HongFileViewVo">
+    <select id="list" parameterType="Long" resultType="HongFileViewVo">
         select hong_file_uid
               ,file_url
               ,file_id

@@ -47,15 +47,6 @@
             })
         })
 
-
-        const uploadView = new UploadView("upload-view-container")
-        function drawViewFile(fUid){
-            Http.get(`/api/hong/files/list.json?fileUid=${fUid}`).then((res) => {
-                const list = res.message
-                uploadView.setData(list).draw()
-            })
-        }
-
     </script>
 </th:block>
 

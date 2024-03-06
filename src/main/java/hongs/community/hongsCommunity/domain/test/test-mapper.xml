@@ -44,7 +44,7 @@
          where uid = #{uid}
     </update>
 
-    <select id="view" resultType="TestVo" parameterType="java.lang.Long">
+    <select id="view" resultType="TestVo" parameterType="Long">
         select uid
               ,name
               ,file_uid

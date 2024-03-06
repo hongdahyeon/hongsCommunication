@@ -57,11 +57,14 @@
         })
 
         function drawViewFile(fUid){
-            Http.get(`/api/hong/files/list.json?fileUid=${fUid}`).then((res) => {
-                const list = res.message
-                uploadView.setData(list).draw()
-            })
+            if(fUid !== null) {
+                Http.get(`/api/hong/files/list.json?fileUid=${fUid}`).then((res) => {
+                    const list = res.message
+                    uploadView.setData(list).draw()
+                })
+            } else uploadView.setData([]).draw()
         }
+
         function setEditFile(fUid) {
             editUpload.drawEditFile(fUid, editUpload)
         }
