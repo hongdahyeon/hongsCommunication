@@ -4,6 +4,7 @@ class Upload {
         this.upload_uuid = this.getUUID();
         this._removes = []
         this._uid = null
+        this._currentFiles = {}
 
         const { Dashboard, Tus } = Uppy
         this._uppy = new Uppy.Uppy({
@@ -22,7 +23,7 @@ class Upload {
 
         this._uppy.use(Dashboard,{
             inline: true,
-            target: selector,
+            target: this._selector,
             width: '100%',
             height: 400,
             showRemoveButtonAfterComplete: true
@@ -30,7 +31,18 @@ class Upload {
 
         this._uppy.use(Tus, {
             endpoint: `/api/tus/files/upload?uploadId=${this.upload_uuid}`,
-            onShouldRetry: this._onShouldRetry
+            onShouldRetry: this._onShouldRetry,
+            onBeforeRequest: (req, file) => {
+                this._currentFiles[req._url] = file
+            },
+            onAfterResponse: (req, res) => {
+                return new Promise(resolve => {
+                    const url = req.getURL()
+                    const fileId = res.getHeader("X-File-Id")
+                    this._currentFiles[req._url].meta.fileId = fileId
+                    resolve()
+                })
+            }
         })
 
         this._uppy.on('upload-success', (file, upload) => {
@@ -88,8 +100,19 @@ class Upload {
         this._uid = fileUid
     }
 
-    getTempFileUrls(){
-        return this._uppy.getFiles().filter(x => !x.meta.saved).map(x => x.meta.url)
+    getTempFiles(){
+        const allFiles = this._uppy.getFiles();
+        console.log('allFiles: ', allFiles)
+        const tempFiles = allFiles.filter(x => !x.meta.saved).map(x => ({
+            fileName: x.name,
+            fileUrl: x.meta.url,
+            fileId: x.meta.fileId,
+            fileType: x.meta.type,
+            fileSize: x.data.size,
+            extension: x.extension
+        }))
+
+        return tempFiles
     }
 
 

@@ -3,7 +3,7 @@ package hongs.community.hongsCommunity.domain.test;
 import hongs.community.hongsCommunity.domain.test.dto.TestDto;
 import hongs.community.hongsCommunity.domain.test.dto.TestFileDto;
 import hongs.community.hongsCommunity.domain.test.vo.TestVo;
-import hongs.community.hongsCommunity.global.hongs.file.tus.HongTusFileService;
+import hongs.community.hongsCommunity.global.hongs.file.common.HongCommonFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import java.util.List;
 public class TestService {
 
     private final TestMapper testMapper;
-    private final HongTusFileService hongFileService;
+    private final HongCommonFileService hongCommonFileService;
 
     public List<TestVo> getTestList(){
         return testMapper.testList(new TestDto("test"));
@@ -23,7 +23,7 @@ public class TestService {
 
     @Transactional
     public Long save(TestFileDto dto){
-        Long fUid = hongFileService.changeSaved(dto.getFileUid(), dto.getAddFile(), dto.getDelFile());
+        Long fUid = hongCommonFileService.saveAndDelFiles(dto.getFileUid(), dto.getAddFile(), dto.getDelFile());
         dto.setFileUid(fUid);
         testMapper.testSave(dto);
         return dto.getUid();
@@ -31,7 +31,7 @@ public class TestService {
 
     @Transactional
     public Long edit(TestFileDto dto){
-        Long fUid = hongFileService.changeSaved(dto.getFileUid(), dto.getAddFile(), dto.getDelFile());
+        Long fUid = hongCommonFileService.saveAndDelFiles(dto.getFileUid(), dto.getAddFile(), dto.getDelFile());
         dto.setFileUid(fUid);
         testMapper.testEdit(dto);
         return dto.getUid();

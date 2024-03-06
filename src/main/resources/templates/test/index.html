@@ -39,7 +39,7 @@
         upload.setUid(fileUid)
 
         $("#save-btn").on('click', () => {
-            const obj = { name: summernote.getCode(), fileUid: fileUid, addFile: upload.getTempFileUrls(), delFile: upload.getRemoveFileUrls() }
+            const obj = { name: summernote.getCode(), fileUid: fileUid, addFile: upload.getTempFiles(), delFile: upload.getRemoveFileUrls() }
             Http.post('/api/test/save.json', obj).then((res) => {
                     console.log('res: ', res)
                     const uid = res.message

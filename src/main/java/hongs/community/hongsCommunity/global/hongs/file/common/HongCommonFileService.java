@@ -1,6 +1,8 @@
 package hongs.community.hongsCommunity.global.hongs.file.common;
 
 import hongs.community.hongsCommunity.global.hongs.file.common.dto.HongCommonFileDownloadDto;
+import hongs.community.hongsCommunity.global.hongs.file.common.dto.HongDeleteFileDto;
+import hongs.community.hongsCommunity.global.hongs.file.common.dto.HongSaveFileDto;
 import hongs.community.hongsCommunity.global.hongs.file.common.vo.HongFileViewVo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,10 @@ public class HongCommonFileService {
 
     @Value("${hong.tus.file.root}")
     private String tusStoragePath;
+
+    private Long generateKey(){
+        return fileMapper.generateKey();
+    }
 
     @Transactional(readOnly = true)
     public List<HongFileViewVo> list(Long fileUid){
@@ -65,5 +71,22 @@ public class HongCommonFileService {
     public void updateDownCntAndLog(Long fileUid, String fileUrl) {
         fileMapper.updateDownCnt(new HongCommonFileDownloadDto(fileUid, fileUrl));
         fileMapper.insertLog(new HongCommonFileDownloadDto(fileUid, fileUrl));
+    }
+
+    @Transactional
+    public Long saveAndDelFiles(Long uid, HongSaveFileDto[] addFile, String[] delFile){
+        Long fileUid = null;
+        if((addFile != null && addFile.length > 0) || (delFile != null && delFile.length > 0)) {
+            fileUid = (uid == null) ? generateKey() : uid;
+            for (HongSaveFileDto dto : addFile){
+                dto.setHongFileUid(fileUid);
+                fileMapper.saveFile(dto);
+            }
+
+            for (String delFileUrl : delFile){
+                fileMapper.deleteFile(new HongDeleteFileDto(delFileUrl));
+            }
+        }
+        return fileUid;
     }
 }

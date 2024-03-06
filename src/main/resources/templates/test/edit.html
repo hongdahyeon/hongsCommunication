@@ -67,7 +67,7 @@
         }
 
         $("#edit-btn").on('click', () => {
-            const obj = { uid: uid, name: summernote.getCode(), fileUid: fileUid, addFile: editUpload.getTempFileUrls(), delFile: editUpload.getRemoveFileUrls() }
+            const obj = { uid: uid, name: summernote.getCode(), fileUid: fileUid, addFile: editUpload.getTempFiles(), delFile: editUpload.getRemoveFileUrls() }
             Http.put('/api/test/edit.json', obj).then((res) => {
                 console.log('res: ', res)
                 const uid = res.message

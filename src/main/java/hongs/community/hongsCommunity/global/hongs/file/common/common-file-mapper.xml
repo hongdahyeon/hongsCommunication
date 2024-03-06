@@ -3,6 +3,55 @@
 
 
 <mapper namespace="hongs.community.hongsCommunity.global.hongs.file.common.HongCommonFileMapper">
+
+    <select id="generateKey" resultType="Long">
+        SELECT NVL(MAX(hong_file_uid)+1, 1) as uid
+        FROM hong_file
+    </select>
+
+    <insert id="saveFile" parameterType="HongSaveFileDto">
+        INSERT INTO hong_file (
+           hong_file_uid
+          ,file_name
+          ,file_url
+          ,file_id
+          ,file_type
+          ,file_size
+          ,extension
+          ,down_cnt
+          ,saved
+          ,delete_yn
+          ,reg_id
+          ,mdfr_id
+          ,reg_dt
+          ,mdfr_dt
+        ) values (
+           #{hongFileUid}
+          ,#{fileName}
+          ,#{fileUrl}
+          ,#{fileId}
+          ,#{fileType}
+          ,#{fileSize}
+          ,#{extension}
+          ,0
+          ,'SAVED'
+          ,'N'
+          ,#{regId}
+          ,#{mdfrId}
+          ,now()
+          ,now()
+        )
+    </insert>
+
+    <update id="deleteFile" parameterType="HongDeleteFileDto">
+        update hong_file
+        set saved = #{saved}
+          ,delete_yn = #{deleteYn}
+          ,mdfr_id = #{mdfrId}
+          ,mdfr_dt = now()
+        where file_url = #{fileUrl}
+    </update>
+
     <select id="list" parameterType="java.lang.Long" resultType="HongFileViewVo">
         select hong_file_uid
               ,file_url

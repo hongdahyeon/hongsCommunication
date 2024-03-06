@@ -1,5 +1,6 @@
 package hongs.community.hongsCommunity.global.hongs.dto;
 
+import hongs.community.hongsCommunity.global.hongs.file.common.dto.HongSaveFileDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,6 @@ import lombok.Setter;
 @Getter @Setter
 public class FileDto extends Creator {
 
-    private String[] addFile;
+    private HongSaveFileDto[] addFile;
     private String[] delFile;
 }
