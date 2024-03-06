@@ -59,3 +59,9 @@ $("#view-content").html(code)
 (10) 24-03-06
 1. 이메일 구현
 2. response 더 세분화
+
+
+(11) 24-03-06
+1. mybatis config 파일 구현
+2. sqlSessionFactory 빈 등록
+3. mybatis 로그 출력 구현
