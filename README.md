@@ -65,3 +65,8 @@ $("#view-content").html(code)
 1. mybatis config 파일 구현
 2. sqlSessionFactory 빈 등록
 3. mybatis 로그 출력 구현
+
+
+(12) 24-03-07 
+1. /error 호출되는 문제 해결
+  - css, js 파일이 없어서 생겼던 문제
