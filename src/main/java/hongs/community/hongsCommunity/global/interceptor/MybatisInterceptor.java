@@ -21,7 +21,7 @@ import java.util.Properties;
 
 @Intercepts({
         @Signature(type= StatementHandler.class, method = "query", args = {Statement.class, ResultHandler.class})
-        , @Signature(type = StatementHandler.class, method = "update", args = {Statement.class})
+        ,@Signature(type = StatementHandler.class, method = "update", args = {Statement.class})
 })
 @Slf4j
 public class MybatisInterceptor implements Interceptor {
@@ -38,6 +38,7 @@ public class MybatisInterceptor implements Interceptor {
         BoundSql boundSql = handler.getBoundSql();
         Object param = handler.getParameterHandler().getParameterObject();
         String sql = boundSql.getSql().replaceAll("\\s*(?=(\\r\\n|\\r|\\n))+", "");
+        System.out.println("가공전 sql: " + sql);
 
         // if param null
         if(param == null) {

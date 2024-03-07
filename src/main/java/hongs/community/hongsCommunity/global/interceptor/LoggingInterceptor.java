@@ -28,6 +28,11 @@ public class LoggingInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest req, HttpServletResponse res, Object handler, Exception ex) throws Exception {
 
+        if(ex != null) {
+            log.info("ex.message: {} ", ex.getMessage());
+            return;
+        }
+
         // TODO: 너무 많이 찍히는 로그 원인 찾아야함
         StringBuilder logs = new StringBuilder();
         logs.append("\n========================================");
@@ -36,16 +41,16 @@ public class LoggingInterceptor implements HandlerInterceptor {
         String method = req.getMethod();
         String url = new UrlPathHelper().getRequestUri(req);
 
-        logs.append("\nURI: ").append(requestURI);
-        logs.append("\nMETHOD: ").append(method);
-        logs.append("\nURL: ").append(url);
+        logs.append("\n# URI: ").append(requestURI);
+        logs.append("\n# METHOD: ").append(method);
 
         StringBuilder sql = (StringBuilder) req.getAttribute(MYBATIS_SQL_LOG);
-        if(sql != null) logs.append("\nsql: ").append(sql);
+        if(sql != null) logs.append("\n# SQL: ").append(sql);
 
         logs.append("\n========================================");
 
         sqlLog.info("{}", logs);
         req.removeAttribute(MYBATIS_SQL_LOG);
     }
+
 }
