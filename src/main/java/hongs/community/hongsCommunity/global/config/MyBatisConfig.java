@@ -36,13 +36,13 @@ public class MyBatisConfig {
     @Value("${spring.datasource.password}")
     private String password;
 
-    @Value("${mybatis.config-location}")
+    @Value("${hong.mybatis-setting.config-location}")
     private String configLocation;
 
-    @Value("${mybatis.mapper-locations}")
+    @Value("${hong.mybatis-setting.mapper-locations}")
     private String mapperLocations;
 
-    @Value("${mybatis.type-aliases-package}")
+    @Value("${hong.mybatis-setting.type-aliases-package}")
     private String typeAliasesPackage;
 
     @Bean(name = "dataSource")
