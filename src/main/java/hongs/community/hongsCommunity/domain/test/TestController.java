@@ -1,6 +1,7 @@
 package hongs.community.hongsCommunity.domain.test;
 
 import hongs.community.hongsCommunity.domain.test.vo.TestVo;
+import hongs.community.hongsCommunity.global.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ public class TestController {
     @GetMapping("/edit/{uid}")
     public String edit(@PathVariable(name = "uid") Long uid, Model model) {
         TestVo view = testService.view(uid);
+        view.setName(StringUtil.unescape(view.getName()));
         model.addAttribute("fUid", view.getFileUid());
         model.addAttribute("view", view);
         return "test/edit";
