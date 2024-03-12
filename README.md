@@ -74,3 +74,7 @@ $("#view-content").html(code)
 
 
 (13) 24-03-08 : @value 경로 변경
+
+
+
+(14) 24-03-12 : regid, mdfrid를 위한 aspect 추가
