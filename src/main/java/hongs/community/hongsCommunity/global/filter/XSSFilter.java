@@ -35,6 +35,10 @@ public class XSSFilter extends OncePerRequestFilter {
 
         String method = request.getMethod();
         String contentType = request.getContentType();
+        if ("application/offset+octet-stream".equals(contentType) || contentType == null ) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         if(method.equals(HttpMethod.DELETE.name()) || method.equals(HttpMethod.GET.name())) doFilterParam(request, wrappingResponse, chain);
         else if(method.equals(HttpMethod.POST.name()) || method.equals(HttpMethod.PUT.name())) doFilterBody(request, wrappingResponse, chain);

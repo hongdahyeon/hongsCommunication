@@ -38,7 +38,6 @@ public class MybatisInterceptor implements Interceptor {
         BoundSql boundSql = handler.getBoundSql();
         Object param = handler.getParameterHandler().getParameterObject();
         String sql = boundSql.getSql().replaceAll("\\s*(?=(\\r\\n|\\r|\\n))+", "");
-        System.out.println("가공전 sql: " + sql);
 
         // if param null
         if(param == null) {
@@ -126,6 +125,7 @@ public class MybatisInterceptor implements Interceptor {
     private void setSqls(HttpServletRequest request, String sql) {
         StringBuilder sqls = getStringBuilder(request);
         sqls.append("\n        " + sql);
+        sqls.append("\n =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*");
         request.setAttribute(LoggingInterceptor.MYBATIS_SQL_LOG, sqls);
     }
 
