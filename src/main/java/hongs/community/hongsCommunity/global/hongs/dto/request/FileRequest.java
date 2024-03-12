@@ -1,11 +1,11 @@
-package hongs.community.hongsCommunity.global.hongs.dto;
+package hongs.community.hongsCommunity.global.hongs.dto.request;
 
 import hongs.community.hongsCommunity.global.hongs.file.common.dto.HongSaveFileDto;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
-* @fileName FileDto
+* @fileName FileRequest
 * @author dahyeon
 * @version 1.0.0
 * @date 2024-03-05
@@ -13,8 +13,8 @@ import lombok.Setter;
 **/
 
 @Getter @Setter
-public class FileDto extends Creator {
+public class FileRequest extends CreateRequest {
 
-    private HongSaveFileDto[] addFile;
-    private String[] delFile;
+    protected HongSaveFileDto[] addFile;
+    protected String[] delFile;
 }

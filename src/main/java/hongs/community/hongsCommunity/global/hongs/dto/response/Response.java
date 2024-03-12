@@ -1,4 +1,4 @@
-package hongs.community.hongsCommunity.global.response;
+package hongs.community.hongsCommunity.global.hongs.dto.response;
 
 import hongs.community.hongsCommunity.global.util.TimeUtil;
 import lombok.Getter;

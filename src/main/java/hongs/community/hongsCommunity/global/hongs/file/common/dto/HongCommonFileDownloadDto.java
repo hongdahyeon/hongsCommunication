@@ -1,12 +1,12 @@
 package hongs.community.hongsCommunity.global.hongs.file.common.dto;
 
-import hongs.community.hongsCommunity.global.hongs.dto.Creator;
+import hongs.community.hongsCommunity.global.hongs.dto.request.CreateRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class HongCommonFileDownloadDto extends Creator {
+public class HongCommonFileDownloadDto extends CreateRequest {
 
     private Long hongFileUid;
     private String fileUrl;

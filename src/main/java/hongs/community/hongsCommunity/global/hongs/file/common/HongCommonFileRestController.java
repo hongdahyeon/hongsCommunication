@@ -1,7 +1,7 @@
 package hongs.community.hongsCommunity.global.hongs.file.common;
 
 import hongs.community.hongsCommunity.global.hongs.file.common.vo.HongFileViewVo;
-import hongs.community.hongsCommunity.global.response.Response;
+import hongs.community.hongsCommunity.global.hongs.dto.response.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

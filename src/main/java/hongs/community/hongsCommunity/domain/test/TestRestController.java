@@ -2,7 +2,7 @@ package hongs.community.hongsCommunity.domain.test;
 
 import hongs.community.hongsCommunity.domain.test.dto.TestFileDto;
 import hongs.community.hongsCommunity.global.hongs.mail.EmailService;
-import hongs.community.hongsCommunity.global.response.Response;
+import hongs.community.hongsCommunity.global.hongs.dto.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

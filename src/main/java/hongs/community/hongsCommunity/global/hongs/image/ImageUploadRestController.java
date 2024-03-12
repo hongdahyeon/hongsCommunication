@@ -1,4 +1,4 @@
-package hongs.community.hongsCommunity.domain;
+package hongs.community.hongsCommunity.global.hongs.image;
 
 
 import hongs.community.hongsCommunity.global.util.FileUtil;

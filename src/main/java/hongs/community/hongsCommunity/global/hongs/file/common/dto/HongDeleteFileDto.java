@@ -1,6 +1,6 @@
 package hongs.community.hongsCommunity.global.hongs.file.common.dto;
 
-import hongs.community.hongsCommunity.global.hongs.dto.Creator;
+import hongs.community.hongsCommunity.global.hongs.dto.request.CreateRequest;
 import hongs.community.hongsCommunity.global.hongs.file.HongFileState;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor
-public class HongDeleteFileDto extends Creator {
+public class HongDeleteFileDto extends CreateRequest {
 
     private String fileUrl;
     private String deleteYn;

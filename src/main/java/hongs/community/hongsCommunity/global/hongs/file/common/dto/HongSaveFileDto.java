@@ -1,6 +1,6 @@
 package hongs.community.hongsCommunity.global.hongs.file.common.dto;
 
-import hongs.community.hongsCommunity.global.hongs.dto.Creator;
+import hongs.community.hongsCommunity.global.hongs.dto.request.CreateRequest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +13,7 @@ import lombok.Setter;
 **/
 
 @Getter @Setter
-public class HongSaveFileDto extends Creator {
+public class HongSaveFileDto extends CreateRequest {
 
     private Long hongFileUid;
     private String fileName;
