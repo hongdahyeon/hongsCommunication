@@ -78,3 +78,11 @@ $("#view-content").html(code)
 
 
 (14) 24-03-12 : regid, mdfrid를 위한 aspect 추가
+
+
+
+(15) 24-03-12
+1. xssfilter 적용
+   - post, put : requestBody
+   - get, delete : queryString
+   - & < >  에 대해 인코딩 적용
