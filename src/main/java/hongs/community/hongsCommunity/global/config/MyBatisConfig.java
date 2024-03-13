@@ -39,8 +39,8 @@ public class MyBatisConfig {
     @Value("${spring.datasource.password}")
     private String password;
 
-    @Value("${hong.mybatis-setting.config-location}")
-    private String configLocation;                  // -> MybatisConfig 파일에서 코드 작성으로 대체
+//    @Value("${hong.mybatis-setting.config-location}")
+//    private String configLocation;                  // -> MybatisConfig 파일에서 코드 작성으로 대체
 
     @Value("${hong.mybatis-setting.mapper-locations}")
     private String mapperLocations;

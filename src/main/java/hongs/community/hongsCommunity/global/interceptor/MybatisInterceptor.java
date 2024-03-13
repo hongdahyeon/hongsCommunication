@@ -8,20 +8,19 @@ import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.plugin.*;
+import org.apache.ibatis.session.ResultHandler;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-//@Intercepts({
-//        @Signature(type= StatementHandler.class, method = "query", args = {Statement.class, ResultHandler.class})
-//        ,@Signature(type = StatementHandler.class, method = "update", args = {Statement.class})
-//})
 @Intercepts({
-        @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class, Integer.class })
+        @Signature(type= StatementHandler.class, method = "query", args = {Statement.class, ResultHandler.class})
+        ,@Signature(type = StatementHandler.class, method = "update", args = {Statement.class})
 })
 @Slf4j
 public class MybatisInterceptor implements Interceptor {
@@ -31,13 +30,12 @@ public class MybatisInterceptor implements Interceptor {
         HttpServletRequest request = WebUtil.nowRequest();
         StatementHandler handler = (StatementHandler) invocation.getTarget();
 
-        if (request != null) bindingSQL(request, handler, invocation);
-
-        return invocation.proceed();
+        if(request == null) return invocation.proceed();
+        else return bindingSQL(request, handler, invocation);
     }
 
     @SuppressWarnings("rawtypes")
-    public void bindingSQL(HttpServletRequest request, StatementHandler handler, Invocation invocation) throws NoSuchFieldException, IllegalAccessException {
+    public Object bindingSQL(HttpServletRequest request, StatementHandler handler, Invocation invocation) throws InvocationTargetException, IllegalAccessException {
         BoundSql boundSql = handler.getBoundSql();
         Object param = handler.getParameterHandler().getParameterObject();
         String sql = boundSql.getSql().replaceAll("\\s*(?=(\\r\\n|\\r|\\n))+", "");
@@ -114,11 +112,17 @@ public class MybatisInterceptor implements Interceptor {
             setSqls(request, sql);
         }
 
+
         try {
-            Object result = invocation.proceed();
+            Object result = null;
+            result = invocation.proceed();
             setSqlResult(request, result);
-        } catch (Exception e) {
-            setSqlError(request, e);
+
+            return  result;
+
+        } catch (Throwable t) {
+            setSqlError(request, t);
+            throw t;
         }
     }
 
@@ -142,9 +146,9 @@ public class MybatisInterceptor implements Interceptor {
         request.setAttribute(LoggingInterceptor.MYBATIS_SQL_LOG, sqls);
     }
 
-    private void setSqlError(HttpServletRequest request, Exception exception) {
+    private void setSqlError(HttpServletRequest request, Throwable t) {
         StringBuilder sqls = getStringBuilder(request);
-        sqls.append("\n ==> ERROR: ").append(exception.getCause());
+        sqls.append("\n ==> ERROR: ").append(t.getCause());
         sqls.append("\n =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*");
         request.setAttribute(LoggingInterceptor.MYBATIS_SQL_LOG, sqls);
     }
