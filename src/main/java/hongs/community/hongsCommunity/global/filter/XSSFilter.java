@@ -1,5 +1,6 @@
 package hongs.community.hongsCommunity.global.filter;
 
+import hongs.community.hongsCommunity.global.util.StringUtil;
 import hongs.community.hongsCommunity.global.util.XSSUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -33,9 +34,11 @@ public class XSSFilter extends OncePerRequestFilter {
 
         ContentCachingResponseWrapper wrappingResponse = new ContentCachingResponseWrapper(response);
 
+        String requestURI = request.getRequestURI();
         String method = request.getMethod();
         String contentType = request.getContentType();
-        if ("application/offset+octet-stream".equals(contentType) || contentType == null ) {
+
+        if ( !StringUtil.startswith(requestURI, "/api") || (contentType == null || StringUtil.equal(contentType, "application/offset+octet-stream")) ) {
             chain.doFilter(request, response);
             return;
         }

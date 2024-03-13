@@ -30,11 +30,11 @@ public class MybatisInterceptor implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
         HttpServletRequest request = WebUtil.nowRequest();
         StatementHandler handler = (StatementHandler) invocation.getTarget();
-        bindingSQL(request ,handler);
+        if(request != null) bindingSQL(request ,handler, invocation);
         return invocation.proceed();
     }
 
-    public void bindingSQL(HttpServletRequest request, StatementHandler handler) throws NoSuchFieldException, IllegalAccessException {
+    public void bindingSQL(HttpServletRequest request, StatementHandler handler, Invocation invocation) throws NoSuchFieldException, IllegalAccessException {
         BoundSql boundSql = handler.getBoundSql();
         Object param = handler.getParameterHandler().getParameterObject();
         String sql = boundSql.getSql().replaceAll("\\s*(?=(\\r\\n|\\r|\\n))+", "");
@@ -110,21 +110,38 @@ public class MybatisInterceptor implements Interceptor {
             }
             setSqls(request, sql);
         }
+
+        try {
+            Object result = invocation.proceed();
+            setSqlResult(request, result);
+        } catch (Exception e) {
+            setSqlError(request, e);
+        }
     }
 
     private String formValue(Object o) {
-        if(o == null) {
-            return "*";
-        }
-        if(o instanceof String) {
-            return String.format("'%s'", o.toString());
-        }
+        if(o == null) return "*";
+        if(o instanceof String) return String.format("'%s'", o.toString());
         return o.toString();
     }
 
     private void setSqls(HttpServletRequest request, String sql) {
         StringBuilder sqls = getStringBuilder(request);
-        sqls.append("\n        " + sql);
+        sqls.append("\n        ").append(sql);
+        request.setAttribute(LoggingInterceptor.MYBATIS_SQL_LOG, sqls);
+    }
+
+    private void setSqlResult(HttpServletRequest request, Object result){
+        StringBuilder sqls = getStringBuilder(request);
+        if(result instanceof List<?>) sqls.append("\n ==> RESULT: ").append(((List<?>) result).size()).append(" 건 획득");
+        else if(result instanceof Integer) sqls.append("\n ==> RESULT: ").append(((Integer) result).intValue()).append(" 건 반영");
+        sqls.append("\n =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*");
+        request.setAttribute(LoggingInterceptor.MYBATIS_SQL_LOG, sqls);
+    }
+
+    private void setSqlError(HttpServletRequest request, Exception exception) {
+        StringBuilder sqls = getStringBuilder(request);
+        sqls.append("\n ==> ERROR: ").append(exception.getCause());
         sqls.append("\n =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*");
         request.setAttribute(LoggingInterceptor.MYBATIS_SQL_LOG, sqls);
     }

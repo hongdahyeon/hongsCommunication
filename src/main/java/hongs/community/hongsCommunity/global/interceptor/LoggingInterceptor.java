@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StopWatch;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UrlPathHelper;
@@ -14,9 +15,15 @@ public class LoggingInterceptor implements HandlerInterceptor {
 
     private static Logger sqlLog = LoggerFactory.getLogger("MYBATIS_SQL_LOG");
     public static final String MYBATIS_SQL_LOG = "mybatis_sql_log";
+    public static final String MYBATIS_SQL_STOP_WATCH = "mybatis_sql_stop";
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+
+        req.setAttribute(MYBATIS_SQL_STOP_WATCH, stopWatch);
+
         return true;
     }
 
@@ -33,7 +40,6 @@ public class LoggingInterceptor implements HandlerInterceptor {
             return;
         }
 
-        // TODO: 너무 많이 찍히는 로그 원인 찾아야함
         StringBuilder logs = new StringBuilder();
         logs.append("\n========================================");
 
@@ -47,10 +53,18 @@ public class LoggingInterceptor implements HandlerInterceptor {
         StringBuilder sql = (StringBuilder) req.getAttribute(MYBATIS_SQL_LOG);
         if(sql != null) logs.append("\n# SQL: ").append(sql);
 
+        StopWatch stopWatch = (StopWatch) req.getAttribute(MYBATIS_SQL_STOP_WATCH);
+        if(stopWatch != null) {
+            stopWatch.stop();
+            double totalTime = stopWatch.getTotalTimeSeconds();
+            logs.append(String.format("\n ==> TIMES: %.2f sec", totalTime));
+        }
+
         logs.append("\n========================================");
 
         sqlLog.info("{}", logs);
         req.removeAttribute(MYBATIS_SQL_LOG);
+        req.removeAttribute(MYBATIS_SQL_STOP_WATCH);
     }
 
 }

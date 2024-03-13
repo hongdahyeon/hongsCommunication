@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("upload")
+@RequestMapping("api/upload")
 public class ImageUploadRestController {
 
     @Value("${hong.summernote.summernoteImage.root}")

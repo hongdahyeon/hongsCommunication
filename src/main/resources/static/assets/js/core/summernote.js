@@ -69,7 +69,7 @@ class Summernote {
     uploadSummernoteImageFile(file){
         let data = new FormData();
         data.append("file", file);
-        Http.filePost("/upload/summernote/img", data).then((res) => {
+        Http.filePost("/api/upload/summernote/img", data).then((res) => {
             this._editor.summernote('insertImage', res.url)
         })
     }
