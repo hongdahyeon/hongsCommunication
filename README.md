@@ -105,3 +105,9 @@ $("#view-content").html(code)
 
 
 (18) 24-03-13 : mybatis-config 파일과 MyBatisConfig 파일 합침
+
+
+
+(19) 24-03-13
+- 쿼리 2번 수행 문제 해결 : invocation.proceed() 메서드 2번 수행의 문제였음 -> 한번만 수행되도록 해결
+- @Signature 메서드를 prepare 로 하게 될 경우 결과값에 대한 반환에 대해 출력이 불가능해짐
