@@ -91,4 +91,13 @@ $("#view-content").html(code)
 
 (16) 24-03-13
 1. XSSFilter : '/api' uri에 대해서만 진행
-2. mybatis log 정보 추가
+2. mybatis log 정보 추가\
+
+
+
+(17) 24-03-13
+1. security 추가
+   - 로그인이전시점: /api/front/**
+   - ADMIN: /api/admin/**
+   - SUPER: /api/admin/**, /api/super/**
+2. 같은 쿼리 2번씩 저장되는 문제 해결 : MybatisInterceptor에서 @Signature->method 문제인듯
