@@ -24,4 +24,9 @@ public class HomeController {
         log.info("testList : {} ", testList);
         return "index";
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "/login";
+    }
 }

@@ -1,5 +1,7 @@
 package hongs.community.hongsCommunity.global.config;
 
+import groovy.lang.Interceptor;
+import hongs.community.hongsCommunity.global.interceptor.MybatisInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,6 +68,9 @@ public class MyBatisConfig {
         factoryBean.setMapperLocations(resources);
 
         factoryBean.setTypeAliasesPackage(typeAliasesPackage);
+
+        MybatisInterceptor mybatisInterceptor = new MybatisInterceptor();
+        factoryBean.setPlugins(mybatisInterceptor);
 
         return factoryBean.getObject();
     }

@@ -87,7 +87,6 @@ public class XSSFilter extends OncePerRequestFilter {
         String body = IOUtils.toString(wrapper.getInputStream(), Charset.defaultCharset());
 
         if(!StringUtils.isBlank(body)){
-            log.info("body is not blank : {}", body);
             String filteredBody = XSSUtil.charEscape(body);
             wrapper.resetInputStream(filteredBody.getBytes());
         }

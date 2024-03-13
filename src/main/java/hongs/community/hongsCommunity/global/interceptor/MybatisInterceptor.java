@@ -8,20 +8,20 @@ import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.plugin.*;
-import org.apache.ibatis.session.ResultHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
-import java.sql.Statement;
+import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+//@Intercepts({
+//        @Signature(type= StatementHandler.class, method = "query", args = {Statement.class, ResultHandler.class})
+//        ,@Signature(type = StatementHandler.class, method = "update", args = {Statement.class})
+//})
 @Intercepts({
-        @Signature(type= StatementHandler.class, method = "query", args = {Statement.class, ResultHandler.class})
-        ,@Signature(type = StatementHandler.class, method = "update", args = {Statement.class})
+        @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class, Integer.class })
 })
 @Slf4j
 public class MybatisInterceptor implements Interceptor {
@@ -30,10 +30,13 @@ public class MybatisInterceptor implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
         HttpServletRequest request = WebUtil.nowRequest();
         StatementHandler handler = (StatementHandler) invocation.getTarget();
-        if(request != null) bindingSQL(request ,handler, invocation);
+
+        if (request != null) bindingSQL(request, handler, invocation);
+
         return invocation.proceed();
     }
 
+    @SuppressWarnings("rawtypes")
     public void bindingSQL(HttpServletRequest request, StatementHandler handler, Invocation invocation) throws NoSuchFieldException, IllegalAccessException {
         BoundSql boundSql = handler.getBoundSql();
         Object param = handler.getParameterHandler().getParameterObject();
@@ -160,5 +163,8 @@ public class MybatisInterceptor implements Interceptor {
     }
 
     @Override
-    public void setProperties(Properties properties) { }
+    public void setProperties(Properties properties) {
+        // 설정이 필요한 경우 여기에 구현
+    }
+
 }

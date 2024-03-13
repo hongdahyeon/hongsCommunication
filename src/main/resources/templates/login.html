@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+</head>
+
+<body>
+<div class="container mt-3 d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card col-md-6">
+
+        <!-- start : Login Form  -->
+        <form id="form" action="/loginProc" method="post">
+
+            <div class="card-header">
+                <h4 class="card-title">로그인</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3 mt-3">
+                    <label for="userId">아이디</label>
+                    <input type="text" class="form-control" id="userId" name="userId" value="super" />
+                </div>
+
+                <div class="mb-3 mt-3">
+                    <label for="password">비밀번호</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password" value="1234" />
+                        <button class="btn btn-outline-dark" type="button" id="show-pwd">show</button>
+                    </div>
+                    <p class="error-message" style="color: red" id="pwdError"></p>
+                </div>
+
+                <div class="form-check mb-3">
+                    <div class="card-text d-flex justify-content-between">
+                        <div class="text-start">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" name="remember" id="remember"> Remember me
+                            </label>
+                        </div>
+                        <div class="text-end">
+                            <a id="find-user-password-userId" href="#">아이디/비번 찾기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">로그인</button>
+                <button type="button" class="btn btn-secondary" id="goto-new-login">회원가입</button>
+
+<!--                <hr class="hr" />-->
+
+<!--                <div class="card-text" style="margin-top: 10px">-->
+<!--                    <div class="text-start">-->
+<!--                        <span><b>소셜 로그인</b></span>-->
+<!--                        <div class="mb-3 mt-3">-->
+<!--                            <img src="/assets/src/login/kakao.png" id="kakao-login-btn" style="cursor: pointer; ">-->
+<!--                            <img src="/assets/src/login/naver.png" id="naver-login-btn" style="cursor: pointer; ">-->
+<!--                            <img src="/assets/src/login/google.png" id="google-login-btn" style="cursor: pointer; ">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+            </div>
+        </form>
+        <!-- end : Login Form  -->
+
+    </div>
+</div>
+<th:block th:replace="~{fragments/script :: script}"></th:block>
+<script></script>
+</body>
+</html>

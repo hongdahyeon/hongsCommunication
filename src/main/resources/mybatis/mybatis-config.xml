@@ -16,10 +16,6 @@
         <typeAlias alias="Long" type="java.lang.Long"/>
     </typeAliases>
 
-    <plugins>
-        <plugin interceptor="hongs.community.hongsCommunity.global.interceptor.MybatisInterceptor"></plugin>
-    </plugins>
-
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"></transactionManager>

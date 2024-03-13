@@ -1,5 +1,6 @@
 package hongs.community.hongsCommunity.global.config;
 
+//import hongs.community.hongsCommunity.global.interceptor.LoggingInterceptor;
 import hongs.community.hongsCommunity.global.interceptor.LoggingInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

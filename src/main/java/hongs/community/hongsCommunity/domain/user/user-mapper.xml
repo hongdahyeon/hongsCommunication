@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hongs.community.hongsCommunity.domain.user.HongUserMapper">
+
+    <select id="findUser" parameterType="String" resultType="HongLoginUserVo">
+        select user_uid
+              ,user_id
+              ,password
+              ,user_name
+              ,user_email
+              ,role
+              ,is_enable
+              ,pwd_last_update
+              ,last_login_date
+              ,is_non_locked
+          from hong_user
+         where user_id = #{userId}
+    </select>
+
+    <insert id="joinUser" parameterType="HongUserInsertDto">
+        insert into hong_user (
+            user_id
+           ,password
+           ,user_name
+           ,user_email
+           ,role
+           ,is_enable
+           ,pwd_last_update
+           ,last_login_date
+           ,is_non_locked
+        ) values (
+            #{userId}
+           ,#{password}
+           ,#{userName}
+           ,#{userEmail}
+           ,#{role}
+           ,true
+           ,#{pwdLastUpdate}
+           ,#{lastLoginDate}
+           ,true
+        )
+    </insert>
+</mapper>
