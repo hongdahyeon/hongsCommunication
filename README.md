@@ -86,3 +86,9 @@ $("#view-content").html(code)
    - post, put : requestBody
    - get, delete : queryString
    - & < >  에 대해 인코딩 적용
+
+  
+
+(16) 24-03-13
+1. XSSFilter : '/api' uri에 대해서만 진행
+2. mybatis log 정보 추가
