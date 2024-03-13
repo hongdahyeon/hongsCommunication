@@ -101,3 +101,7 @@ $("#view-content").html(code)
    - ADMIN: /api/admin/**
    - SUPER: /api/admin/**, /api/super/**
 2. 같은 쿼리 2번씩 저장되는 문제 해결 : MybatisInterceptor에서 @Signature->method 문제인듯
+
+
+
+(18) 24-03-13 : mybatis-config 파일과 MyBatisConfig 파일 합침
