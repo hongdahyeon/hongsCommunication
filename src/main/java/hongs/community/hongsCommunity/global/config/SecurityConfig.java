@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity              // spring security 활성화 어노테이션
@@ -24,9 +24,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable().headers().frameOptions().disable();       // csrf 및 frame 옵션 비활성화 -> 애플리케이션을 iframe에 임베드 가능하도록 한다.
 
         http
+            .csrf(AbstractHttpConfigurer::disable)      // csrf disable 처리
             .authorizeHttpRequests(authorize ->
                 authorize
                         .requestMatchers(SecurityConfigMatchers.BEFORE_LOGIN).permitAll()
