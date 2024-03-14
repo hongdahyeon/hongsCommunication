@@ -33,13 +33,13 @@ class Upload {
             endpoint: `/api/tus/files/upload?uploadId=${this.upload_uuid}`,
             onShouldRetry: this._onShouldRetry,
             onBeforeRequest: (req, file) => {
+                const {header, token} = Http.getCookieInfo()
+                req._xhr.setRequestHeader(header, token);
                 this._currentFiles[req._url] = file
             },
             onAfterResponse: (req, res) => {
                 return new Promise(resolve => {
-                    const url = req.getURL()
-                    const fileId = res.getHeader("X-File-Id")
-                    this._currentFiles[req._url].meta.fileId = fileId
+                    this._currentFiles[req._url].meta.fileId = res.getHeader("X-File-Id")
                     resolve()
                 })
             }

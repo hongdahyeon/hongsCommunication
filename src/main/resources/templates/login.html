@@ -31,6 +31,8 @@
                     <p class="error-message" style="color: red" id="pwdError"></p>
                 </div>
 
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+
                 <div class="form-check mb-3">
                     <div class="card-text d-flex justify-content-between">
                         <div class="text-start">

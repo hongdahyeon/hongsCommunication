@@ -41,13 +41,28 @@ class Util {
 
 class Http {
 
+    static handleError(e) {
+        if (e.status === 401) {
+            Util.alert("다시 로그인 해주세요.").then(() => {
+                window.location.href = '/';
+            })
+        } else {
+            // Handle other error scenarios
+            console.error('DataTables AJAX Error: ', e);
+        }
+    }
+
     static get(url, params = '', method = 'GET') {
         return $.ajax({
             type: method,
             url: url,
             data: params,
-            dataType: 'json'
-        })
+            dataType: 'json',
+            beforeSend: function(xhr) {
+                const {token, header} = Http.getCookieInfo();
+                xhr.setRequestHeader(header, token)
+            }
+        }).catch(e => this.handleError(e))
     }
 
     static syncGet(url, params='', async = false, method = 'GET'){
@@ -56,8 +71,12 @@ class Http {
             url: url,
             data: params,
             async: false,
-            dataType: 'json'
-        })
+            dataType: 'json',
+            beforeSend: function(xhr) {
+                const {token, header} = Http.getCookieInfo();
+                xhr.setRequestHeader(header, token)
+            }
+        }).catch(e => this.handleError(e))
     }
 
     static post(url, data, method = 'POST') {
@@ -66,8 +85,12 @@ class Http {
             url: url,
             data: JSON.stringify(data),
             dataType: 'json',
-            contentType: 'application/json'
-        })
+            contentType: 'application/json',
+            beforeSend: function(xhr) {
+                const {token, header} = Http.getCookieInfo();
+                xhr.setRequestHeader(header, token)
+            }
+        }).catch(e => this.handleError(e))
     }
 
     static delete(url, data, method = 'DELETE') {
@@ -75,8 +98,12 @@ class Http {
             type: method,
             url: url,
             data: data,
-            contentType: 'application/json'
-        })
+            contentType: 'application/json',
+            beforeSend: function(xhr) {
+                const {token, header} = Http.getCookieInfo();
+                xhr.setRequestHeader(header, token)
+            }
+        }).catch(e => this.handleError(e))
     }
 
     static put(url, data, method='PUT') {
@@ -85,8 +112,12 @@ class Http {
             url: url,
             data: JSON.stringify(data),
             dataType: 'json',
-            contentType: 'application/json'
-        })
+            contentType: 'application/json',
+            beforeSend: function(xhr) {
+                const {token, header} = Http.getCookieInfo();
+                xhr.setRequestHeader(header, token)
+            }
+        }).catch(e => this.handleError(e))
     }
 
     static filePost(url, formData, method = 'POST'){
@@ -95,8 +126,12 @@ class Http {
             url: url,
             data: formData,
             contentType: false,
-            processData: false
-        })
+            processData: false,
+            beforeSend: function(xhr) {
+                const {token, header} = Http.getCookieInfo();
+                xhr.setRequestHeader(header, token)
+            }
+        }).catch(e => this.handleError(e))
     }
 
     static fileDownload(id){
@@ -106,6 +141,10 @@ class Http {
             method: 'GET',
             xhrFields: {
                 responseType: 'blob'
+            },
+            beforeSend: function(xhr) {
+                const {token, header} = Http.getCookieInfo();
+                xhr.setRequestHeader(header, token)
             },
             success: function (blobData, status, xhr) {
                 const contentDisposition = xhr.getResponseHeader('Content-Disposition');
@@ -121,7 +160,13 @@ class Http {
                     link.remove();
                 }
             }
-        });
+        }).catch(e => this.handleError(e))
+    }
+
+    static getCookieInfo(){
+        const token = $("meta[name='_csrf']").attr("content")
+        const header = $("meta[name='_csrf_header']").attr("content");
+        return { header : header, token : token }
     }
 
 }
