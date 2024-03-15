@@ -117,3 +117,10 @@ $("#view-content").html(code)
 
 
 (21) 24-03-14 : csrf 활성화 -> 토큰으로 관리
+
+
+
+(22) 24-03-15 
+1. 리퍼러 정책 : same-origin 추가
+2. cors 정책 추가
+3. xss 공격 : 기본 xss protection 적용
