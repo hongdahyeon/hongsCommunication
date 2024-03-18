@@ -124,3 +124,6 @@ $("#view-content").html(code)
 1. 리퍼러 정책 : same-origin 추가
 2. cors 정책 추가
 3. xss 공격 : 기본 xss protection 적용
+
+
+(23) 24-03-15 : error html
