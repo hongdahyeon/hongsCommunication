@@ -1,6 +1,7 @@
 package hongs.community.hongsCommunity.domain.user;
 
 import hongs.community.hongsCommunity.domain.user.dto.HongUserInsertDto;
+import hongs.community.hongsCommunity.domain.user.service.HongUserService;
 import hongs.community.hongsCommunity.global.hongs.dto.response.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

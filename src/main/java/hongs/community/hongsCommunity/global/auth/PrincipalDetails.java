@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class PrincipalDetails implements UserDetails {
 
-    private HongLoginUserVo hongUser;
+    private final HongLoginUserVo hongUser;
 
     public PrincipalDetails(HongLoginUserVo user) {
         this.hongUser = user;
@@ -24,7 +24,7 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add(new SimpleGrantedAuthority(hongUser.getRole().toString()));
+        collection.add(new SimpleGrantedAuthority(hongUser.getRole()));
         return collection;
     }
 

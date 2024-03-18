@@ -1,6 +1,6 @@
 package hongs.community.hongsCommunity.global.auth;
 
-import hongs.community.hongsCommunity.domain.user.HongUserService;
+import hongs.community.hongsCommunity.domain.user.service.HongUserService;
 import hongs.community.hongsCommunity.domain.user.vo.HongLoginUserVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

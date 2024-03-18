@@ -29,6 +29,7 @@
            ,pwd_last_update
            ,last_login_date
            ,is_non_locked
+           ,pwd_fail_cnt
         ) values (
             #{userId}
            ,#{password}
@@ -39,6 +40,29 @@
            ,#{pwdLastUpdate}
            ,#{lastLoginDate}
            ,true
+           ,0
         )
     </insert>
+    
+    <select id="checkUser" parameterType="String" resultType="HongCheckUserVo">
+        select user_id
+              ,pwd_fail_cnt
+          from hong_user
+         where user_id = #{userId}
+    </select>
+
+    <update id="updatePwdFailCnt" parameterType="HongUserUpdateFailCntDto">
+        update hong_user
+           set pwd_fail_cnt = #{pwdFailCnt}
+            <if test="pwdFailCnt != null and pwdFailCnt == 5">
+              ,is_non_locked = false
+            </if>
+         where user_id = #{userId}
+    </update>
+
+    <update id="resetFailCnt" parameterType="String">
+        update hong_user
+           set pwd_fail_cnt = 0
+         where user_id = #{userId}
+    </update>
 </mapper>

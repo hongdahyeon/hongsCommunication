@@ -1,5 +1,7 @@
 package hongs.community.hongsCommunity.global.config;
 
+import hongs.community.hongsCommunity.global.handler.CustomLoginFailureHandler;
+import hongs.community.hongsCommunity.global.handler.CustomLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +20,9 @@ import java.util.List;
 @EnableWebSecurity              // spring security 활성화 어노테이션
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomLoginSuccessHandler successHandler;
+    private final CustomLoginFailureHandler failureHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
@@ -49,9 +54,10 @@ public class SecurityConfig {
             .formLogin(form ->
                 form
                     .loginPage(LOGIN)
+                    .successHandler(successHandler)
+                    .failureHandler(failureHandler)
                     .usernameParameter("userId")
                     .loginProcessingUrl("/loginProc")
-                    .defaultSuccessUrl("/")
             )
             .logout(logout ->
                 logout

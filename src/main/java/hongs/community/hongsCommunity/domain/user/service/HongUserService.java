@@ -1,5 +1,6 @@
-package hongs.community.hongsCommunity.domain.user;
+package hongs.community.hongsCommunity.domain.user.service;
 
+import hongs.community.hongsCommunity.domain.user.HongUserMapper;
 import hongs.community.hongsCommunity.domain.user.dto.HongUserInsertDto;
 import hongs.community.hongsCommunity.domain.user.vo.HongLoginUserVo;
 import lombok.RequiredArgsConstructor;
