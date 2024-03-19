@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <div class="card">
+        <div class="card-header"></div>
+        <div class="card-body">
+            <div id='calendar'></div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script>
+
+        const calendar = new DateCalendar('calendar').init()
+        calendar.rowSelect(info => {
+            calendar.addDateEvent({
+                title: "제목",
+                start: info.startStr,
+                end: info.endStr,
+                allDay: info.allDay
+            })
+        })
+
+        calendar.eventRemove(info => {
+            console.log(`remove> \n uid: ${info.event._def.extendedProps.uid} \n groupId: ${info.event._def.groupId} \n title: ${info.event._def.title} \n start: ${info.event._instance.range.start} \n end: ${info.event._instance.range.end}`)
+        })
+
+        calendar.eventChange(info => {
+            console.log(`change> \n uid: ${info.event._def.extendedProps.uid} \n groupId: ${info.event._def.groupId} \n title: ${info.event._def.title} \n start: ${info.event._instance.range.start} \n end: ${info.event._instance.range.end}`)
+        })
+
+        calendar.eventClick(info => {
+            // 클릭시 색깔 변경 혹은 삭제?
+            console.log(`click> \n uid: ${info.event._def.extendedProps.uid} \n groupId: ${info.event._def.groupId} \n title: ${info.event._def.title} \n start: ${info.event._instance.range.start} \n end: ${info.event._instance.range.end}`)
+            info.event.remove()
+        })
+
+    </script>
+</th:block>
+
+</html>

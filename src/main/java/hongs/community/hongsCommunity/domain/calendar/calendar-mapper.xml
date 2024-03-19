@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="hongs.community.hongsCommunity.domain.calendar.HongCalendarMapper">	<!-- mapper 인터페이스가 위치하는 풀경로 -->
+
+    <select id="list" parameterType="Long" resultType="HongCalendarVo">
+        SELECT cal_uid as uid
+              ,group_id
+              ,title
+              ,start_date as start
+              ,end_date as end
+              ,background_color
+              ,text_color
+              ,all_day
+         from hong_calendar
+        where user_uid = #{userUid}
+    </select>
+</mapper>

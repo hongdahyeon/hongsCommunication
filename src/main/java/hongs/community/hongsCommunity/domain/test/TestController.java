@@ -29,4 +29,9 @@ public class TestController {
         model.addAttribute("view", view);
         return "test/edit";
     }
+
+    @GetMapping("/test2")
+    public String test2(){
+        return "test/test2";
+    }
 }
