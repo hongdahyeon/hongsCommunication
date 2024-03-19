@@ -19,7 +19,7 @@ public class HongLoginUserService {
     }
 
     public void updateFailCnt(String userId, Integer failCnt) {
-        userMapper.updatePwdFailCnt(new HongUserUpdateFailCntDto(userId, failCnt + 1));
+        userMapper.updatePwdFailCnt(new HongUserUpdateFailCntDto(userId, failCnt));
     }
 
     public void resetFailCnt(String userId) {
