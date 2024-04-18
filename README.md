@@ -136,3 +136,6 @@ $("#view-content").html(code)
 
 
 (25) 24-03-19 : fullCalendar 모듈 추가 (현재 작업중)
+
+
+(26) 24-04-18 : fullCalendar랑 db랑 연결
