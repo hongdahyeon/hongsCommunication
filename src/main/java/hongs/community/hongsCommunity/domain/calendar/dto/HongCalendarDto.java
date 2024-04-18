@@ -1,12 +1,12 @@
-package hongs.community.hongsCommunity.domain.calendar.vo;
+package hongs.community.hongsCommunity.domain.calendar.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class HongCalendarVo {
+public class HongCalendarDto {
 
-    private Long uid;
+    private Long calUid;
     private String title;
     private String start;
     private String end;
@@ -14,4 +14,5 @@ public class HongCalendarVo {
     private String borderColor;
     private String textColor;
     private boolean allDay;
+    private Long userUid;
 }

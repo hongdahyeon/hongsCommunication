@@ -6,14 +6,58 @@
 
     <select id="list" parameterType="Long" resultType="HongCalendarVo">
         SELECT cal_uid as uid
-              ,group_id
               ,title
               ,start_date as start
               ,end_date as end
               ,background_color
+              ,border_color
               ,text_color
               ,all_day
          from hong_calendar
         where user_uid = #{userUid}
     </select>
+
+    <insert id="join" parameterType="HongCalendarDto" keyProperty="calUid" useGeneratedKeys="true">
+        insert into hong_calendar (
+            title
+           ,user_uid
+           ,start_date
+           ,end_date
+           ,background_color
+           ,border_color
+           ,text_color
+           ,all_day
+        ) values (
+            #{title}
+           ,#{userUid}
+           ,#{start}
+           ,#{end}
+           ,#{backgroundColor}
+           ,#{borderColor}
+           ,#{textColor}
+           ,true
+        )
+    </insert>
+
+    <update id="update" parameterType="HongCalendarDto">
+        update hong_calendar
+           set start_date = #{start}
+              ,end_date = #{end}
+              ,background_color = #{backgroundColor}
+              ,border_color = #{borderColor}
+              ,text_color = #{textColor}
+         where cal_uid = #{calUid}
+    </update>
+
+    <update id="updateDate" parameterType="HongCalendarDto">
+        update hong_calendar
+           set start_date = #{start}
+              ,end_date = #{end}
+         where cal_uid = #{calUid}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        delete from hong_calendar
+         where cal_uid = #{calUid}
+    </delete>
 </mapper>

@@ -5,13 +5,15 @@ class DateCalendar{
     }
 
     _initSettings(id) {
+        this._id = id
         this._calendarEl = document.getElementById(id)
         this._calendar = null
+        this._calInfo = null
 
         // header options
-        this._left = 'prev'
+        this._left = 'prev today'
         this._center = 'title'
-        this._right = 'next'
+        this._right = 'dayGridMonth,dayGridWeek,dayGridDay next'
 
         // calendar option
         this._height = '700px'                      // 캘린더 높이
@@ -24,9 +26,10 @@ class DateCalendar{
 
         // click event
         this._select = null
-        this._eventChange = null
+        this._eventChange = ''
         this._eventRemove = null
         this._eventClick = null
+        this._eventDrop = null
     }
 
     init(){
@@ -54,13 +57,22 @@ class DateCalendar{
         calendar.render()
 
         calendar.on("select", info => this._select(info))
-        calendar.on('eventChange', info => this._eventChange(info))
+        // calendar.on('eventChange', info => this._eventChange(info))
         calendar.on('eventRemove', info => this._eventRemove(info))
         calendar.on('eventClick', info => this._eventClick(info))
+        calendar.on('eventDrop', info => this._eventDrop(info))
 
         this._calendar = calendar
 
         return this
+    }
+
+    setInfo(info) {
+        this._calInfo = info
+    }
+
+    getInfo(info) {
+        return this._calInfo
     }
 
     rowSelect(callback) {
@@ -83,8 +95,25 @@ class DateCalendar{
         return this
     }
 
-
     addDateEvent(obj) {
         this._calendar.addEvent(obj)
+    }
+
+    eventDrop(callback) {
+        this._eventDrop = callback
+        return this
+    }
+
+    updateDateEvent(obj) {
+        this._calInfo.event.setProp('title', obj.title)
+        this._calInfo.event.setStart(obj.start)
+        this._calInfo.event.setEnd(obj.end)
+        this._calInfo.event.setProp('borderColor', obj.borderColor)
+        this._calInfo.event.setProp('backgroundColor', obj.backgroundColor)
+        this._calInfo.event.setProp('textColor', obj.textColor)
+    }
+
+    refresh() {
+        this._calendar('refetchEvents')
     }
 }

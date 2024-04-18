@@ -37,6 +37,37 @@ class Util {
             cancelButtonText: cancelButtonText,
         }).then((res) => res.isConfirmed)
     }
+
+    static dayDifference(start, end, dateCnt = 1) {
+        const startDate = new Date(start)
+        const endDate = new Date(end)
+        const diffTime = Math.abs(endDate - startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays === dateCnt;
+    }
+
+    static getPrevDates(dateStr) {
+        const date = new Date(dateStr);
+        const oneDay = 24 * 60 * 60 * 1000; // 1일을 밀리초로 표현
+        const prevDate = new Date(date.getTime() - oneDay);
+        return prevDate.toISOString().split('T')[0]
+    }
+
+    static getNextDates(dateStr) {
+        const date = new Date(dateStr);
+        const oneDay = 24 * 60 * 60 * 1000; // 1일을 밀리초로 표현
+        const nextDate = new Date(date.getTime() + oneDay);
+        return nextDate.toISOString().split('T')[0]
+    }
+
+    static formatDate(dateStr) {
+        const date = new Date(dateStr);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    }
 }
 
 class Http {
@@ -47,7 +78,6 @@ class Http {
                 window.location.href = '/';
             })
         } else {
-            // Handle other error scenarios
             console.error('DataTables AJAX Error: ', e);
         }
     }
