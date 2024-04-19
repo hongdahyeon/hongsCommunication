@@ -93,7 +93,6 @@
 <th:block layout:fragment="script">
     <script>
 
-        let calendarObj = {start: '', end: '', uid: '', groupId: '', title: '', backgroundColor: '', borderColor: '', textColor: '', allDay: true}
         const calendar = new DateCalendar('calendar').init()
 
         const addCalendarColor = $("#addCalendar-color")
@@ -109,37 +108,41 @@
             })
 
             $("#addCalendar-add").on('click', () => {
-                calendarObj['backgroundColor'] = calendarObj['borderColor'] =  addCalendarColor.find(":selected").val()
-                calendarObj['textColor'] = addCalendarColor.find(":selected").attr('data-text')
-                calendarObj['title'] = $("#addCalendar-content").val()
+                calendar
+                    .setData('backgroundColor', addCalendarColor.find(":selected").val())
+                    .setData('borderColor', addCalendarColor.find(":selected").val())
+                    .setData('title', $("#addCalendar-content").val())
 
-                const obj = {title: calendarObj.title, start: calendarObj.start, end: calendarObj.end, backgroundColor: calendarObj.backgroundColor, borderColor: calendarObj.borderColor, textColor: calendarObj.textColor}
+                const obj = calendar.getData()
                 Http.post('/api/calendar/insert.json', obj).then((res) => {
-                    calendarObj.uid = res.message
-                    calendar.addDateEvent(calendarObj)
+                    calendar.setData('uid', res.message)
+                    calendar.addDateEvent(calendar.getData())
                     resetModal(true)
                 })
             })
 
             $("#updateCalendar-update").on('click', () => {
-                calendarObj['backgroundColor'] = calendarObj['borderColor'] =  updateCalendarColor.find(":selected").val()
-                calendarObj['textColor'] =  updateCalendarColor.find(":selected").attr('data-text')
-                calendarObj['title'] = $("#updateCalendar-content").val()
-                calendarObj['start'] = $("#updateCalendar-period-start").val()
-                calendarObj['end'] = Util.getNextDates($("#updateCalendar-period-end").val())
+                calendar
+                    .setData('title', $("#updateCalendar-content").val())
+                    .setData('start', $("#updateCalendar-period-start").val())
+                    .setData('end', DateUtil.getNextDates($("#updateCalendar-period-end").val()))
+                    .setData('textColor', updateCalendarColor.find(":selected").attr('data-text'))
+                    .setData('backgroundColor', updateCalendarColor.find(":selected").val())
+                    .setData('borderColor', updateCalendarColor.find(":selected").val())
 
-                const obj = {calUid: calendarObj.uid, title: calendarObj.title, start: calendarObj.start, end: calendarObj.end, backgroundColor: calendarObj.backgroundColor, borderColor: calendarObj.borderColor, textColor: calendarObj.textColor}
+                const obj = calendar.getData()
+                obj['calUid'] = obj['uid']
+                delete obj['uid']
                 Http.put('/api/calendar/update.json', obj).then((res) => {
-                    calendar.updateDateEvent(calendarObj)
+                    calendar.updateDateEvent(calendar.getData())
                     resetModal(false)
                 })
             })
 
             calendar.rowSelect(info => {
-                calendarObj['start'] = info.startStr
-                calendarObj['end'] = info.endStr
-                if(Util.dayDifference(info.startStr, info.endStr, 1)) $("#addCalendar-period").val(`${info.startStr}`)
-                else $("#addCalendar-period").val(`${info.startStr} ~ ${Util.getPrevDates(info.endStr)}`)
+                calendar.setData('start', info.startStr).setData('end', info.endStr)
+                if(DateUtil.dayDifference(info.startStr, info.endStr, 1)) $("#addCalendar-period").val(`${info.startStr}`)
+                else $("#addCalendar-period").val(`${info.startStr} ~ ${DateUtil.getPrevDates(info.endStr)}`)
                 $("#addCalendarModal").modal('show')
             })
 
@@ -152,34 +155,35 @@
 
             calendar.eventDrop(info => {
                 const uid = info.event._def.extendedProps.uid
-                const start = Util.formatDate(info.event._instance.range.start)
-                const end = Util.formatDate(info.event._instance.range.end)
+                const start = DateUtil.formatDate(info.event._instance.range.start)
+                const end = DateUtil.formatDate(info.event._instance.range.end)
                 Http.put('/api/calendar/updateDate.json', {calUid: uid, start: start, end: end})
             })
 
             calendar.eventClick(info => {
                 setObj(info)
-                $("#updateCalendar-content").val(calendarObj.title)
-                $("#updateCalendar-color").val(calendarObj.backgroundColor)
-                $("#updateCalendar-period-start").val(calendarObj.start)
-                $("#updateCalendar-period-end").val(Util.getPrevDates(calendarObj.end))
+                $("#updateCalendar-content").val(calendar.getData().title)
+                $("#updateCalendar-color").val(calendar.getData().backgroundColor)
+                $("#updateCalendar-period-start").val(calendar.getData().start)
+                $("#updateCalendar-period-end").val(DateUtil.getPrevDates(calendar.getData().end))
                 $("#updateCalendarModal").modal('show')
                 calendar.setInfo(info)
             })
         });
 
         function setObj(info) {
-            calendarObj['title'] = info.event._def.title
-            calendarObj['start'] = Util.formatDate(info.event._instance.range.start)
-            calendarObj['end'] = Util.formatDate(info.event._instance.range.end)
-            calendarObj['uid'] = info.event._def.extendedProps.uid
-            calendarObj['groupId'] = info.event._def.groupId
-            calendarObj['borderColor'] = calendarObj['backgroundColor'] = info.event._def.ui.backgroundColor
-            calendarObj['textColor'] = info.event._def.ui.textColor
+            calendar
+                .setData('title', info.event._def.title)
+                .setData('start', DateUtil.formatDate(info.event._instance.range.start))
+                .setData('end', DateUtil.formatDate(info.event._instance.range.end))
+                .setData('uid', info.event._def.extendedProps.uid)
+                .setData('borderColor', info.event._def.ui.backgroundColor)
+                .setData('backgroundColor', info.event._def.ui.backgroundColor)
+                .setData('textColor', info.event._def.ui.textColor)
         }
 
         function resetModal(addModal = true){
-            Object.keys(calendarObj).forEach(key => { if(key !== 'allDay') calendarObj[key] = '' });
+            calendar.resetData()
             if(addModal) {
                 addCalendarColor.val('green')
                 $("#addCalendar-content").val('')

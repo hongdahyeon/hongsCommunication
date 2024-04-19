@@ -2,7 +2,7 @@ class FormDataToObj {
     static async getParameter(formId) {
         const form = document.getElementById(formId);
         const formData = new FormData(form);
-        const data = Array.from(formData.entries()).reduce((perv, [key, value]) => {
+        return Array.from(formData.entries()).reduce((perv, [key, value]) => {
             if (perv[key]) {
                 Array.isArray(perv[key]) ? perv[key].push(value) : (perv[key] = [perv[key], value]);
             } else {
@@ -10,7 +10,6 @@ class FormDataToObj {
             }
             return perv;
         }, {});
-        return data;
     }
 }
 
@@ -37,6 +36,9 @@ class Util {
             cancelButtonText: cancelButtonText,
         }).then((res) => res.isConfirmed)
     }
+}
+
+class DateUtil {
 
     static dayDifference(start, end, dateCnt = 1) {
         const startDate = new Date(start)
@@ -65,7 +67,6 @@ class Util {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
         const day = String(date.getDate()).padStart(2, '0');
-
         return `${year}-${month}-${day}`;
     }
 }

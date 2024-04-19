@@ -10,6 +10,17 @@ class DateCalendar{
         this._calendar = null
         this._calInfo = null
 
+        this._data = {
+            title: '',
+            uid: '',
+            start: '',
+            end: '',
+            backgroundColor: '',
+            borderColor: '',
+            textColor: '',
+            allDay: true
+        }
+
         // header options
         this._left = 'prev today'
         this._center = 'title'
@@ -67,11 +78,24 @@ class DateCalendar{
         return this
     }
 
+    setData(key, value) {
+        this._data[key] = value
+        return this
+    }
+
+    resetData() {
+        Object.keys(this._data).forEach(key => { if(key !== 'allDay') this._data[key] = '' });
+    }
+
+    getData() {
+        return this._data
+    }
+
     setInfo(info) {
         this._calInfo = info
     }
 
-    getInfo(info) {
+    getInfo() {
         return this._calInfo
     }
 
