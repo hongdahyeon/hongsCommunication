@@ -139,3 +139,6 @@ $("#view-content").html(code)
 
 
 (26) 24-04-18 : fullCalendar랑 db랑 연결
+
+
+(27) 24-04-19 : fullCalendar 정리
