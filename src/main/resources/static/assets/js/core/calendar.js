@@ -10,21 +10,12 @@ class DateCalendar{
         this._calendar = null
         this._calInfo = null
 
-        this._data = {
-            title: '',
-            uid: '',
-            start: '',
-            end: '',
-            backgroundColor: '',
-            borderColor: '',
-            textColor: '',
-            allDay: true
-        }
+        this._data = { title: '', uid: '', start: '', end: '', backgroundColor: '', borderColor: '', textColor: '', allDay: true }
 
         // header options
-        this._left = 'prev today'
+        this._left = 'prev,next today'
         this._center = 'title'
-        this._right = 'dayGridMonth,dayGridWeek,dayGridDay next'
+        this._right = 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
 
         // calendar option
         this._height = '700px'                      // 캘린더 높이

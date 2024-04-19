@@ -148,7 +148,7 @@
 
             calendar.eventRemove(info => {
                 const uid = info.event._def.extendedProps.uid
-                Http.delete(`/api/calendar/delete.json?clUid=${uid}`).then((res) => {
+                Http.deleteUrl(`/api/calendar/delete.json?clUid=${uid}`).then((res) => {
                     resetModal(false)
                 })
             })

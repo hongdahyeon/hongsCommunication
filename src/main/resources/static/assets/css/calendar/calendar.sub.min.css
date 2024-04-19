@@ -1,0 +1,32 @@
+#calendar .fc-today-button,             /*   today 버튼  */
+#calendar .fc-dayGridMonth-button,      /*   month 버튼  */
+#calendar .fc-timeGridWeek-button,      /*   week 버튼   */
+#calendar .fc-timeGridDay-button,       /*    day 버튼   */
+#calendar .fc-listMonth-button,         /*   list 버튼   */
+#calendar .fc-prev-button,              /*    전달 버튼   */
+#calendar .fc-next-button               /*   다음달 버튼  */
+{
+    background-color: white;
+    border-color: black;
+    color: black;
+}
+
+#calendar .fc-today-button:disabled {       /* today 버튼 disable */
+    background-color: black;
+    border-color: black;
+    color: white;
+}
+
+#calendar .fc-daygrid-day-number,                   /* month에서 일수 */
+#calendar .fc-col-header-cell-cushion,              /* week에서 헤더  */
+#calendar .fc-list-day-text,                        /* list에서 날짜  */
+#calendar .fc-list-day-side-text                    /* list에서 요일  */
+{
+    text-decoration: none !important; /* 기존 스타일 무시 */
+    color: black;
+}
+
+#calendar .fc-event {           /* list에서 일정 */
+    color: black;
+    background-color: white;
+}
