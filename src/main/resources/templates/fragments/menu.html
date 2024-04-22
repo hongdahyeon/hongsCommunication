@@ -8,12 +8,52 @@
         </div>
         <div class="list-group list-group-flush">
             <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Dashboard</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">menu1</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">menu2</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">menu3</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">menu4</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">menu5</a>
+
+            <th:block th:each="menu : ${#authentication.principal.user.menu}">
+
+                <th:block th:if="${menu.upperMenuUid == null}">
+                    <h4 class="accordion-button acc-header" style="margin-bottom: 10px; margin-left:10px; margin-top: 10px" role="button" data-bs-toggle="collapse" th:id="|menu${menu.menuUid}|">
+                        <i data-feather="folder" class="font-medium-2 ms-50" style="margin-right: 10px"></i>
+                        <span th:text="${menu.menuText}"></span>
+                    </h4>
+                </th:block>
+
+                <th:block th:if="${#lists.size(menu.children) > 0}">
+                    <div class="accordion-collapse" th:id="|child-menu${menu.menuUid}|">
+                        <div class="list-group">
+                            <th:block th:each="child : ${menu.children}">
+                                <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="${child.menuUrl}">
+                                    <i data-feather="file" class="font-medium-2 ms-50" style="margin-right: 10px"></i>
+                                    <span th:text="${child.menuText}"></span>
+                                </a>
+                            </th:block>
+                        </div>
+                    </div>
+                </th:block>
+
+            </th:block>
+            <!-- Menu 1 -->
         </div>
     </div>
     <!-- e: menu -->
+    <script>
+        const headers  = document.getElementsByClassName("acc-header")
+        for (let header of headers) {
+            header.addEventListener("click", function() {
+                const headerId = header.id;
+                const childMenu = document.getElementById(`child-${headerId}`);
+                if(childMenu) {
+                    const isCollapsed = header.classList.contains("collapsed");
+                    const isCollapsedMenu = childMenu.classList.contains("collapse");
+
+                    if (isCollapsed) header.classList.remove("collapsed");
+                    else header.classList.add("collapsed");
+
+                    if (isCollapsedMenu) childMenu.classList.remove("collapse");
+                    else childMenu.classList.add("collapse");
+                }
+            });
+        }
+
+    </script>
 </th:block>

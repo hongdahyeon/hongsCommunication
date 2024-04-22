@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hongs.community.hongsCommunity.domain.menu.HongMenuMapper">
+
+    <select id="parentList" parameterType="HongMenuDto" resultType="HongMenuVo">
+        SELECT menu_Uid
+              ,upper_menu_uid
+              ,menu_url
+              ,menu_text
+              ,menu_role
+              ,use_yn
+              ,delete_yn
+              ,sort_no
+         FROM hong_menu
+        WHERE upper_menu_uid IS NULL
+          and menu_role = #{menuRole}
+          and delete_yn = #{deleteYn}
+          and use_yn = #{useYn}
+        order by sort_no
+    </select>
+
+    <select id="childList" parameterType="HongMenuDto" resultType="HongMenuVo">
+        SELECT menu_Uid
+             ,upper_menu_uid
+             ,menu_url
+             ,menu_text
+             ,menu_role
+             ,use_yn
+             ,delete_yn
+             ,sort_no
+        FROM hong_menu
+        WHERE upper_menu_uid IS NOT NULL
+          and upper_menu_uid = #{upperMenuUid}
+          and delete_yn = #{deleteYn}
+          and use_yn = #{useYn}
+        order by sort_no
+    </select>
+</mapper>
