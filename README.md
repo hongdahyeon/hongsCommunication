@@ -142,3 +142,6 @@ $("#view-content").html(code)
 
 
 (27) 24-04-19 : fullCalendar 정리
+
+
+(28) 24-04-19 : fullCalendar css 수정
