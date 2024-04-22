@@ -1,5 +1,6 @@
 package hongs.community.hongsCommunity.global.config;
 
+import hongs.community.hongsCommunity.global.auth.PrincipalOAuth2UserService;
 import hongs.community.hongsCommunity.global.handler.CustomLoginFailureHandler;
 import hongs.community.hongsCommunity.global.handler.CustomLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class SecurityConfig {
 
     private final CustomLoginSuccessHandler successHandler;
     private final CustomLoginFailureHandler failureHandler;
+    private final PrincipalOAuth2UserService principalOAuth2UserService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
@@ -59,6 +61,13 @@ public class SecurityConfig {
                     .usernameParameter("userId")
                     .loginProcessingUrl("/loginProc")
             )
+            .oauth2Login( httpSecurityOAuth2LoginConfigurer ->
+                    httpSecurityOAuth2LoginConfigurer
+                            .loginPage(LOGIN)
+                            .successHandler(successHandler)
+                            .failureHandler(failureHandler)
+                            .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(principalOAuth2UserService))
+            )
             .logout(logout ->
                 logout
                     .logoutUrl(LOGOUT)
@@ -71,7 +80,7 @@ public class SecurityConfig {
 
     private CorsConfiguration corsConfiguration(){
         CorsConfiguration cors = new CorsConfiguration();
-        cors.setAllowedOrigins(List.of("*"));       // 모든 출처 허용
+        cors.setAllowedOriginPatterns(List.of("*"));       // 모든 출처 허용
         cors.setAllowedMethods(List.of("*"));       // 모든 http 메서드 허용
         cors.setAllowedHeaders(List.of("*"));       // 모든 헤더 허용
         cors.setAllowCredentials(true);                 // 자격 증명 허용 => 웹 브라우저가 요청을 보낼 때 쿠키와 HTTP 인증 정보를 함께 보내는지 여부를 결정한다.

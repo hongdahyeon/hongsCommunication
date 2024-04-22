@@ -1,0 +1,64 @@
+package hongs.community.hongsCommunity.global.auth;
+
+import hongs.community.hongsCommunity.domain.user.dto.HongSocialUserInsertDto;
+import hongs.community.hongsCommunity.domain.user.service.HongSocialUserService;
+import hongs.community.hongsCommunity.domain.user.vo.HongLoginUserVo;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
+
+    private final HongSocialUserService socialUserService;
+
+    @Override
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        OAuth2User user = super.loadUser(userRequest);
+        String provider = userRequest.getClientRegistration().getRegistrationId();
+        Map<String, Object> userInfo = user.getAttributes();
+
+        String userId = "";
+        String email = "";
+        String name = "";
+
+        // **
+        switch (provider) {
+            case "kakao":
+                Map<String, Object> kakaoAccount = user.getAttribute("kakao_account");
+                userId = provider + "_" + userInfo.get("id");
+                email = (String) kakaoAccount.get("email");
+                name = (String) ((Map<String, Object>) kakaoAccount.get("profile")).get("nickname");
+                break;
+
+            case "naver":
+                Map<String, Object> naverAccount = user.getAttribute("response");
+                userId = provider + "_" + (String) naverAccount.get("id");
+                email = (String) naverAccount.get("email");
+                name = (String) naverAccount.get("name");
+                break;
+
+            case "google": // **
+                userId = provider + "_" + (String) userInfo.get("sub");
+                email = (String) userInfo.get("email");
+                name = (String) userInfo.get("name");
+                break;
+
+        }
+
+        log.info("provider: {} -> userId : {}, name : {}, email : {}", provider, userId, name, email);
+
+        HongLoginUserVo socialUser = socialUserService.findSocialUser(userId);
+
+        if (socialUser == null) socialUser = socialUserService.joinSocialUser(new HongSocialUserInsertDto(userId, name, email));
+        return new PrincipalDetails(socialUser, userInfo);
+    }
+}

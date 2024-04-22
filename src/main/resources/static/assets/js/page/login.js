@@ -44,4 +44,13 @@ $(document).ready(function(e) {
         passwordInput.attr('type', type);
         $("#show-pwd").text(text)
     })
+
+    /* 카카오톡 로그인 */
+    $("#kakao-login-btn").on("click", () => window.location.href = '/oauth2/authorization/kakao')
+
+    /* 네이버 로그인 */
+    $("#naver-login-btn").on("click", () => window.location.href = '/oauth2/authorization/naver')
+
+    /* 구글 로그인 */
+    $("#google-login-btn").on("click", () => window.location.href = '/oauth2/authorization/google')
 })

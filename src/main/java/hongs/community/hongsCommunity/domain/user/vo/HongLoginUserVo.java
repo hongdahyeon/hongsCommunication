@@ -11,6 +11,7 @@ import java.util.List;
 public class HongLoginUserVo {
 
     private Long userUid;
+    private Long socialUserUid;
     private String userId;
     private String password;
     private String userName;
