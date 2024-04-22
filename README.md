@@ -148,3 +148,6 @@ $("#view-content").html(code)
 
 
 (29) 24-04-22 : menu principaldetail
+
+
+(30) 24-04-22 : 소셜 로그인 (카카오, 네이버, 구글)
