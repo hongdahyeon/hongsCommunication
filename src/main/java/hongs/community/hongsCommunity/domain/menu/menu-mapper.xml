@@ -36,4 +36,121 @@
           and use_yn = #{useYn}
         order by sort_no
     </select>
+
+    <select id="superList" parameterType="HongMenuSuperDto" resultType="HongMenuSuperVo">
+        WITH RECURSIVE menu_hierarchy AS (
+            SELECT menu_uid
+                  ,upper_menu_uid
+                  ,menu_url
+                  ,menu_text
+                  ,menu_role
+                  ,use_yn
+                  ,delete_yn
+                  ,sort_no
+                  ,json_array(menu_text) as path_nm
+                  ,json_array(menu_uid) as path
+                  ,0 AS level
+              FROM hong_menu
+             WHERE upper_menu_uid IS NULL
+             <if test="useYn != null">
+               and use_yn = #{useYn}
+             </if>
+               and menu_role = #{menuRole}
+               and delete_yn = 'N'
+             UNION ALL
+            SELECT m.menu_uid
+                  ,m.upper_menu_uid
+                  ,m.menu_url
+                  ,m.menu_text
+                  ,m.menu_role
+                  ,m.use_yn
+                  ,m.delete_yn
+                  ,m.sort_no
+                  ,json_array_append(mh.path_nm, '$', m.menu_text) as path_nm
+                  ,json_array_append(mh.PATH, '$', m.sort_no) as path
+                  ,mh.level + 1 AS level
+              FROM hong_menu AS m
+             INNER JOIN menu_hierarchy mh ON m.upper_menu_uid = mh.menu_Uid
+             where m.delete_yn = 'N'
+              <if test="useYn != null">
+               and m.use_yn = #{useYn}
+              </if>
+               and m.menu_role = #{menuRole}
+               and m.upper_menu_uid is not null
+        )
+        SELECT  mh.menu_uid
+               ,mh.upper_menu_uid
+               ,mh.menu_text
+               ,mh.menu_url
+               ,mh.menu_role
+               ,mh.use_yn
+               ,mh.delete_yn
+               ,mh.sort_no
+               ,mh.path
+               ,mh.level
+               ,CONCAT_WS(' > ', JSON_UNQUOTE(JSON_EXTRACT(mh.path_nm, '$[0]')), JSON_UNQUOTE(JSON_EXTRACT(mh.path_nm, '$[1]'))) AS menu_path
+          FROM menu_hierarchy AS mh
+         ORDER BY JSON_UNQUOTE(JSON_EXTRACT(mh.path, '$[0]')) ASC, JSON_UNQUOTE(JSON_EXTRACT(mh.path, '$[1]')) ASC, JSON_UNQUOTE(JSON_EXTRACT(mh.path, '$[2]')) ASC
+    </select>
+
+    <insert id="join" parameterType="HongMenuInsertUpdateDto">
+        /* HongMenuInsertUpdateDto.join */
+        insert into hong_menu (
+            menu_text
+        <if test="menuUrl != null">
+            ,menu_url
+        </if>
+           ,use_yn
+           ,delete_yn
+           ,sort_no
+           ,menu_role
+        <if test="upperMenuUid != null">
+           ,upper_menu_uid
+        </if>
+           ,reg_id
+           ,mdfr_id
+           ,reg_dt
+           ,mdfr_dt
+        ) values (
+            #{menuText}
+        <if test="menuUrl != null">
+            ,#{menuUrl}
+        </if>
+           ,#{useYn}
+           ,'N'
+           ,#{sortNo}
+           ,#{menuRole}
+        <if test="upperMenuUid != null">
+           ,#{upperMenuUid}
+        </if>
+           ,#{regId}
+           ,#{mdfrId}
+           ,now()
+           ,now()
+        )
+    </insert>
+
+    <update id="update" parameterType="HongMenuInsertUpdateDto">
+        /* HongMenuInsertUpdateDto.update */
+        update hong_menu
+           set menu_text = #{menuText}
+             <if test="menuUrl != null">
+              ,menu_url = #{menuUrl}
+             </if>
+              ,use_yn = #{useYn}
+              ,sort_no = #{sortNo}
+              ,menu_role = #{menuRole}
+            <if test="upperMenuUid != null">
+              ,upper_menu_uid = #{upperMenuUid}
+            </if>
+              ,mdfr_id = #{mdfrId}
+              ,mdfr_dt = now()
+         where menu_uid = #{menuUid}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        update hong_menu
+           set delete_yn = 'Y'
+         where menu_uid = #{menuUid}
+    </delete>
 </mapper>

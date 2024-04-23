@@ -4,9 +4,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
+/**
+* @fileName HongMenuDto
+* @author dahyeon
+* @version 1.0.0
+* @date 2024-04-23
+* @summary  조회용 dto
+**/
+
+@Getter @Setter @NoArgsConstructor
 public class HongMenuDto {
 
     private Long menuUid;

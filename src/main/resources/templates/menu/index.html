@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <div class="row match-height">
+        <div class="col-12 col-md-4">
+            <!-- 왼쪽 카드 영역 -->
+            <div class="card">
+                <div class="card-body">
+                    <h4>권한별 메뉴 관리</h4>
+                    <select class="form-select" id="menu-role">
+                        <option value="ROLE_SUPER" selected>슈퍼 권한</option>
+                        <option value="ROLE_ADMIN">어드민 권한</option>
+                        <option value="ROLE_USER">유저 권한</option>
+                    </select>
+                    <hr class="hr" />
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4>Root</h4>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="add-menu-btn">메뉴 추가</button>
+                    </div>
+                    <div id="tree"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-7">
+            <!-- 오른쪽 카드 영역 -->
+            <div class="card">
+                <div class="card-body" id="menu-form-body" style="display: none">
+                    <h3>권한별 메뉴 상세</h3>
+
+                    <hr class="hr" />
+                    <!-- 오른쪽 카드 내용 -->
+                    <form id="menu-form" class="needs-validation" novalidate>
+                        <input type="hidden" value="" id="upperMenuUid" name="upperMenuUid">
+                        <div class="row mb-3">
+                            <!-- 첫 번째 row: 메뉴 코드와 메뉴 경로 -->
+                            <div class="col-md-6">
+                                <label for="menuUid" class="form-label">메뉴 코드</label>
+                                <input type="text" class="form-control" name="menuUid" id="menuUid" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="menuPath" class="form-label">메뉴 경로</label>
+                                <input type="text" class="form-control" name="menuPath" id="menuPath" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <!-- 두 번째 row: 메뉴 이름과 메뉴 URL -->
+                            <div class="col-md-6">
+                                <label for="menuText" class="form-label">메뉴 이름</label>
+                                <input type="text" class="form-control" name="menuText" id="menuText" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="menuUrl" class="form-label">메뉴 URL</label>
+                                <input type="text" class="form-control" name="menuUrl" id="menuUrl">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <!-- 세 번째 row: 사용 여부와 정렬 순서 -->
+                            <div class="col-md-6">
+                                <label class="form-label">사용 여부</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="useYn" id="useYn_Y" value="Y" required>
+                                    <label class="form-check-label" for="useYn_Y">사용</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="useYn" id="useYn_N" value="N" required>
+                                    <label class="form-check-label" for="useYn_N">미사용</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sortNo" class="form-label">정렬 순서</label>
+                                <input type="number" class="form-control" id="sortNo" name="sortNo" required>
+                            </div>
+                        </div>
+                        <!-- 버튼 영역 -->
+                        <div class="row mb-3">
+                            <div class="col-md-12 text-end">
+                                <button type="button" class="btn btn-outline-danger" id="delete-btn">삭제</button>
+                                <button type="button" class="btn btn-primary" id="save-btn">저장</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body" id="empty-body" style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                    <div class="mb-3 text-center">
+                        <p class="fs-5 text-muted">메뉴를 선택해주세요</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script>
+
+        const menu_tree = new Tree("tree")
+            .setUrl('/api/super/menu/list.json')
+            .setQueryString({menuRole: $("#menu-role").find(":selected").val()})
+            .init()
+
+        $(function () {
+
+            menu_tree.nodeClick((e, data) => {
+                const node = data.node
+                document.getElementById("menu-form-body").style.display = "block"
+                document.getElementById("empty-body").style.display = "none"
+                setForm(node)
+            })
+
+            $("#add-menu-btn").on('click', () => {
+                const {ref, sel} = menu_tree.getSelectNode()
+                if(sel) {
+                    if(sel.id === "new") Util.alert("상위 메뉴를 먼저 등록해주세요.", 'w', 'w')
+                    else {
+                        const obj = {
+                            id: "new",
+                            text: "새 메뉴",
+                            type: "file",
+                            state: {opened: true},
+                            data: {useYn: 'Y', menuPath: `${sel.data.menuPath} > 새 메뉴`}
+                        }
+                        menu_tree.deselectNode(sel.id)
+                        menu_tree.addNode(ref, sel.id, obj, true)
+                        menu_tree.selectNode("new")
+                    }
+                } else {
+                    const obj = {
+                        id: "new",
+                        text: "새 메뉴",
+                        type: "file",
+                        state: {opened: true},
+                        data: {useYn: 'Y', menuPath: '새 메뉴'}
+                    }
+                    const root = menu_tree.getNode("#")
+                    menu_tree.addNode(ref, root, obj, false)
+                    menu_tree.selectNode("new")
+                }
+            })
+
+            $("#menu-role").change(() => {
+                menu_tree
+                    .setQueryString({menuRole: $("#menu-role").find(":selected").val()})
+                    .refresh()
+            })
+
+            $("#save-btn").on('click', (e) => {
+                e.preventDefault();
+                const form = document.getElementById("menu-form")
+                if (form.checkValidity() === false) form.classList.add("was-validated")
+                else {
+                    const menuUid = $("#menuUid").val()
+                    const message = (menuUid) ? '정말 수정하시겠습니까?' : '정말 저장하시겠습니까?'
+                    Util.confirm(message).then((isOk) => {
+                        if(isOk) {
+                            FormDataToObj.getParameter("menu-form").then((obj) => {
+                                obj['menuRole'] = $("#menu-role").find(":selected").val()
+                                if(obj['upperMenuUid'] == 0) delete obj['upperMenuUid']
+                                if(menuUid) {
+                                    obj['menuUid'] = menuUid
+                                    Http.put('/api/super/menu/update.json', obj).then((res) => {
+                                        if(res.message === 1) Util.alert("메뉴 정보가 수정되었습니다.").then(() => window.location.href = '/super/menu')
+                                    })
+                                } else {
+                                    Http.post('/api/super/menu/insert.json', obj).then((res) => {
+                                        if(res.message === 1) Util.alert("메뉴가 추가되었습니다.").then(() => window.location.href = '/super/menu')
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+
+            $("#delete-btn").on('click', (e) => {
+                e.preventDefault();
+                const {ref, sel} = menu_tree.getSelectNode()
+                const menuUid= sel.id
+                Util.confirm("메뉴를 삭제하시겠습니까?").then((isOk) => {
+                    if(isOk) {
+                        Http.deleteUrl(`/api/super/menu/delete.json?menuUid=${menuUid}`).then((res) => {
+                            if(res.message === 1) Util.alert("해당 메뉴가 삭제되었습니다.").then(() => window.location.href = '/super/menu')
+                        })
+                    }
+                })
+            })
+        });
+
+        function setForm(data = {}) {
+            $("#upperMenuUid").val((data.parent === '#') ? 0 : data.parent)
+            $("#menuPath").val(data.data['menuPath'])
+            $("#menuUid").val(data.data['menuUid'])
+            $("#menuText").val(data.data['menuText'])
+            $("#menuUrl").val(data.data['menuUrl'])
+            $(`#useYn_${data.data['useYn']}`).prop("checked", true)
+            $("#sortNo").val(data.data['sortNo'])
+            $("#save-btn").text((data.id === 'new') ? "저장" : "수정")
+            $("#delete-btn").css("visibility", (data.id === 'new') ? "hidden" : "visible");
+        }
+
+    </script>
+</th:block>
+
+</html>

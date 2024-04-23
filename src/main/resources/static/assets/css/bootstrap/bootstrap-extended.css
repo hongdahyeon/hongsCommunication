@@ -1,0 +1,8 @@
+
+/* row > match-height */
+.match-height > [class*='col'] {
+  display: flex;
+  flex-flow: column; }
+
+.match-height > [class*='col'] > .card {
+  flex: 1 1 auto; }

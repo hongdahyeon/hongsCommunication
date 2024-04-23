@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HongCalendarController {
 
     @GetMapping({"/", ""})
-    public String test2(){
+    public String index(){
         return "calendar/index";
     }
 }
