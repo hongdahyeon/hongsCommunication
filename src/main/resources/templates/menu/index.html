@@ -18,7 +18,7 @@
                     <hr class="hr" />
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h4>Root</h4>
-                        <button type="button" class="btn btn-sm btn-outline-primary" id="add-menu-btn">메뉴 추가</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary custom" id="add-menu-btn">메뉴 추가</button>
                     </div>
                     <div id="tree"></div>
                 </div>
@@ -77,8 +77,8 @@
                         <!-- 버튼 영역 -->
                         <div class="row mb-3">
                             <div class="col-md-12 text-end">
-                                <button type="button" class="btn btn-outline-danger" id="delete-btn">삭제</button>
-                                <button type="button" class="btn btn-primary" id="save-btn">저장</button>
+                                <button type="button" class="btn btn-secondary custom" id="delete-btn">삭제</button>
+                                <button type="button" class="btn btn-primary custom" id="save-btn">저장</button>
                             </div>
                         </div>
                     </form>
@@ -113,7 +113,7 @@
             $("#add-menu-btn").on('click', () => {
                 const {ref, sel} = menu_tree.getSelectNode()
                 if(sel) {
-                    if(sel.id === "new") Util.alert("상위 메뉴를 먼저 등록해주세요.", 'w', 'w')
+                    if(sel.id === "new") Util.alert("상위 메뉴를 먼저 등록해주세요.")
                     else {
                         const obj = {
                             id: "new",

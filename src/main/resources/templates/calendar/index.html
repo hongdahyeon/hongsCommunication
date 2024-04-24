@@ -20,7 +20,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="addCalendarModal-form" class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="addCalendar-color" class="col-form-label">일정 색깔</label>
                             <select class="form-select" id="addCalendar-color">
@@ -35,13 +35,13 @@
                         </div>
                         <div class="form-group" style="margin-top: 10px;">
                             <label for="addCalendar-content" class="col-form-label">일정 내용</label>
-                            <input type="text" class="form-control" id="addCalendar-content">
+                            <input type="text" class="form-control" id="addCalendar-content" required>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary add-modal-close">닫기</button>
-                    <button type="button" class="btn btn-primary" id="addCalendar-add">일정 추가</button>
+                    <button type="button" class="btn btn-secondary custom-gray add-modal-close">닫기</button>
+                    <button type="button" class="btn btn-primary custom" id="addCalendar-add">일정 추가</button>
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form  id="updateCalendarModal-form" class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="updateCalendar-color" class="col-form-label">일정 색깔</label>
                             <select class="form-select" id="updateCalendar-color">
@@ -76,14 +76,14 @@
                         </div>
                         <div class="form-group" style="margin-top: 10px;">
                             <label for="updateCalendar-content" class="col-form-label">일정 내용</label>
-                            <input type="text" class="form-control" id="updateCalendar-content">
+                            <input type="text" class="form-control" id="updateCalendar-content" required>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary update-modal-close">닫기</button>
-                    <button type="button" class="btn btn-outline-danger" id="updateCalendar-delete">일정 삭제</button>
-                    <button type="button" class="btn btn-primary" id="updateCalendar-update">일정 수정</button>
+                    <button type="button" class="btn btn-secondary custom-gray update-modal-close">닫기</button>
+                    <button type="button" class="btn btn-outline-primary custom" id="updateCalendar-delete">일정 삭제</button>
+                    <button type="button" class="btn btn-primary custom" id="updateCalendar-update">일정 수정</button>
                 </div>
             </div>
         </div>
@@ -108,35 +108,44 @@
             })
 
             $("#addCalendar-add").on('click', () => {
-                calendar
-                    .setData('backgroundColor', addCalendarColor.find(":selected").val())
-                    .setData('borderColor', addCalendarColor.find(":selected").val())
-                    .setData('title', $("#addCalendar-content").val())
+                const form = document.getElementById("addCalendarModal-form")
+                if (form.checkValidity() === false) form.classList.add("was-validated")
+                else {
+                    calendar
+                        .setData('backgroundColor', addCalendarColor.find(":selected").val())
+                        .setData('borderColor', addCalendarColor.find(":selected").val())
+                        .setData('title', $("#addCalendar-content").val())
 
-                const obj = calendar.getData()
-                Http.post('/api/calendar/insert.json', obj).then((res) => {
-                    calendar.setData('uid', res.message)
-                    calendar.addDateEvent(calendar.getData())
-                    resetModal(true)
-                })
+                    const obj = calendar.getData()
+                    Http.post('/api/calendar/insert.json', obj).then((res) => {
+                        calendar.setData('uid', res.message)
+                        calendar.addDateEvent(calendar.getData())
+                        resetModal(true)
+                    })
+                }
             })
 
             $("#updateCalendar-update").on('click', () => {
-                calendar
-                    .setData('title', $("#updateCalendar-content").val())
-                    .setData('start', $("#updateCalendar-period-start").val())
-                    .setData('end', DateUtil.getNextDates($("#updateCalendar-period-end").val()))
-                    .setData('textColor', updateCalendarColor.find(":selected").attr('data-text'))
-                    .setData('backgroundColor', updateCalendarColor.find(":selected").val())
-                    .setData('borderColor', updateCalendarColor.find(":selected").val())
 
-                const obj = calendar.getData()
-                obj['calUid'] = obj['uid']
-                delete obj['uid']
-                Http.put('/api/calendar/update.json', obj).then((res) => {
-                    calendar.updateDateEvent(calendar.getData())
-                    resetModal(false)
-                })
+                const form = document.getElementById("updateCalendarModal-form")
+                if (form.checkValidity() === false) form.classList.add("was-validated")
+                else {
+                    calendar
+                        .setData('title', $("#updateCalendar-content").val())
+                        .setData('start', $("#updateCalendar-period-start").val())
+                        .setData('end', DateUtil.getNextDates($("#updateCalendar-period-end").val()))
+                        .setData('textColor', updateCalendarColor.find(":selected").attr('data-text'))
+                        .setData('backgroundColor', updateCalendarColor.find(":selected").val())
+                        .setData('borderColor', updateCalendarColor.find(":selected").val())
+
+                    const obj = calendar.getData()
+                    obj['calUid'] = obj['uid']
+                    delete obj['uid']
+                    Http.put('/api/calendar/update.json', obj).then((res) => {
+                        calendar.updateDateEvent(calendar.getData())
+                        resetModal(false)
+                    })
+                }
             })
 
             calendar.rowSelect(info => {

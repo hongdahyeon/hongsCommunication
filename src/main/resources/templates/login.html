@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>login</title>
     <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" type="text/css" th:href="@{'/assets/css/custom/login.css'}">
 </head>
 
 <body>
@@ -11,59 +12,48 @@
     <div class="card col-md-6">
 
         <!-- start : Login Form  -->
-        <form id="form" action="/loginProc" method="post">
-
-            <div class="card-header">
-                <h4 class="card-title">로그인</h4>
-            </div>
-            <div class="card-body">
-                <div class="mb-3 mt-3">
-                    <label for="userId">아이디</label>
-                    <input type="text" class="form-control" id="userId" name="userId" value="super" />
-                </div>
-
-                <div class="mb-3 mt-3">
-                    <label for="password">비밀번호</label>
-                    <div class="input-group">
-                        <input type="password" class="form-control" id="password" name="password" value="1234" />
-                        <button class="btn btn-outline-dark" type="button" id="show-pwd">show</button>
-                    </div>
-                    <p class="error-message" style="color: red" id="pwdError"></p>
-                </div>
-
+        <div class="login-container">
+            <h2>로그인</h2>
+            <form method="post" action="/loginProc" id="form">
                 <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                <label for="userId">아이디</label>
+                <input type="text" id="userId" name="userId" required>
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" required>
+                <p class="error-message" style="color: #ff69b4; font-weight: bold" id="pwdError"></p>
+                <div class="remember-checkbox">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">비밀번호 기억하기</label>
+                </div>
+                <button type="submit" class="login-btn">로그인</button>
 
-                <div class="form-check mb-3">
-                    <div class="card-text d-flex justify-content-between">
-                        <div class="text-start">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember"> Remember me
-                            </label>
-                        </div>
-                        <div class="text-end">
-                            <a id="find-user-password-userId" href="#">아이디/비번 찾기</a>
-                        </div>
-                    </div>
+                <div class="text-center mt-3">
+                    <span style="cursor: pointer; font-weight: bold;" id="search-id">아이디 찾기</span>
+                    <span>|</span>
+                    <span style="cursor: pointer; font-weight: bold;" id="search-pwd">비밀번호 찾기</span>
                 </div>
 
-                <button type="submit" class="btn btn-primary">로그인</button>
-                <button type="button" class="btn btn-secondary" id="goto-new-login">회원가입</button>
+                <hr>
 
-                <hr class="hr" />
-
-                <div class="card-text" style="margin-top: 10px">
-                    <div class="text-start">
+                <div class="card-text text-center" style="margin-top: 10px;">
+                    <div class="text-center d-inline-block">
                         <span><b>소셜 로그인</b></span>
                         <div class="mb-3 mt-3">
-                            <img src="/assets/src/img/login/kakao.png" id="kakao-login-btn" style="cursor: pointer; ">
-                            <img src="/assets/src/img/login/naver.png" id="naver-login-btn" style="cursor: pointer; ">
-                            <img src="/assets/src/img/login/google.png" id="google-login-btn" style="cursor: pointer; ">
+                            <img src="/assets/src/img/login/sm-kakao.png" id="kakao-login-btn" style="cursor: pointer; margin-right: 10px;">
+                            <img src="/assets/src/img/login/sm-naver.png" id="naver-login-btn" style="cursor: pointer; margin-right: 10px;">
+                            <img src="/assets/src/img/login/sm-google.png" id="google-login-btn" style="cursor: pointer; ">
                         </div>
                     </div>
                 </div>
 
-            </div>
-        </form>
+                <hr>
+
+                <div class="text-center mt-3">
+                    <span>아직 회원이 아니신가요? &nbsp;</span>
+                    <span style="color: #ff69b4;cursor: pointer; font-weight: bold;" id="new-login">회원가입하러가기</span>
+                </div>
+            </form>
+        </div>
         <!-- end : Login Form  -->
 
     </div>

@@ -51,6 +51,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry
                 .addInterceptor(loggingInterceptor())
-                .excludePathPatterns("/assets/**");
+                .excludePathPatterns("/assets/**", "/error");
     }
 }

@@ -14,7 +14,7 @@ class FormDataToObj {
 }
 
 class Util {
-    static alert(html, icon = 's', btn = 's') {
+    static alertIcon(html, icon = 's', btn = 's') {
         return Swal.fire({
             html,
             icon: (icon === 's') ? 'success' : 'warning',
@@ -24,14 +24,35 @@ class Util {
         });
     }
 
-    static confirm(html, icon = 'w', confirmButtonText = '확인', cancelButtonText = '취소') {
+    static alert(html) {
+        return Swal.fire({
+            html,
+            confirmButtonColor: '#ff69b4',
+            focusConfirm: false,
+            confirmButtonText: "확인"
+        });
+    }
+
+    static confirmIcon(html, icon = 'w', confirmButtonText = '확인', cancelButtonText = '취소') {
         return Swal.fire({
             html,
             icon: (icon === 'w') ? 'warning' : 'success',
             focusConfirm: false,
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#ff69b4',
             cancelButtonColor: '#d33',
+            confirmButtonText: confirmButtonText,
+            cancelButtonText: cancelButtonText,
+        }).then((res) => res.isConfirmed)
+    }
+
+    static confirm(html, confirmButtonText = '확인', cancelButtonText = '취소') {
+        return Swal.fire({
+            html,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonColor: '#ff69b4',
+            cancelButtonColor: '#6e7881',
             confirmButtonText: confirmButtonText,
             cancelButtonText: cancelButtonText,
         }).then((res) => res.isConfirmed)

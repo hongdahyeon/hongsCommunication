@@ -1,0 +1,84 @@
+/* btn-primary 커스텀 */
+.btn.btn-primary.custom {
+    background-color: #ff69b4 !important;
+    color: #fff !important;
+    border-color: #ff69b4 !important;
+    --bs-btn-hover-color: #fff !important;
+    --bs-btn-hover-bg: #ff69b4 !important;
+    --bs-btn-hover-border-color: #ff69b4 !important;
+    --bs-btn-active-color: #fff !important;
+    --bs-btn-active-bg: #ff69b4 !important;
+    --bs-btn-active-border-color: #ff69b4 !important;
+    --bs-btn-disabled-color: #fff !important;
+    --bs-btn-disabled-bg: #ff69b4 !important;
+    --bs-btn-disabled-border-color: #ff69b4 !important;
+}
+.btn.btn-primary.custom:hover {
+    background-color: #ff4d88 !important;
+    color: #fff !important;
+}
+
+/* btn-outline-primary 커스텀 */
+.btn.btn-outline-primary.custom {
+    background-color: #fff !important;
+    color: #000000 !important;
+    border-color: #ffc0cb !important;
+    --bs-btn-hover-color: #000000 !important;
+    --bs-btn-hover-bg: #ffc0cb !important;
+    --bs-btn-hover-border-color: #ffc0cb !important;
+    --bs-btn-active-color: #000000 !important;
+    --bs-btn-active-bg: #fff !important;
+    --bs-btn-active-border-color: #ffc0cb !important;
+    --bs-btn-disabled-color: #000000 !important;
+    --bs-btn-disabled-bg: #fff !important;
+    --bs-btn-disabled-border-color: #ffc0cb !important;
+}
+.btn.btn-outline-primary.custom:hover {
+    background-color: #ffc0cb !important;
+    color: #000000 !important;
+}
+
+/* btn-secondary 커스텀 */
+.btn.btn-secondary.custom {
+    background-color: #CCCCCC  !important;
+    color: #fff !important;
+    border-color: #CCCCCC  !important;
+    --bs-btn-hover-color: #fff !important;
+    --bs-btn-hover-bg: #CCCCCC  !important;
+    --bs-btn-hover-border-color: #CCCCCC  !important;
+    --bs-btn-active-color: #fff !important;
+    --bs-btn-active-bg: #CCCCCC  !important;
+    --bs-btn-active-border-color: #CCCCCC  !important;
+    --bs-btn-disabled-color: #fff !important;
+    --bs-btn-disabled-bg: #CCCCCC  !important;
+    --bs-btn-disabled-border-color: #CCCCCC  !important;
+}
+.btn.btn-secondary.custom:hover {
+    background-color: #A0A0A0 !important;
+    color: #fff !important;
+}
+
+/* sweetalert custom */
+.swal2-confirm {
+    border:0;
+    border-radius:.25em;
+    background:initial;
+    background-color: #ff69b4 !important;
+    color: #fff;
+    font-size:1em
+}
+div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm:focus{
+    box-shadow:0 0 0 3px #ff69b4 !important;
+}
+
+.swal2-cancel{
+    border:0;
+    border-radius:.25em;
+    background:initial;
+    background-color: #6e7881 !important;
+    color:#fff;
+    font-size:1em
+}
+div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel:focus{
+    box-shadow:0 0 0 3px #6e7881 !important;
+}
