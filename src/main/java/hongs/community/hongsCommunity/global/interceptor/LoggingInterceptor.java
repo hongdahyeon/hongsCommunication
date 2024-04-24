@@ -66,7 +66,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
 
             String[] values = req.getParameterValues(key);
             if(values.length == 1) {
-                paramText.append("\t{").append(key).append(" = ").append(StringUtil.fixLength(values[0], 50)).append("}\n}");
+                paramText.append("\t{").append(key).append(" = ").append(StringUtil.fixLength(values[0], 50)).append("}\n");
             }
             else {
                 paramText.append("\t{").append(key).append("[] = [");

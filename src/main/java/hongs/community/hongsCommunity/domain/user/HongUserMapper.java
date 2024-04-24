@@ -1,8 +1,6 @@
 package hongs.community.hongsCommunity.domain.user;
 
-import hongs.community.hongsCommunity.domain.user.dto.HongSocialUserInsertDto;
-import hongs.community.hongsCommunity.domain.user.dto.HongUserInsertDto;
-import hongs.community.hongsCommunity.domain.user.dto.HongUserUpdateFailCntDto;
+import hongs.community.hongsCommunity.domain.user.dto.*;
 import hongs.community.hongsCommunity.domain.user.vo.HongCheckUserVo;
 import hongs.community.hongsCommunity.domain.user.vo.HongLoginUserVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -25,4 +23,8 @@ public interface HongUserMapper {
     void resetFailCnt(String userId);
 
     HongLoginUserVo findUserByUid(Long userUid);
+
+    String searchId(HongSearchIdPwdDto dto);
+
+    void updateUserPwd(HongUserUpdatePwdDto dto);
 }

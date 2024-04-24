@@ -55,10 +55,10 @@ $(document).ready(function(e) {
     $("#google-login-btn").on("click", () => window.location.href = '/oauth2/authorization/google')
 
     /* 아이디 찾기 */
-    $("#search-id").on('click', () => console.log("search-id clicked.."))
+    $("#search-id").on('click', () => window.location.href = '/searchId')
 
     /* 비밀번호 찾기 */
-    $("#search-pwd").on('click', () => console.log("search-pwd clicked.."))
+    $("#search-pwd").on('click', () => window.location.href = '/searchPwd')
 
     /* 회원가입 하기 */
     $("#new-login").on('click', () => console.log("new-login clicked.."))

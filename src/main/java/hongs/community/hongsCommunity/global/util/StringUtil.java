@@ -2,6 +2,8 @@ package hongs.community.hongsCommunity.global.util;
 
 import org.apache.commons.text.StringEscapeUtils;
 
+import java.util.Random;
+
 public class StringUtil {
     public static String unescape(String str) {
         return StringEscapeUtils.unescapeHtml4(str);
@@ -26,5 +28,19 @@ public class StringUtil {
             return src.substring(0, limit) + "...";
         }
         return src;
+    }
+
+    public static String random(int length){
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder password = new StringBuilder();
+
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            char randomChar = characters.charAt(index);
+            password.append(randomChar);
+        }
+
+        return password.toString();
     }
 }

@@ -19,6 +19,44 @@ public class EmailService {
         this.sendEmail(to, subject, content);
     }
 
+    public void sendSearchId(String to, String searchId) {
+        String subject = "아이디입니다.";
+        String content = "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<body>\n" +
+                "    <div class=\"container\">\n" +
+                "        <div class=\"form-group\">\n" +
+                "            <label for=\"telephone\">아이디입니다.</label>\n" +
+                "            <input type=\"text\" class=\"form-control\" value=\"" + searchId + "\" readonly>\n" +
+                "        </div>\n" +
+                "    </div>\n" +
+                "</body>\n" +
+                "</html>";
+
+        this.sendEmail(to, subject, content);
+    }
+
+    public void sendInitialPwdEmail(String to, String initialPassword){
+        String subject = "초기화된 비밀번호입니다.";
+        String text = "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<body>\n" +
+                "    <div class=\"container\">\n" +
+                "        <div class=\"form-group\">\n" +
+                "            <label for=\"telephone\">초기화된 비밀번호입니다</label>\n" +
+                "            <input type=\"text\" class=\"form-control\" value=\"" + initialPassword + "\" readonly>\n" +
+                "        </div>\n" +
+                "        <span style=\"color: red; font-size: 12px;\">로그인 후\n" +
+                "            <span style=\"text-decoration: underline;\">\"프로필 이미지 클릭 > 나의정보\"</span>\n" +
+                "            에서 비밀번호를 변경해주시기 바랍니다.\n" +
+                "        </span>\n" +
+                "    </div>\n" +
+                "</body>\n" +
+                "</html>";
+
+        this.sendEmail(to, subject, text);
+    }
+
     private void sendEmail(String to, String subject, String content) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try{

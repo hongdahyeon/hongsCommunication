@@ -13,6 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+/**
+* @fileName HongSocialUserService
+* @author dahyeon
+* @version 1.0.0
+* @date 2024-04-24
+* @summary  소셜 로그인을 위한 서비스 : 소셜 로그인 찾기, 소셜 로그인 회원가입
+**/
+
 @Service
 @RequiredArgsConstructor
 @Slf4j

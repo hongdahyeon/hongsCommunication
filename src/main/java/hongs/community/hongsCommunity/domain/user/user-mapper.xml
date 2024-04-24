@@ -116,4 +116,20 @@
         insert into hong_social_user ( user_id )
         values ( #{userId} )
     </insert>
+
+    <select id="searchId" parameterType="HongSearchIdPwdDto" resultType="String">
+        /* searchId */
+        select user_id
+          from hong_user
+         where user_name = #{userName}
+           and user_email = #{userEmail}
+    </select>
+
+    <update id="updateUserPwd" parameterType="HongUserUpdatePwdDto">
+        /* HongUserUpdatePwdDto.updateUserPwd */
+        update hong_user
+           set password = #{password}
+         where user_email = #{userEmail}
+           and user_name = #{userName}
+    </update>
 </mapper>

@@ -7,6 +7,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+/**
+* @fileName HongLoginUserService
+* @author dahyeon
+* @version 1.0.0
+* @date 2024-04-24
+* @summary  로그인 시점에 사용되는 service : 유저 찾기, 비번실패횟수 업데이트
+**/
+
 @Service
 @RequiredArgsConstructor
 @Slf4j

@@ -16,9 +16,16 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.login-container h2 {
+.login-container h4 {
     text-align: center;
+    font-weight: bold;
     margin-bottom: 20px;
+}
+
+.login-container label.explain {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
 }
 
 .login-container label {
@@ -65,5 +72,16 @@ body {
     border-radius: 4px;
     padding: 10px 0;
     width: 100%;
+    cursor: pointer;
+}
+
+.login-container .back-btn {
+    background-color: #cccccc;
+    color: #ffff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 0;
+    width: 100%;
+    margin-top: 5px;
     cursor: pointer;
 }

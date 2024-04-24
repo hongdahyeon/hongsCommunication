@@ -6,6 +6,8 @@ public class SecurityConfigMatchers {
 
     public static final AntPathRequestMatcher[] BEFORE_LOGIN = new  AntPathRequestMatcher[]{
              new AntPathRequestMatcher("/login")
+            ,new AntPathRequestMatcher("/searchId")
+            ,new AntPathRequestMatcher("/searchPwd")
             ,new AntPathRequestMatcher("/assets/**")
             ,new AntPathRequestMatcher("/api/front/**")
             ,new AntPathRequestMatcher("/api/swagger-ui/index.html")

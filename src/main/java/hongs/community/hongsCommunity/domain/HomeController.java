@@ -29,4 +29,14 @@ public class HomeController {
     public String login() {
         return "/login";
     }
+
+    @GetMapping("/searchId")
+    public String searchId() {
+        return "/searchId";
+    }
+
+    @GetMapping("/searchPwd")
+    public String searchPwd() {
+        return "/searchPwd";
+    }
 }
