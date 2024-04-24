@@ -161,3 +161,6 @@ $("#view-content").html(code)
 
 
 (33) 24-04-24 : swagger 태그 추가 및 로그찍는곳에 params 추가
+
+
+(34) 24-04-24 : yml 파일 암호화
