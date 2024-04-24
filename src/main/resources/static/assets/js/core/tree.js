@@ -1,13 +1,11 @@
 class Tree {
-
     constructor(id) {
         this._initialValues(id)
     }
-
     _initialValues(id){
         this._id = id
         this._url = ''
-        this._queryString = ''
+        this._queryString = {}
         this._check_callback = true
         this._nodeClick = null
         this._js_tree = null
@@ -19,9 +17,8 @@ class Tree {
         return this
     }
 
-    setQueryString(obj = {}) {
-        this._queryString = (Object.keys(obj).length === 0) ? ''
-                            : '?' + Object.entries(obj).map(([key, val]) => `${key}=${val}`).join('&');
+    setParams(obj = {}) {
+        this._queryString = obj
         return this
     }
 
@@ -83,7 +80,7 @@ class Tree {
     }
 
     getTreeData = (obj, callback) => {
-        Http.get(`${this._url}${this._queryString}`).done((result) => {
+        Http.get(this._url, this._queryString).done((result) => {
             const dataList = result.message;
             let dataMap = {};
             let data = [];

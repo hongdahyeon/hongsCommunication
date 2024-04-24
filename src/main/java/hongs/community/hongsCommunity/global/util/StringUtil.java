@@ -20,4 +20,11 @@ public class StringUtil {
             return str1.equals(str2) && str2.equals(str1);
         }
     }
+
+    public static String fixLength(String src, int limit) {
+        if (src.length() > limit) {
+            return src.substring(0, limit) + "...";
+        }
+        return src;
+    }
 }

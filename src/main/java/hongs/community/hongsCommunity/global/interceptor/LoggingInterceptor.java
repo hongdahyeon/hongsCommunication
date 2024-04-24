@@ -1,7 +1,9 @@
 package hongs.community.hongsCommunity.global.interceptor;
 
+import hongs.community.hongsCommunity.global.util.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jodd.util.ArraysUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +11,8 @@ import org.springframework.util.StopWatch;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UrlPathHelper;
+
+import java.util.Enumeration;
 
 @Slf4j
 public class LoggingInterceptor implements HandlerInterceptor {
@@ -43,13 +47,40 @@ public class LoggingInterceptor implements HandlerInterceptor {
         StringBuilder logs = new StringBuilder();
         logs.append("\n========================================");
 
+
         String requestURI = req.getRequestURI();
         String method = req.getMethod();
-        String url = new UrlPathHelper().getRequestUri(req);
 
+        /* URI */
         logs.append("\n# URI: ").append(requestURI);
+
+        /* METHOD */
         logs.append("\n# METHOD: ").append(method);
 
+        /* PARAMS */
+        int parameterLength = 0;
+        StringBuilder paramText = new StringBuilder();
+        Enumeration<String> _paramNames = req.getParameterNames();
+        while(_paramNames.hasMoreElements()) {
+            String key = _paramNames.nextElement().toString();
+
+            String[] values = req.getParameterValues(key);
+            if(values.length == 1) {
+                paramText.append("\t{").append(key).append(" = ").append(StringUtil.fixLength(values[0], 50)).append("}\n}");
+            }
+            else {
+                paramText.append("\t{").append(key).append("[] = [");
+                paramText.append(ArraysUtil.toString(values));
+                paramText.append("]}\n");
+            }
+            parameterLength++;
+        }
+        if(parameterLength > 0) {
+            logs.append("\nPARAMS     : ").append(parameterLength).append(" 건\n");
+            logs.append(paramText.substring(0, paramText.length()-1));
+        }
+
+        /* SQL */
         StringBuilder sql = (StringBuilder) req.getAttribute(MYBATIS_SQL_LOG);
         if(sql != null) logs.append("\n# SQL: ").append(sql);
 

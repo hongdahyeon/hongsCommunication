@@ -98,7 +98,7 @@
 
         const menu_tree = new Tree("tree")
             .setUrl('/api/super/menu/list.json')
-            .setQueryString({menuRole: $("#menu-role").find(":selected").val()})
+            .setParams({menuRole: $("#menu-role").find(":selected").val()})
             .init()
 
         $(function () {
@@ -142,7 +142,7 @@
 
             $("#menu-role").change(() => {
                 menu_tree
-                    .setQueryString({menuRole: $("#menu-role").find(":selected").val()})
+                    .setParams({menuRole: $("#menu-role").find(":selected").val()})
                     .refresh()
             })
 
