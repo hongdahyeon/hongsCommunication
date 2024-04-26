@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>login</title>
     <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <meta th:name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet" type="text/css" th:href="@{'/assets/css/custom/login.css'}">
 </head>
 
@@ -22,8 +24,8 @@
                 <input type="password" id="password" name="password" required>
                 <p class="error-message" style="color: #ff69b4; font-weight: bold" id="pwdError"></p>
                 <div class="remember-checkbox">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">비밀번호 기억하기</label>
+                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                    <label for="remember">아이디 기억하기</label>
                 </div>
                 <button type="submit" class="login-btn">로그인</button>
 
@@ -55,6 +57,100 @@
             </form>
         </div>
         <!-- end : Login Form  -->
+
+        <!-- Start : change pwd form -->
+        <form id="change-pwd-form" class="needs-validation" novalidate>
+            <div class="modal" id="changePwdModal" tabindex="-1" aria-labelledby="changePwdModalLabel" data-bs-keyboard="false" aria-hidden="true" data-bs-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">비밀번호 변경하기</h4>
+                        </div>
+
+                        <form>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <div class="mb-3 mt-3">
+                                    <p class="error-message" style="color: #ff69b4">* 비밀번호가 만료되었습니다.</p>
+                                </div>
+                                <div class="mb-3 mt-3">
+                                    <label for="changePwdModal-loginUserId">아이디</label>
+                                    <input type="text" class="form-control custom" id="changePwdModal-loginUserId" name="userId" readonly/>
+                                </div>
+                                <div class="mb-3 mt-3">
+                                    <label for="changePwd">비밀번호</label>
+                                    <input type="password" class="form-control custom" id="changePwd" name="password" required />
+                                    <div class="invalid-feedback">비밀번호를 입력하세요.</div>
+                                </div>
+                                <div class="mb-3 mt-3">
+                                    <label for="changePwdChk">비밀번호 확인</label>
+                                    <input type="password" class="form-control custom" id="changePwdChk" required />
+                                    <div class="invalid-feedback">비밀번호가 일치하지 않습니다.</div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary custom" id="more-days">90일 더 연장하기</button>
+                            <button type="button" class="btn btn-primary custom" id="change-pwd">비밀번호 변경하기</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- End : change pwd form -->
+
+        <!-- Start : validate email form -->
+        <form id="validate-email-form" class="needs-validation" novalidate>
+            <div class="modal" id="validateEmailModal" tabindex="-1" aria-labelledby="validateEmailModalLabel" data-bs-keyboard="false" aria-hidden="true" data-bs-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">이메일 인증하기</h4>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+
+                            <div class="mb-3 mt-3">
+                                <p class="error-message" style="color: #ff69b4">* 최근 로그인일로부터 1년이 지나 휴먼 계정이 되었습니다. </p>
+                            </div>
+
+                            <div class="mb-3 mt-3">
+                                <label for="validateEmailModal-loginUserId">아이디</label>
+                                <input type="text" class="form-control" id="validateEmailModal-loginUserId" name="userId" readonly/>
+                            </div>
+
+                            <div class="mb-3 mt-3">
+                                <label for="chkEmail">이메일</label>
+                                <input type="text" class="form-control" id="chkEmail" name="userEmail" required />
+                                <div class="invalid-feedback">이메일을 입력하세요.</div>
+                            </div>
+
+                            <div class="mb-3 mt-3">
+                                <label for="verify-code">인증번호</label>
+                                <input type="text" class="form-control" id="verify-code" name="validate-code" />
+                            </div>
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary custom" id="email-validate">인증번호 발송</button>
+                            <button type="button" class="btn btn-outline-primary custom" id="email-validate-chk" disabled>인증하기</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- End : validate email form -->
 
     </div>
 </div>

@@ -70,7 +70,6 @@
 div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm:focus{
     box-shadow:0 0 0 3px #ff69b4 !important;
 }
-
 .swal2-cancel{
     border:0;
     border-radius:.25em;
@@ -81,4 +80,21 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm:focus{
 }
 div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel:focus{
     box-shadow:0 0 0 3px #6e7881 !important;
+}
+
+
+/* checkbox, radio button */
+.form-check-input.custom {
+    border:2px solid #ff69b4 !important;
+    display:inline-block;
+}
+.form-check-input.custom:focus {
+    border-color: #ff69b4 !important;
+    outline:0;
+    box-shadow:0 0 0 .25rem rgba(255, 166, 166, 0.25) !important;
+}
+.form-check-input.custom:checked {
+    background-color: #ff69b4 !important; /* 체크됐을 때 배경색 */
+    border-color: #ff69b4 !important;
+    background-repeat: no-repeat;
 }

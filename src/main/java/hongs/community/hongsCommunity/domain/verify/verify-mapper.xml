@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hongs.community.hongsCommunity.domain.verify.HongVerifyCodeMapper">
+
+    <insert id="join" parameterType="HongVerifyCodeInsertDto">
+        /* HongVerifyCodeInsertDto.join */
+        insert into hong_verify_code (
+            user_email
+           ,verify_check
+           ,verify_code
+           ,verify_created
+           ,verify_expire
+        ) values (
+            #{userEmail}
+           ,#{verifyCheck}
+           ,#{verifyCode}
+           ,#{verifyCreated}
+           ,#{verifyExpire}
+        )
+    </insert>
+
+    <select id="checkVerify" parameterType="HongVerifyCheckDto" resultType="String">
+        /* HongVerifyCheckDto.checkVerify */
+        select verify_code
+          from hong_verify_code
+         where user_email = #{userEmail}
+           and verify_expire > now()
+           and verify_check is false
+         order by verify_created desc
+         limit 1;
+    </select>
+
+    <update id="changeVerifyCheck" parameterType="String">
+        /* changeVerifyCheck */
+        update hong_verify_code
+           set verify_check = true
+         where user_email = #{userEmail}
+    </update>
+
+    <update id="changeUserLastLoginDate" parameterType="String">
+        /* changeUserLastLoginDate */
+        update hong_user
+           set last_login_date = now()
+         where user_id = #{userId}
+    </update>
+</mapper>

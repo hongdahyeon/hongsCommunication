@@ -1,9 +1,7 @@
 package hongs.community.hongsCommunity.domain.user.service;
 
 import hongs.community.hongsCommunity.domain.user.HongUserMapper;
-import hongs.community.hongsCommunity.domain.user.dto.HongSearchIdPwdDto;
-import hongs.community.hongsCommunity.domain.user.dto.HongUserInsertDto;
-import hongs.community.hongsCommunity.domain.user.dto.HongUserUpdatePwdDto;
+import hongs.community.hongsCommunity.domain.user.dto.*;
 import hongs.community.hongsCommunity.domain.user.vo.HongLoginUserVo;
 import hongs.community.hongsCommunity.global.hongs.mail.EmailService;
 import hongs.community.hongsCommunity.global.util.StringUtil;
@@ -57,6 +55,20 @@ public class HongUserService {
             String encodePassword = passwordEncoder.encode(initialPassword);
             userMapper.updateUserPwd(new HongUserUpdatePwdDto(encodePassword, dto));
             emailService.sendInitialPwdEmail(dto.getUserEmail(), initialPassword);
+            return true;
+        }
+    }
+
+    public Integer changePwd(HongUserChngPwdDto dto) {
+        if(dto.getChngPwd()) dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        return userMapper.chngPwd(dto);
+    }
+
+    public Boolean sendEmail(HongUserSendEmailDto dto) {
+        Integer searchedUser = userMapper.searchUser(dto);
+        if(searchedUser == 0) return false;
+        else {
+            emailService.sendVerification(dto.getUserEmail());
             return true;
         }
     }

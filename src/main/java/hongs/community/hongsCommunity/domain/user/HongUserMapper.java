@@ -27,4 +27,8 @@ public interface HongUserMapper {
     String searchId(HongSearchIdPwdDto dto);
 
     void updateUserPwd(HongUserUpdatePwdDto dto);
+
+    Integer chngPwd(HongUserChngPwdDto dto);
+
+    Integer searchUser(HongUserSendEmailDto dto);
 }

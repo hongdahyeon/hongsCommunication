@@ -56,11 +56,23 @@ body {
     margin-top: 15px;
     margin-bottom: 10px;
 }
-
+.login-container .remember-checkbox .form-check-input {
+    border:2px solid #ff69b4 !important;
+    display:inline-block;
+}
+.login-container .remember-checkbox .form-check-input:focus {
+    border-color: #ff69b4 !important;
+    outline:0;
+    box-shadow:0 0 0 .25rem rgba(255, 166, 166, 0.25) !important;
+}
+.login-container .remember-checkbox .form-check-input:checked {
+    background-color: #ff69b4 !important; /* 체크됐을 때 배경색 */
+    border-color: #ff69b4 !important;
+    background-repeat: no-repeat;
+}
 .login-container .remember-checkbox input[type="checkbox"] {
     margin-right: 10px; /* 체크박스 오른쪽 여백 추가 */
 }
-
 .login-container .remember-checkbox label {
     margin: 0; /* 레이블 여백 제거 */
 }

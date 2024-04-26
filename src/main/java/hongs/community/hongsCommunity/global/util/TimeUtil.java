@@ -28,4 +28,8 @@ public class TimeUtil {
         return futureDate.format(DATE_TIME_FORMATTER);
     }
 
+    public static LocalDateTime daysAfter_Date(int after) {
+        return TODAY.plusDays(after);
+    }
+
 }

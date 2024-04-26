@@ -132,4 +132,23 @@
          where user_email = #{userEmail}
            and user_name = #{userName}
     </update>
+
+    <update id="chngPwd" parameterType="HongUserChngPwdDto">
+        /* HongUserChngPwdDto.chngPwd */
+        update hong_user
+           set pwd_last_update = #{pwdLastUpdate}
+           <if test="chngPwd == true">
+              ,password = #{password}
+           </if>
+          where user_id = #{userId}
+    </update>
+
+    <select id="searchUser" parameterType="HongUserSendEmailDto" resultType="int">
+        /* HongUserSendEmailDto.searchUser */
+        select count(*)
+          from hong_user
+         where user_id = #{userId}
+           and user_email = #{userEmail}
+    </select>
+
 </mapper>

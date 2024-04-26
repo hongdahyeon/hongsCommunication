@@ -13,12 +13,29 @@ $(document).ready(function(e) {
 
         pwdError.html(errorMessage.replace("\n", "<br>"))
 
-        if (type === "disable") {
-            console.log("disable: 비활성화")
-        } else if (type === "expired") {
-            console.log("expired: 비밀번호 만료")
-        } else if (type === "account") {
-            console.log("account: 계정 만료")
+        /* [비밀번호 만료] : 비밀번호 변경한지 90일이 지났을때 */
+        if(type === "expired") {
+            Util.alert(errorMessage.replace("\n", "<br>")).then(() => {
+
+                const changePwd = $("#changePwd")
+                const changePwdChk = $("#changePwdChk")
+                changePwd.on('input', () => validatePassword(changePwd, changePwdChk));
+                changePwdChk.on('input', () => validatePassword(changePwd, changePwdChk));
+
+                $("#changePwdModal-loginUserId").val(userId)
+                $("#changePwdModal").modal('show')
+            })
+        }
+
+        /* [계정 비활성화] : 관리자가 계정을 비활성화 시킴 */
+        if(type === "disable") Util.alert(errorMessage.replace("\n", "<br>"))
+
+        /* [계정 만료] : 로그인 1년이상 안해서 휴면 계정된 경우 */
+        if(type === "account") {
+            Util.alert(errorMessage.replace("\n", "<br>")).then(() => {
+                $("#validateEmailModal-loginUserId").val(userId)
+                $("#validateEmailModal").modal('show')
+            })
         }
     }
 
@@ -62,4 +79,82 @@ $(document).ready(function(e) {
 
     /* 회원가입 하기 */
     $("#new-login").on('click', () => console.log("new-login clicked.."))
+
+    /* [비밀번호 만료] 90일 연장 */
+    $("#more-days").on('click', () => {
+        const userId = $("#changePwdModal-loginUserId").val()
+        const obj = {userId: userId, chngPwd: false}
+        Http.put('/api/front/user/updatePwd.json', obj).then((res) => {
+            if(res['httpStatus'] === 200) {
+                Util.alert("비밀번호 만료일이 90일 연장되었습니다. <br> 다시 로그인해주세요.")
+                    .then(() => window.location.href = '/login')
+            } else Util.alert("비밀번호 변경에 실패했습니다.")
+        })
+    })
+
+    /* [비밀번호 만료] 비밀번호 변경하기 */
+    $("#change-pwd").on('click', () => {
+        const userId = $("#changePwdModal-loginUserId").val()
+        const password = $("#changePwd").val()
+        const form = document.getElementById("change-pwd-form")
+        if (form.checkValidity() === false) form.classList.add("was-validated")
+        else {
+            const obj = {userId: userId, chngPwd: true, password: password}
+            Http.put('/api/front/user/updatePwd.json', obj).then((res) => {
+                if (res['httpStatus'] === 200) {
+                    Util.alert("비밀번호가 변경되었습니다. <br> 다시 로그인해주세요.")
+                        .then(() => window.location.href = '/login')
+                } else Util.alert("비밀번호 변경에 실패했습니다.")
+            })
+        }
+    })
+
+    /* [계정 만료] 이메일로 인증번호 발송 */
+    $("#email-validate").on('click', function(e) {
+        const form = document.getElementById("validate-email-form");
+        if (form.checkValidity() === false) form.classList.add("was-validated");
+        else {
+            const userId = $("#validateEmailModal-loginUserId").val()
+            const userEmail = $("#chkEmail").val()
+            const obj = {userId: userId, userEmail: userEmail}
+            Http.get('/api/front/user/sendEmail.json', obj).then((res) => {
+                if(res['httpStatus'] === 400) Util.alert(res.message.replace("\n", "<br>"))
+                else if(res['httpStatus'] === 200) {
+                    Util.alert(res.message.replace("\n", "<br>")).then(() => {
+                        $("#email-validate-chk").prop('disabled', false)
+                        $("#email-validate").prop('disabled', true)
+                    })
+                }
+            })
+        }
+    })
+
+    /* [계정 만료] 이메일로 인증번호 발송 */
+    $("#email-validate-chk").on('click', function(e) {
+        const userId = $("#validateEmailModal-loginUserId").val()
+        const userEmail = $("#chkEmail").val()
+        const verifyCode = $("#verify-code").val()
+
+        if(!verifyCode.length) Util.alert("이메일로 받으신 인증번호를 입력해주세요.")
+        else {
+            const obj = {userId: userId, userEmail: userEmail, verifyCode: verifyCode}
+            Http.get('/api/front/verify/check-verify.json', obj).then((res) => {
+                if(res['httpStatus'] === 400) Util.alert(res.message.replace("\n", "<br>"))
+                else if(res['httpStatus'] === 200) {
+                    Util.alert(res.message.replace("\n", "<br>")).then(() => {
+                        window.location.href = '/login'
+                    })
+                }
+            })
+        }
+    })
 })
+
+function validatePassword(password, confirmPassword) {
+    const passwordVal = password.val();
+    const confirmPasswordVal = confirmPassword.val();
+    if(passwordVal && confirmPasswordVal) {
+        if (passwordVal === confirmPasswordVal) confirmPassword.removeClass('is-invalid');  // 비밀번호와 비밀번호 확인이 일치하는 경우
+        else confirmPassword.addClass('is-invalid');                                        // 비밀번호와 비밀번호 확인이 일치하지 않는 경우
+    }
+}

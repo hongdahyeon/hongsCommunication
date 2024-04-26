@@ -1,7 +1,9 @@
 package hongs.community.hongsCommunity.domain.user;
 
 import hongs.community.hongsCommunity.domain.user.dto.HongSearchIdPwdDto;
+import hongs.community.hongsCommunity.domain.user.dto.HongUserChngPwdDto;
 import hongs.community.hongsCommunity.domain.user.dto.HongUserInsertDto;
+import hongs.community.hongsCommunity.domain.user.dto.HongUserSendEmailDto;
 import hongs.community.hongsCommunity.domain.user.service.HongUserService;
 import hongs.community.hongsCommunity.global.hongs.dto.response.ApiDocumentResponse;
 import hongs.community.hongsCommunity.global.hongs.dto.response.Response;
@@ -44,4 +46,21 @@ public class HongUserFrontRestController {
         else return Response.badRequest("사용자를 찾지 못했습니다. 다시 한번 확인해주세요.");
     }
 
+    @PutMapping("/updatePwd.json")
+    @Operation(summary = "비밀번호 변경하기", description = "사용자의 비밀번호가 만료되어 비밀번호를 연장 혹은 변경한다.")
+    @ApiDocumentResponse
+    public Response updatePwd(@RequestBody HongUserChngPwdDto dto) {
+        Integer changePwd = userService.changePwd(dto);
+        if(changePwd == 1) return Response.ok(changePwd);
+        else return Response.badRequest();
+    }
+
+    @GetMapping("/sendEmail.json")
+    @Operation(summary = "이메일로 인증번호 전송", description = "1년간 로그인을 안하여 휴먼계정이된 경우, 이메일 인증을 통해 풀어야 한다.")
+    @ApiDocumentResponse
+    public Response sendEmail(HongUserSendEmailDto dto) {
+        Boolean sendEmail = userService.sendEmail(dto);
+        String message = (sendEmail) ? "해당 이메일로 인증번호를 전송했습니다." : "해당되는 사용자가 없습니다. \n 이메일 및 아이디를 확인해주세요.";
+        return (sendEmail) ? Response.ok(message) : Response.badRequest(message);
+    }
 }
