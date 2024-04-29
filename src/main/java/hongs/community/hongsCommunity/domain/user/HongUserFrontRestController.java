@@ -13,6 +13,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/front/user")
@@ -20,6 +25,12 @@ import org.springframework.web.bind.annotation.*;
 public class HongUserFrontRestController {
 
     private final HongUserService userService;
+    private static final String EMAIL_REGEX =
+            "^[a-zA-Z0-9_+&*-]+(?:\\." +
+                    "[a-zA-Z0-9_+&*-]+)*@" +
+                    "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                    "A-Z]{2,7}$";
+
     @PostMapping("/insert.json")
     @Operation(summary = "회원가입", description = "사용자 회원가입을 한다.")
     @ApiDocumentResponse
@@ -62,5 +73,35 @@ public class HongUserFrontRestController {
         Boolean sendEmail = userService.sendEmail(dto);
         String message = (sendEmail) ? "해당 이메일로 인증번호를 전송했습니다." : "해당되는 사용자가 없습니다. \n 이메일 및 아이디를 확인해주세요.";
         return (sendEmail) ? Response.ok(message) : Response.badRequest(message);
+    }
+
+    @GetMapping("/chkUserId.json")
+    @Operation(summary = "아이디 중복 확인", description = "회원가입시, 아이디 중복 확인")
+    @ApiDocumentResponse
+    public Response chkUserId(@RequestParam(name = "userId", required = true) String userId) {
+        Boolean chkedUserId = userService.chkUserId(userId);
+        String message = (chkedUserId) ? "사용 가능한 아이디입니다." : "중복되는 아이디입니다. \n 다른 아이디를 입력해주세요.";
+        return (chkedUserId) ? Response.ok(message) : Response.badRequest(message);
+    }
+
+    @GetMapping("/chkUserEmail.json")
+    @Operation(summary = "이메일 중복 확인", description = "회원가입시, 이메일 중복 확인")
+    @ApiDocumentResponse
+    public Response chkUserEmail(@RequestParam(name = "userEmail", required = true) String userEmail) {
+        Map<String, Object> map = new HashMap<>();
+        if(isValidEmail(userEmail)) {
+            Integer chkedUserEmail = userService.chkUserEmail(userEmail);
+            String message = (chkedUserEmail == 0) ? "사용 가능한 이메일입니다." : "중복되는 이메일입니다. \n 다른 이메일을 입력해주세요.";
+            map.put("key", chkedUserEmail); map.put("message", message);
+        } else {
+            map.put("key", 3); map.put("message", "이메일 형식이 유효하지 않습니다.");
+        }
+        return Response.ok(map);
+    }
+
+    private boolean isValidEmail(String email) {
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

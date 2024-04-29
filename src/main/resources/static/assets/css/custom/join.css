@@ -1,0 +1,125 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.join-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    height: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.join-container h4 {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.join-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* 회원가입 : 로그인 중복확인 */
+.input-box {
+    margin-bottom: 15px;
+    flex-grow: 1;
+    display: flex;
+}
+.join-container .form-control {
+    width: calc(100% - 30px);
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.join-container .input-box button{
+    margin-left: 5px;
+    width: 100px;
+    height: inherit;
+}
+
+
+/* 회원가입 : 비밀번호 및 form */
+.join-container input[type="password"] {
+    width: calc(100% - 30px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+
+/* 이용약관 동의 체크 */
+.join-container .ok-checkbox {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+.join-container .ok-checkbox .form-check-input {
+    border:2px solid #ff69b4 !important;
+    display:inline-block;
+}
+.join-container .ok-checkbox .form-check-input:focus {
+    border-color: #ff69b4 !important;
+    outline:0;
+    box-shadow:0 0 0 .25rem rgba(255, 166, 166, 0.25) !important;
+}
+.join-container .ok-checkbox .form-check-input:checked {
+    background-color: #ff69b4 !important; /* 체크됐을 때 배경색 */
+    border-color: #ff69b4 !important;
+    background-repeat: no-repeat;
+}
+.join-container .ok-checkbox input[type="checkbox"] {
+    margin-right: 10px; /* 체크박스 오른쪽 여백 추가 */
+}
+.join-container .ok-checkbox label {
+    margin: 0; /* 레이블 여백 제거 */
+}
+
+
+/* 동의화면 */
+.join-container .scroll_box {
+    border: 1px solid #c4c3c7;
+    border-radius: 6px;
+    height: 286px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px 40px 20px 20px;
+    margin-bottom: 20px;
+}
+.agree .t1 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+.agree .t2 {
+    margin-bottom: 2rem;
+}
+
+
+/* 버튼 */
+.join-container .login-btn {
+    background-color: #ff69b4;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 0;
+    width: 100%;
+    cursor: pointer;
+}
+.join-container .back-btn {
+    background-color: #cccccc;
+    color: #ffff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 0;
+    width: 100%;
+    margin-top: 5px;
+    cursor: pointer;
+}

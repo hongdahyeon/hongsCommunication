@@ -151,4 +151,18 @@
            and user_email = #{userEmail}
     </select>
 
+    <select id="chkUserId" parameterType="String" resultType="int">
+        /* chkUserId */
+        select count(*)
+          from hong_user
+         where user_id = #{userId}
+    </select>
+
+    <select id="chkUserEmail" parameterType="String" resultType="int">
+        /* chkUserEmail */
+        select count(*)
+        from hong_user
+        where user_email = #{userEmail}
+    </select>
+
 </mapper>

@@ -19,9 +19,9 @@
             <form method="post" action="/loginProc" id="form">
                 <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                 <label for="userId">아이디</label>
-                <input type="text" id="userId" name="userId" required>
+                <input type="text" id="userId" name="userId" class="form-control" required>
                 <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" class="form-control" required>
                 <p class="error-message" style="color: #ff69b4; font-weight: bold" id="pwdError"></p>
                 <div class="remember-checkbox">
                     <input type="checkbox" class="form-check-input" id="remember" name="remember">
@@ -77,11 +77,11 @@
                                 </div>
                                 <div class="mb-3 mt-3">
                                     <label for="changePwdModal-loginUserId">아이디</label>
-                                    <input type="text" class="form-control custom" id="changePwdModal-loginUserId" name="userId" readonly/>
+                                    <input type="text" class="form-control" id="changePwdModal-loginUserId" name="userId" readonly/>
                                 </div>
                                 <div class="mb-3 mt-3">
                                     <label for="changePwd">비밀번호</label>
-                                    <input type="password" class="form-control custom" id="changePwd" name="password" required />
+                                    <input type="password" class="form-control" id="changePwd" name="password" required />
                                     <div class="invalid-feedback">비밀번호를 입력하세요.</div>
                                 </div>
                                 <div class="mb-3 mt-3">

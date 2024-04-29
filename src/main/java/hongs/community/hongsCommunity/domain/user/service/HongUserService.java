@@ -72,4 +72,14 @@ public class HongUserService {
             return true;
         }
     }
+
+    public Boolean chkUserId(String userId) {
+        Integer chkedUserId = userMapper.chkUserId(userId);
+        if(chkedUserId == 0) return true;
+        else return false;
+    }
+
+    public Integer chkUserEmail(String userEmail) {
+        return userMapper.chkUserEmail(userEmail);
+    }
 }

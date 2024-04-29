@@ -32,6 +32,12 @@ public class HongSocialUserService {
         return userMapper.findSocialUser(userId);
     }
 
+    public Boolean findUserEmail(String userEmail) {
+        Integer chkedUserEmail = userMapper.chkUserEmail(userEmail);
+        if(chkedUserEmail == 0) return true;
+        else return false;
+    }
+
     @Transactional(readOnly = false)
     public HongLoginUserVo joinSocialUser(HongSocialUserInsertDto dto) {
 

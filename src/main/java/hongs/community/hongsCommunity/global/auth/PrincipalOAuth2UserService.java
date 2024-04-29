@@ -3,11 +3,13 @@ package hongs.community.hongsCommunity.global.auth;
 import hongs.community.hongsCommunity.domain.user.dto.HongSocialUserInsertDto;
 import hongs.community.hongsCommunity.domain.user.service.HongSocialUserService;
 import hongs.community.hongsCommunity.domain.user.vo.HongLoginUserVo;
+import hongs.community.hongsCommunity.global.handler.FailureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +60,13 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
         HongLoginUserVo socialUser = socialUserService.findSocialUser(userId);
 
-        if (socialUser == null) socialUser = socialUserService.joinSocialUser(new HongSocialUserInsertDto(userId, name, email));
+        if (socialUser == null) {
+            Boolean ifUserEmailIsEmpty = socialUserService.findUserEmail(email);
+            if(ifUserEmailIsEmpty) {
+                socialUser = socialUserService.joinSocialUser(new HongSocialUserInsertDto(userId, name, email));
+                return new PrincipalDetails(socialUser, userInfo);
+            } else throw new OAuth2AuthenticationException(new OAuth2Error("socialLoginFail"), FailureException.OAuth2AuthenticationExceptionMsg.message);
+        }
         return new PrincipalDetails(socialUser, userInfo);
     }
 }

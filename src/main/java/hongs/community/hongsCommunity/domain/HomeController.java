@@ -2,6 +2,7 @@ package hongs.community.hongsCommunity.domain;
 
 import hongs.community.hongsCommunity.domain.test.vo.TestVo;
 import hongs.community.hongsCommunity.domain.test.TestService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -38,5 +39,23 @@ public class HomeController {
     @GetMapping("/searchPwd")
     public String searchPwd() {
         return "/searchPwd";
+    }
+
+    @GetMapping("/join1")
+    public String join1(HttpServletRequest req){
+        String blocked = blockDirectAccess(req);
+        return blocked != null ? blocked : "join/join1";
+    }
+
+    @GetMapping("/join2")
+    public String join2(HttpServletRequest req){
+        String blocked = blockDirectAccess(req);
+        return blocked != null ? blocked : "join/join2";
+    }
+
+    public String blockDirectAccess(HttpServletRequest req) {
+        String referer = req.getHeader("referer");
+        if (referer == null) return "redirect:/";
+        return null;
     }
 }

@@ -7,8 +7,11 @@ public enum FailureException {
     CredentialsExpiredException("비밀번호가 만료되었습니다. \n 비밀번호를 변경해주세요."),
     AccountExpiredException("최근 로그인일로부터 1년이 지나 휴먼 계정이 되었습니다. \n 이메일 인증을 해주세요."),
     InternalAuthenticationServiceException("내부 시스템 문제로 로그인 요청을 처리할 수 없습니다. \n 관리자에게 문의해주세요."),
-    LockedException("비밀번호 5회 오류로 계정이 잠겼습니다. \n 관리자에게 문의해주세요.");
-    String message;
+    LockedException("비밀번호 5회 오류로 계정이 잠겼습니다. \n 관리자에게 문의해주세요."),
+    OAuth2AuthenticationException("소셜 로그인 과정에서 오류가 발생했습니다. \n 관리자에게 문의해주세요."),
+    OAuth2AuthenticationExceptionMsg("이메일이 중복됩니다. \n 다른 이메일로 로그인 해주세요.");
+
+    public String message;
 
     FailureException(String message) {
         this.message = message;

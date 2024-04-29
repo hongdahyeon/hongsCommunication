@@ -27,6 +27,9 @@ $(document).ready(function(e) {
             })
         }
 
+        /* [소셜 로그인 실패], [비밀번호 5회 틀림으로 인한 계정 잠김], [내부 오류] */
+        if(type === "error") Util.alert(errorMessage.replace("\n", "<br>"))
+
         /* [계정 비활성화] : 관리자가 계정을 비활성화 시킴 */
         if(type === "disable") Util.alert(errorMessage.replace("\n", "<br>"))
 
@@ -37,6 +40,9 @@ $(document).ready(function(e) {
                 $("#validateEmailModal").modal('show')
             })
         }
+
+        /* [소셜로그인 오류] : (현시점) 소셜 로그인 이메일이 중복되는 경우 */
+        if(type === "socialError") Util.alert(errorMessage.replace("\n", "<br>"))
     }
 
     /* 로그인 아이디 기억하기 -> localStorage에서 id가져오기 */
@@ -78,7 +84,7 @@ $(document).ready(function(e) {
     $("#search-pwd").on('click', () => window.location.href = '/searchPwd')
 
     /* 회원가입 하기 */
-    $("#new-login").on('click', () => console.log("new-login clicked.."))
+    $("#new-login").on('click', () => window.location.href = '/join1')
 
     /* [비밀번호 만료] 90일 연장 */
     $("#more-days").on('click', () => {

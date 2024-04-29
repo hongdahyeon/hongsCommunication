@@ -31,4 +31,8 @@ public interface HongUserMapper {
     Integer chngPwd(HongUserChngPwdDto dto);
 
     Integer searchUser(HongUserSendEmailDto dto);
+
+    Integer chkUserId(String userId);
+
+    Integer chkUserEmail(String userEmail);
 }

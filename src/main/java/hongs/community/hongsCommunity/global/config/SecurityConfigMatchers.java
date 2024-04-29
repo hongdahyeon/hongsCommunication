@@ -12,6 +12,9 @@ public class SecurityConfigMatchers {
             ,new AntPathRequestMatcher("/api/front/**")
             ,new AntPathRequestMatcher("/api/swagger-ui/index.html")
             ,new AntPathRequestMatcher("/api-docs")
+            ,new AntPathRequestMatcher("/join**")
+            ,new AntPathRequestMatcher("/chkUserId.json**")
+            ,new AntPathRequestMatcher("/chkUserEmail.json**")
     };
 
     public static final AntPathRequestMatcher[] ROLE_ADMIN_SUPER = new  AntPathRequestMatcher[]{

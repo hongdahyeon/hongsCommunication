@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -37,8 +38,12 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
             if(exception instanceof DisabledException) sendMssgAndRedirect(FailureException.DisabledException.message, "disable", userId, response);
             if(exception instanceof CredentialsExpiredException) sendMssgAndRedirect(FailureException.CredentialsExpiredException.message, "expired", userId, response);
             if(exception instanceof AccountExpiredException) sendMssgAndRedirect(FailureException.AccountExpiredException.message, "account", userId, response);
-            if(exception instanceof InternalAuthenticationServiceException) sendMssgAndRedirect(FailureException.InternalAuthenticationServiceException.message, "error", userId, response);
             if(exception instanceof LockedException) sendMssgAndRedirect(FailureException.LockedException.message, "error", userId, response);
+            if(exception instanceof OAuth2AuthenticationException) {
+                if(exception.getMessage() == null) sendMssgAndRedirect(FailureException.OAuth2AuthenticationException.message, "socialError", userId, response);
+                else sendMssgAndRedirect(exception.getMessage(), "socialError", userId, response);
+            }
+            if(exception instanceof InternalAuthenticationServiceException) sendMssgAndRedirect(FailureException.InternalAuthenticationServiceException.message, "error", userId, response);
         }
     }
 
