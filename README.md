@@ -178,3 +178,8 @@ $("#view-content").html(code)
 - 회원가입
 - 소셜 회원가입시, 이메일 중복 체크
 
+
+(38) 24-04-30
+- 템플릿 css 변경
+- before layout 추가
+
