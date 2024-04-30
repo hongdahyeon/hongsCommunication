@@ -1,17 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>login</title>
-    <th:block th:replace="~{fragments/head :: head}"></th:block>
-    <meta th:name="_csrf" th:content="${_csrf.token}"/>
-    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{'/assets/css/custom/login.css'}">
-</head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/before}">
 
-<body>
-<div class="container mt-3 d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="card col-md-6">
+<th:block layout:fragment="content">
+    <div class="card col-md-8">
 
         <!-- start : Login Form  -->
         <div class="login-container">
@@ -153,9 +146,8 @@
         <!-- End : validate email form -->
 
     </div>
-</div>
-<th:block th:replace="~{fragments/script :: script}"></th:block>
-<script th:src="@{'/assets/js/page/login.js'}"></script>
-<script></script>
-</body>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:src="@{'/assets/js/page/login.js'}"></script>
+</th:block>
 </html>

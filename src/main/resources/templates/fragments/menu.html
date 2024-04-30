@@ -1,59 +1,46 @@
 <th:block th:fragment="menu">
-    <!-- s: menu -->
-    <div class="border-end bg-white" id="sidebar-wrapper">
-        <div class="sidebar-heading border-bottom bg-light">
-            <a href="/">
-                <img src="/assets/src/img/main.png" alt="main" style="width: 85%">
-            </a>
-        </div>
-        <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Dashboard</a>
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            <th:block th:each="menu : ${#authentication.principal.user.menu}">
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">Hongs Community<sup>1</sup></div>
+        </a>
 
-                <th:block th:if="${menu.upperMenuUid == null}">
-                    <h4 class="accordion-button acc-header" style="margin-bottom: 10px; margin-left:10px; margin-top: 10px" role="button" data-bs-toggle="collapse" th:id="|menu${menu.menuUid}|">
-                        <i data-feather="folder" class="font-medium-2 ms-50" style="margin-right: 10px"></i>
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <th:block th:each="menu : ${#authentication.principal.user.menu}">
+
+            <th:block th:if="${menu.upperMenuUid == null and #lists.size(menu.children) > 0}">
+                <li class="nav-item">
+                    <a class="nav-link collapsed" th:id="|menu${menu.menuUid}|" href="#" data-toggle="collapse" th:data-target="|#child${menu.menuUid}|" aria-expanded="false" th:aria-controls="|child${menu.menuUid}|">
+                        <i class="fas fa-fw fa-folder"></i>
                         <span th:text="${menu.menuText}"></span>
-                    </h4>
-                </th:block>
-
-                <th:block th:if="${#lists.size(menu.children) > 0}">
-                    <div class="accordion-collapse" th:id="|child-menu${menu.menuUid}|">
-                        <div class="list-group">
+                    </a>
+                    <div th:id="|child${menu.menuUid}|" class="collapse" >
+                        <div class="bg-white py-2 collapse-inner rounded">
                             <th:block th:each="child : ${menu.children}">
-                                <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="${child.menuUrl}">
-                                    <i data-feather="file" class="font-medium-2 ms-50" style="margin-right: 10px"></i>
-                                    <span th:text="${child.menuText}"></span>
-                                </a>
+                                <a class="collapse-item" th:href="${child.menuUrl}" th:text="${child.menuText}"></a>
                             </th:block>
                         </div>
                     </div>
-                </th:block>
-
+                </li>
             </th:block>
-            <!-- Menu 1 -->
-        </div>
-    </div>
-    <!-- e: menu -->
-    <script>
-        const headers  = document.getElementsByClassName("acc-header")
-        for (let header of headers) {
-            header.addEventListener("click", function() {
-                const headerId = header.id;
-                const childMenu = document.getElementById(`child-${headerId}`);
-                if(childMenu) {
-                    const isCollapsed = header.classList.contains("collapsed");
-                    const isCollapsedMenu = childMenu.classList.contains("collapse");
 
-                    if (isCollapsed) header.classList.remove("collapsed");
-                    else header.classList.add("collapsed");
+            <th:block th:if="${menu.upperMenuUid == null and #lists.size(menu.children) == 0}">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${menu.menuUrl}" th:id="|menu${menu.menuUid}|">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span th:text="${menu.menuText}"></span></a>
+                </li>
+            </th:block>
 
-                    if (isCollapsedMenu) childMenu.classList.remove("collapse");
-                    else childMenu.classList.add("collapse");
-                }
-            });
-        }
+        </th:block>
 
-    </script>
+    </ul>
+    <!-- End of Sidebar -->
 </th:block>

@@ -1,16 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>login</title>
-    <th:block th:replace="~{fragments/head :: head}"></th:block>
-    <meta th:name="_csrf" th:content="${_csrf.token}"/>
-    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{'/assets/css/custom/join.css'}">
-</head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/before}">
 
-<body>
-<div class="container mt-3 d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+<th:block layout:fragment="content">
     <div class="card col-md-10">
 
         <!-- start : join Form  -->
@@ -43,20 +36,20 @@
         <!-- end : join Form  -->
 
     </div>
-</div>
-<th:block th:replace="~{fragments/script :: script}"></th:block>
-<script>
+</th:block>
+<th:block layout:fragment="script">
+    <script>
 
-    $(function () {
-        $("#go-back-btn").on('click', () => {
-            window.location.href = '/login'
-        })
+        $(function () {
+            $("#go-back-btn").on('click', () => {
+                window.location.href = '/login'
+            })
 
-        $("#go-to-newLogin").on('click', () => {
-            if($("#remember").is(":checked")) window.location.href = "/join2"
-            else Util.alert("회원정보 이용약관을 동의해주세요.")
-        })
-    });
-</script>
-</body>
+            $("#go-to-newLogin").on('click', () => {
+                if($("#remember").is(":checked")) window.location.href = "/join2"
+                else Util.alert("회원정보 이용약관을 동의해주세요.")
+            })
+        });
+    </script>
+</th:block>
 </html>

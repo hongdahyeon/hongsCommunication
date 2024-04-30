@@ -8,6 +8,101 @@ body {
     align-items: center;
     height: 100vh;
 }
+
+/* --------- 로그인css ------------ */
+
+.login-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.login-container h4 {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.login-container label.explain {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #ff69b4;
+}
+
+.login-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.login-container input[type="text"] {
+    width: calc(100% - 30px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.login-container input[type="password"] {
+    width: calc(100% - 30px);
+    padding: 10px;
+    margin-bottom: 3px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.login-container .remember-checkbox {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+.login-container .remember-checkbox .form-check-input {
+    border:2px solid #ff69b4 !important;
+    display:inline-block;
+}
+.login-container .remember-checkbox .form-check-input:focus {
+    border-color: #ff69b4 !important;
+    outline:0;
+    box-shadow:0 0 0 .25rem rgba(255, 166, 166, 0.25) !important;
+}
+.login-container .remember-checkbox .form-check-input:checked {
+    background-color: #ff69b4 !important; /* 체크됐을 때 배경색 */
+    border-color: #ff69b4 !important;
+    background-repeat: no-repeat;
+}
+.login-container .remember-checkbox input[type="checkbox"] {
+    margin-right: 10px; /* 체크박스 오른쪽 여백 추가 */
+}
+.login-container .remember-checkbox label {
+    margin: 0; /* 레이블 여백 제거 */
+}
+
+.login-container .login-btn {
+    background-color: #ff69b4;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 0;
+    width: 100%;
+    cursor: pointer;
+}
+
+.login-container .back-btn {
+    background-color: #cccccc;
+    color: #ffff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 0;
+    width: 100%;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+
+/* --------- 회원가입css ------------ */
+
 .join-container {
     background-color: #fff;
     border-radius: 8px;
