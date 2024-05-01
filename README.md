@@ -183,3 +183,5 @@ $("#view-content").html(code)
 - 템플릿 css 변경
 - before layout 추가
 
+
+(39) 24-04-30 : 에러 화면
