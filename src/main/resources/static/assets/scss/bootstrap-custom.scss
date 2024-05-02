@@ -1,0 +1,17 @@
+$primary: #ff69b4 !default;
+$secondary: #CCCCCC !default;
+
+$theme-colors: (
+        "primary":    #ff69b4,
+        "secondary":  #CCCCCC,
+        "success":    #198754FF,
+        "info":       #0DCAF0FF,
+        "warning":    #FFC107FF,
+        "danger":     #DC3545FF,
+        "light":      #F8F9FAFF,
+        "dark":       #212529FF
+);
+
+@import "bootstrap/scss/bootstrap";
+
+/* date : 24-05-02 */
