@@ -191,3 +191,8 @@ $("#view-content").html(code)
 
 
 (41) 24-05-02 : bootstrap 색상 변경
+
+
+(42) 24-05-03
+* user -> front/after로 나눔
+* 회원정보 변경 로직 구성
