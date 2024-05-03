@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hongs.community.hongsCommunity.domain.user.after.HongUserMapper">
+
+    <select id="userInfo" parameterType="Long" resultType="HongUserInfoVo">
+        /* userInfo */
+        select user_Uid
+              ,user_id
+              ,user_name
+              ,user_email
+              ,role
+              ,case when role = 'ROLE_SUPER' then '슈퍼 권한'
+                    when role = 'ROLE_ADMIN' then '어드민 권한'
+                    else '유저 권한'
+                end as role_name
+          from hong_user
+         where user_uid = #{userUid}
+    </select>
+
+    <select id="chkUserEmail" parameterType="HongUserCheckEmailVo" resultType="int">
+        /* chkUserEmail */
+        select count(*)
+          from hong_user
+         where user_email = #{userEmail}
+           and user_uid != #{userUid}
+    </select>
+    
+    <update id="updateUser" parameterType="HongUserUpdteDto">
+        /* updateUser */
+        update hong_user
+           set user_name = #{userName}
+        <if test="password != null">
+              ,password = #{password}
+              ,pwd_last_update = now()
+        </if>
+        <if test="userEmail != null">
+              ,user_email = #{userEmail}
+        </if>
+         where user_uid = #{userUid}
+    </update>
+</mapper>

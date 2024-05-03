@@ -1,7 +1,7 @@
 package hongs.community.hongsCommunity.global.handler;
 
-import hongs.community.hongsCommunity.domain.user.service.HongLoginUserService;
-import hongs.community.hongsCommunity.domain.user.vo.HongCheckUserVo;
+import hongs.community.hongsCommunity.domain.user.front.service.HongFrontLoginUserService;
+import hongs.community.hongsCommunity.domain.user.front.vo.HongCheckUserVo;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,16 +21,16 @@ import java.net.URLEncoder;
 @RequiredArgsConstructor
 public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
 
-    private final HongLoginUserService userService;
+    private final HongFrontLoginUserService frontLoginUserService;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String userId = request.getParameter("userId");
         if(exception instanceof BadCredentialsException) {
-            HongCheckUserVo checkUser = userService.checkUser(userId);
+            HongCheckUserVo checkUser = frontLoginUserService.checkUser(userId);
             if(checkUser != null) {
                 Integer failCnt = checkUser.getPwdFailCnt() + 1;
-                userService.updateFailCnt(userId, failCnt);
+                frontLoginUserService.updateFailCnt(userId, failCnt);
                 String message = (failCnt == 5) ? "비밀번호 " + failCnt + " / 5 회 오류로 계정이 잠겼습니다. \n 관리자에게 문의 바랍니다." : "비밀번호 " + failCnt + "/5 회 오류";
                 sendMssgAndRedirect(message, "error", userId, response);
             }

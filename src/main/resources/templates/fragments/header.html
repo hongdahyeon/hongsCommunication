@@ -29,7 +29,7 @@
                 <!-- Dropdown - User Information -->
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                      aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="#" id="profile-btn">
                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
                     </a>
                     <!--                    <a class="dropdown-item" href="#">-->
@@ -54,6 +54,7 @@
         window.onload = function() {
 
             const logout = document.getElementById("logout-btn")
+            const profile = document.getElementById("profile-btn")
 
             logout.onclick = function() {
                 const {header, token} = Http.getCookieInfo()
@@ -67,6 +68,10 @@
                 form.appendChild(csrfInput)
                 document.body.appendChild(form)
                 form.submit()
+            }
+
+            profile.onclick = function() {
+                window.location.href = '/user/info'
             }
         };
 

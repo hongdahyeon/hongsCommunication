@@ -1,8 +1,8 @@
 package hongs.community.hongsCommunity.global.auth;
 
-import hongs.community.hongsCommunity.domain.user.dto.HongSocialUserInsertDto;
-import hongs.community.hongsCommunity.domain.user.service.HongSocialUserService;
-import hongs.community.hongsCommunity.domain.user.vo.HongLoginUserVo;
+import hongs.community.hongsCommunity.domain.user.front.service.HongSocialUserFrontService;
+import hongs.community.hongsCommunity.domain.user.front.dto.HongSocialUserInsertDto;
+import hongs.community.hongsCommunity.domain.user.front.vo.HongLoginUserVo;
 import hongs.community.hongsCommunity.global.handler.FailureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final HongSocialUserService socialUserService;
+    private final HongSocialUserFrontService socialUserFrontService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -58,12 +58,12 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
         log.info("provider: {} -> userId : {}, name : {}, email : {}", provider, userId, name, email);
 
-        HongLoginUserVo socialUser = socialUserService.findSocialUser(userId);
+        HongLoginUserVo socialUser = socialUserFrontService.findSocialUser(userId);
 
         if (socialUser == null) {
-            Boolean ifUserEmailIsEmpty = socialUserService.findUserEmail(email);
+            Boolean ifUserEmailIsEmpty = socialUserFrontService.findUserEmail(email);
             if(ifUserEmailIsEmpty) {
-                socialUser = socialUserService.joinSocialUser(new HongSocialUserInsertDto(userId, name, email));
+                socialUser = socialUserFrontService.joinSocialUser(new HongSocialUserInsertDto(userId, name, email));
                 return new PrincipalDetails(socialUser, userInfo);
             } else throw new OAuth2AuthenticationException(new OAuth2Error("socialLoginFail"), FailureException.OAuth2AuthenticationExceptionMsg.message);
         }

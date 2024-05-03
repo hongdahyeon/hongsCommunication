@@ -2,8 +2,8 @@ package hongs.community.hongsCommunity.global.auth;
 
 import hongs.community.hongsCommunity.domain.menu.HongMenuService;
 import hongs.community.hongsCommunity.domain.menu.vo.HongMenuVo;
-import hongs.community.hongsCommunity.domain.user.service.HongUserService;
-import hongs.community.hongsCommunity.domain.user.vo.HongLoginUserVo;
+import hongs.community.hongsCommunity.domain.user.front.service.HongUserFrontService;
+import hongs.community.hongsCommunity.domain.user.front.vo.HongLoginUserVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,12 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PrincipalDetailsService implements UserDetailsService {
 
-    private final HongUserService userService;
+    private final HongUserFrontService userFrontService;
     private final HongMenuService menuService;
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        HongLoginUserVo user = userService.findUser(userId);
+        HongLoginUserVo user = userFrontService.findUser(userId);
 
         if(user != null) {
             this.customUser(user);

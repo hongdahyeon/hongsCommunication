@@ -1,6 +1,6 @@
 package hongs.community.hongsCommunity.global.auth;
 
-import hongs.community.hongsCommunity.domain.user.vo.HongLoginUserVo;
+import hongs.community.hongsCommunity.domain.user.front.vo.HongLoginUserVo;
 import hongs.community.hongsCommunity.global.util.TimeUtil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -128,6 +128,7 @@ $(document).ready(function(e) {
                 else if(res['httpStatus'] === 200) {
                     Util.alert(res.message.replace("\n", "<br>")).then(() => {
                         $("#email-validate-chk").prop('disabled', false)
+                        $("#chkEmail").attr('readonly', true)
                         $("#email-validate").prop('disabled', true)
                     })
                 }

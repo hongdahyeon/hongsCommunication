@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+  <div class="card">
+    <div class="card-header">
+      <div class="text-center">
+        <h3>회원정보 변경하기</h3>
+      </div>
+    </div>
+    <div class="card-body">
+      <form id="form" class="needs-validation" novalidate>
+        <input type="hidden" th:value="${user?.userUid}" name="userUid" id="userUid" />
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="userId">아이디</label>
+              <input type="text" class="form-control" id="userId" th:value="${user?.userId}" readonly disabled>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="role">권한</label>
+              <input type="text" class="form-control" id="role" th:value="${user?.roleName}" readonly disabled>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="userEmail">이메일</label>
+            <input type="hidden" id="origin-userEmail" th:value="${user?.userEmail}"/>
+            <div class="input-group mb-3">
+              <input type="email" class="form-control" id="userEmail" name="userEmail" aria-describedby="change-edit-email-btn" th:value="${user?.userEmail}" readonly disabled required>
+              <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="button" id="change-edit-email-btn">이메일 변경하기</button>
+              </div>
+              <div class="invalid-feedback">이메일을 입력하세요.</div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="userName">이름</label>
+              <input type="text" class="form-control" id="userName" name="userName" th:value="${user?.userName}" required>
+              <div class="invalid-feedback">이름을 입력하세요.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="password">비밀번호</label>
+            <div class="input-group mb-3">
+              <input type="password" class="form-control" id="password" name="password" aria-describedby="change-pwd-btn" readonly disabled required>
+              <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="button" id="change-pwd-btn">비밀번호 변경하기</button>
+              </div>
+              <div class="invalid-feedback">비밀번호를 입력하세요.</div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="passwordChk">비밀번호 확인</label>
+              <input type="password" class="form-control" id="passwordChk" readonly disabled required>
+              <div class="invalid-feedback">비밀번호가 일치하지 않습니다.</div>
+            </div>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+          <div class="col text-start">
+            <button type="button" class="btn btn-sm btn-primary" id="save-user-info">회원정보 변경하기</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</th:block>
+
+<th:block layout:fragment="script">
+  <script>
+
+    const emailChngBtn = $("#change-edit-email-btn")
+    let emailChangeBtnClicked = false
+    const userEmailInput = $("#userEmail")
+    let chkUserEmail = false
+
+    const pwdChngBtn = $("#change-pwd-btn")
+    let pwdChangeBtnClicked = false
+    const password = $("#password")
+    const passwordChk = $("#passwordChk")
+
+    $(function () {
+
+      emailChngBtn.on('click', () => {
+        if(!emailChangeBtnClicked) {
+          emailChangeBtnClicked = true
+          userEmailInput.attr('disabled', false)
+          userEmailInput.attr('readonly', false)
+          emailChngBtn.text("이메일 중복 체크하기")
+        } else {
+          const changedUserEmail = userEmailInput.val()
+          const originUserEmail = $("#origin-userEmail").val()
+          if(changedUserEmail === originUserEmail) {
+            Util.confirm("기존 이메일과 일치합니다. <br> 이메일을 그대로 유지하시겠습니까?").then((isOk) => {
+              if(isOk) {
+                chkUserEmail = true
+                userEmailInput.attr('disabled', true)
+                userEmailInput.attr('readonly', true)
+                emailChngBtn.attr('disabled', true)
+              }
+            })
+          } else {
+            Http.get(`/api/user/chkUserEmail.json`, {userEmail: changedUserEmail, userUid: $("#userUid").val()}).then((res) => {
+              if (res.message.key === 0) {
+                Util.alert(res.message.message.replace("\n", "<br>")).then(() => {
+                  userEmailInput.removeClass("is-invalid")
+                  userEmailInput.attr('disabled', true)
+                  userEmailInput.attr('readonly', true)
+                  emailChngBtn.attr('disabled', true)
+                  chkUserEmail = true
+                })
+              } else Util.alert(res.message.message.replace("\n", "<br>"))
+            });
+          }
+        }
+      })
+
+      pwdChngBtn.on('click', () => {
+        if(!pwdChangeBtnClicked) {
+          pwdChangeBtnClicked = true
+          password.attr('disabled', false)
+          password.attr('readonly', false)
+          passwordChk.attr('disabled', false)
+          passwordChk.attr('readonly', false)
+          pwdChngBtn.attr('disabled', true)
+        }
+      })
+
+      $("#save-user-info").on('click', () => {
+        const form = document.getElementById("form")
+        if (form.checkValidity() === false) form.classList.add("was-validated")
+        else {
+
+          if(emailChangeBtnClicked && !chkUserEmail) {
+            Util.alert("이메일 중복을 체크해주세요.")
+            return false
+          }
+
+          if(pwdChangeBtnClicked && (password.val() !== passwordChk.val())) {
+            Util.alert("비밀번호가 일치하지 않습니다. <br> 비밀번호를 확인해주세요.")
+            return false
+          }
+
+          FormDataToObj.getParameter("form").then(obj => {
+            if(emailChangeBtnClicked) obj['userEmail'] = userEmailInput.val()
+            Http.put('/api/user/update.json', obj).then((res) => {
+              if(res['httpStatus'] === 200) {
+                Util.alert("회원정보가 변경되었습니다.").then(() => window.location.href = '/')
+              } else Util.alert("회원정보 변경에 실패했습니다.")
+            })
+          })
+        }
+      })
+
+      password.on('input', validatePassword);
+      passwordChk.on('input', validatePassword);
+    })
+
+    function validatePassword() {
+      const passwordVal = password.val();
+      const confirmPasswordVal = passwordChk.val();
+      if(passwordVal && confirmPasswordVal) {
+        if (passwordVal === confirmPasswordVal) passwordChk.removeClass('is-invalid');  // 비밀번호와 비밀번호 확인이 일치하는 경우
+        else passwordChk.addClass('is-invalid');                                        // 비밀번호와 비밀번호 확인이 일치하지 않는 경우
+      }
+    }
+
+  </script>
+</th:block>
+
+</html>

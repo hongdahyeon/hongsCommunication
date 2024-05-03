@@ -1,4 +1,4 @@
-package hongs.community.hongsCommunity.domain.user.dto;
+package hongs.community.hongsCommunity.domain.user.front.dto;
 
 
 import hongs.community.hongsCommunity.global.util.TimeUtil;

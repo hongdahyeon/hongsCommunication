@@ -1,10 +1,18 @@
-package hongs.community.hongsCommunity.domain.user.dto;
+package hongs.community.hongsCommunity.domain.user.front.dto;
 
-import hongs.community.hongsCommunity.domain.user.UserRole;
+import hongs.community.hongsCommunity.domain.user.HongUserRole;
 import hongs.community.hongsCommunity.global.util.TimeUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+/**
+* @fileName HongUserInsertDto
+* @author dahyeon
+* @version 1.0.0
+* @date 2024-05-03
+* @summary  회원가입
+**/
 
 @Getter @Setter @NoArgsConstructor
 public class HongUserInsertDto {
@@ -25,7 +33,7 @@ public class HongUserInsertDto {
         this.password = encodePassword;
         this.userName = dto.getUserName();
         this.userEmail = dto.getUserEmail();
-        this.role = UserRole.ROLE_USER.toString();
+        this.role = HongUserRole.ROLE_USER.toString();
         this.pwdLastUpdate = TimeUtil.daysAfter(90);
         this.lastLoginDate = TimeUtil.nowDate();
     }

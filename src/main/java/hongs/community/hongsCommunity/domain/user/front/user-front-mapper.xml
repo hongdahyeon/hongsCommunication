@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="hongs.community.hongsCommunity.domain.user.HongUserMapper">
+<mapper namespace="hongs.community.hongsCommunity.domain.user.front.HongUserFrontMapper">
 
     <select id="findUser" parameterType="String" resultType="HongLoginUserVo">
         /* HongLoginUserVo.findUser */
@@ -40,36 +40,36 @@
     <insert id="joinUser" parameterType="HongUserInsertDto" keyProperty="userUid" useGeneratedKeys="true">
         /* HongUserInsertDto.joinUser */
         insert into hong_user (
-            user_id
-           ,password
-           ,user_name
-           ,user_email
-           ,role
-           ,is_enable
-           ,pwd_last_update
-           ,last_login_date
-           ,is_non_locked
-           ,pwd_fail_cnt
-           <if test="socialUserUid != null">
-           ,social_user_uid
-           </if>
+             user_id
+            ,password
+            ,user_name
+            ,user_email
+            ,role
+            ,is_enable
+            ,pwd_last_update
+            ,last_login_date
+            ,is_non_locked
+            ,pwd_fail_cnt
+            <if test="socialUserUid != null">
+            ,social_user_uid
+            </if>
         ) values (
-            #{userId}
-           ,#{password}
-           ,#{userName}
-           ,#{userEmail}
-           ,#{role}
-           ,true
-           ,#{pwdLastUpdate}
-           ,#{lastLoginDate}
-           ,true
-           ,0
-           <if test="socialUserUid != null">
-           ,#{socialUserUid}
-           </if>
+             #{userId}
+            ,#{password}
+            ,#{userName}
+            ,#{userEmail}
+            ,#{role}
+            ,true
+            ,#{pwdLastUpdate}
+            ,#{lastLoginDate}
+            ,true
+            ,0
+            <if test="socialUserUid != null">
+            ,#{socialUserUid}
+            </if>
         )
     </insert>
-    
+
     <select id="checkUser" parameterType="String" resultType="HongCheckUserVo">
         /* HongCheckUserVo.checkUser */
         select user_id
@@ -82,9 +82,9 @@
         /* HongUserUpdateFailCntDto.updatePwdFailCnt */
         update hong_user
            set pwd_fail_cnt = #{pwdFailCnt}
-            <if test="pwdFailCnt != null and pwdFailCnt == 5">
+        <if test="pwdFailCnt != null and pwdFailCnt == 5">
               ,is_non_locked = false
-            </if>
+        </if>
          where user_id = #{userId}
     </update>
 
@@ -98,17 +98,17 @@
     <select id="findUserByUid" parameterType="Long" resultType="HongLoginUserVo">
         /* HongLoginUserVo.findUserByUid */
         select user_uid
-             ,user_id
-             ,password
-             ,user_name
-             ,user_email
-             ,role
-             ,is_enable
-             ,pwd_last_update
-             ,last_login_date
-             ,is_non_locked
-        from hong_user
-        where user_uid = #{userUid}
+              ,user_id
+              ,password
+              ,user_name
+              ,user_email
+              ,role
+              ,is_enable
+              ,pwd_last_update
+              ,last_login_date
+              ,is_non_locked
+          from hong_user
+         where user_uid = #{userUid}
     </select>
 
     <insert id="joinSocialUser" parameterType="HongSocialUserInsertDto" keyProperty="socialUserUid" useGeneratedKeys="true">
@@ -137,10 +137,10 @@
         /* HongUserChngPwdDto.chngPwd */
         update hong_user
            set pwd_last_update = #{pwdLastUpdate}
-           <if test="chngPwd == true">
+        <if test="chngPwd == true">
               ,password = #{password}
-           </if>
-          where user_id = #{userId}
+        </if>
+         where user_id = #{userId}
     </update>
 
     <select id="searchUser" parameterType="HongUserSendEmailDto" resultType="int">
@@ -161,8 +161,7 @@
     <select id="chkUserEmail" parameterType="String" resultType="int">
         /* chkUserEmail */
         select count(*)
-        from hong_user
-        where user_email = #{userEmail}
+          from hong_user
+         where user_email = #{userEmail}
     </select>
-
 </mapper>

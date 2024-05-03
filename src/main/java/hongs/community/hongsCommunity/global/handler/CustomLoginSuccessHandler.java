@@ -1,6 +1,6 @@
 package hongs.community.hongsCommunity.global.handler;
 
-import hongs.community.hongsCommunity.domain.user.service.HongLoginUserService;
+import hongs.community.hongsCommunity.domain.user.front.service.HongFrontLoginUserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,13 +17,13 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final HongLoginUserService userService;
+    private final HongFrontLoginUserService frontLoginUserService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String userId = request.getParameter("userId");
         log.info("Login success userId : {} ", userId);
-        userService.resetFailCnt(userId);
+        frontLoginUserService.resetFailCnt(userId);
         response.sendRedirect("/");
     }
 }
