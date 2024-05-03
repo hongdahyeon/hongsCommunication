@@ -5,6 +5,7 @@ import hongs.community.hongsCommunity.domain.user.after.vo.HongUserCheckEmailVo;
 import hongs.community.hongsCommunity.global.hongs.dto.response.ApiDocumentResponse;
 import hongs.community.hongsCommunity.global.hongs.dto.response.Response;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import java.util.regex.Pattern;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/user")
+@Tag(name = "유저 RestController", description = "로그인 이후 접근 가능한 RestController")
 public class HongUserRestController {
 
     private final HongUserService userService;
