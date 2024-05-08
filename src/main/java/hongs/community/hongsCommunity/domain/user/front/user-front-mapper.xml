@@ -15,6 +15,7 @@
               ,pwd_last_update
               ,last_login_date
               ,is_non_locked
+              ,social_user_uid
           from hong_user
          where user_id = #{userId}
     </select>
@@ -31,6 +32,7 @@
               ,hu.pwd_last_update
               ,hu.last_login_date
               ,hu.is_non_locked
+              ,hsu.social_user_uid
           from hong_social_user hsu
          inner join hong_user hu on hu.social_user_uid = hsu.social_user_uid
          where hsu.user_id = #{userId}
@@ -88,10 +90,11 @@
          where user_id = #{userId}
     </update>
 
-    <update id="resetFailCnt" parameterType="String">
-        /* resetFailCnt */
+    <update id="resetFailCntAndLastLoginDate" parameterType="String">
+        /* resetFailCntAndLastLoginDate */
         update hong_user
            set pwd_fail_cnt = 0
+              ,last_login_date = now()
          where user_id = #{userId}
     </update>
 
@@ -164,4 +167,12 @@
           from hong_user
          where user_email = #{userEmail}
     </select>
+
+    <update id="updatePwdChangeDateAndLoginDate" parameterType="String">
+        /* updatePwdChangeDateAndLoginDate */
+        update hong_user
+           set pwd_last_update = now()
+              ,last_login_date = now()
+         where user_email = #{userEmail}
+    </update>
 </mapper>

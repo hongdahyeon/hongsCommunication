@@ -2,6 +2,7 @@ package hongs.community.hongsCommunity.domain.user.after;
 
 import hongs.community.hongsCommunity.domain.user.after.dto.HongUserUpdteDto;
 import hongs.community.hongsCommunity.domain.user.after.vo.HongUserCheckEmailVo;
+import hongs.community.hongsCommunity.domain.user.after.vo.HongUserListVo;
 import hongs.community.hongsCommunity.global.hongs.dto.response.ApiDocumentResponse;
 import hongs.community.hongsCommunity.global.hongs.dto.response.Response;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,5 +57,13 @@ public class HongUserRestController {
     public Response update(@RequestBody HongUserUpdteDto dto) {
         userService.updateUser(dto);
         return Response.ok();
+    }
+
+    @GetMapping("/list.json")
+    @Operation(summary = "회원정보 리스트 조회", description = "회원정보 리스트 조회")
+    @ApiDocumentResponse
+    public Response list() {
+        List<HongUserListVo> list = userService.list();
+        return Response.ok(list);
     }
 }

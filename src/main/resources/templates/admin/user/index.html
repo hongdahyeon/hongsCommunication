@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+
+<th:block layout:fragment="content">
+    <th:block th:replace="fragments/title :: title('사용자 관리')"></th:block>
+    <div id="dataTable"></div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script>
+        $(document).ready(function() {
+
+            const table = new Table("dataTable")
+                .get('/api/user/list.json')
+                .usePagination()
+                .resizeable()
+                .add(new Column("index").title("#").width("5%").center())
+                .add(new Column("userId").title("아이디").width("20%").left())
+                .add(new Column("userName").title("이름").width("10%").left())
+                .add(new Column("userEmail").title("이메일").width("15%").left())
+                .add(new Column("roleName").title("권한").width("10%").center())
+                .add(new Column("pwdLastUpdate").title("비밀번호 <br> 마지막 변경날짜").left())
+                .add(new Column("lastLoginDate").title("마지막 <br> 로그인 변경날짜").left())
+                .add(new Column("socialUserUid").title("소셜 로그인 <br> 계정 여부").left().formatter(function(cell) {
+                    const rowData = cell.getData()
+                    if(rowData['socialUserUid'] !== null) return '소설 로그인 계정'
+                    else '일반 로그인 계정'
+                }))
+                .add(new Column("isNonLocked").title("계정 <br> 잠김여부").left().center().formatter(function(cell) {
+                    const rowData = cell.getData()
+                    if(!rowData['isNonLocked']) return `<button type="button" class="btn btn-sm btn-secondary" data-num="${rowData['userUid']}" onclick="userChangeLocked(this)">계정잠김풀기</button>`
+                }))
+                .add(new Column("isEnable").title("계정 <br> 비활성화").width("10%").center().formatter(function(cell) {
+                    const rowData = cell.getData()
+                    console.log('rowData: ', rowData)
+                    const btnTxt = (rowData['isEnable']) ? '비활성화하기' : '비활성화풀기'
+                    const btnColor = (rowData['isEnable']) ? 'btn-outline-primary' : 'btn-secondary'
+                    return `<button type="button" class="btn btn-sm ${btnColor}" data-num="${rowData['userUid']}" data-enable="${rowData['isEnable']}" onclick="userChangeEnable(this)">${btnTxt}</button>`
+                }))
+                .init()
+        })
+
+        function userChangeEnable(This) {
+            const userUid = This.getAttribute("data-num")
+            const enable = This.getAttribute("data-enable")
+            console.log('userUid: ', userUid , ' -> ', enable)
+        }
+
+        function userChangeLocked(This) {
+            const userUid = This.getAttribute("data-num")
+            console.log('userUid: ', userUid)
+        }
+    </script>
+</th:block>
+
+</html>

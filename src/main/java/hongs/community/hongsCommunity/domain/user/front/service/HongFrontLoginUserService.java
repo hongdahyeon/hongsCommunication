@@ -28,7 +28,11 @@ public class HongFrontLoginUserService {
         userFrontMapper.updatePwdFailCnt(new HongUserUpdateFailCntDto(userId, failCnt));
     }
 
-    public void resetFailCnt(String userId) {
-        userFrontMapper.resetFailCnt(userId);
+    public void resetFailCntAndLastLoginDate(String userId) {
+        userFrontMapper.resetFailCntAndLastLoginDate(userId);
+    }
+
+    public void updatePwdChangeDateAndLoginDate(String userEmail) {
+        userFrontMapper.updatePwdChangeDateAndLoginDate(userEmail);
     }
 }

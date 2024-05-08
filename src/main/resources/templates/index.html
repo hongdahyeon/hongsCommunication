@@ -4,13 +4,7 @@
       layout:decorate="~{layouts/default}">
 
 <th:block layout:fragment="content">
-
-    <div class="card">
-        <div class="card-header">
-            <h1 class="mt-4">Simple Sidebar</h1>
-            <button type="button" class="btn btn-sm btn-primary">버튼</button>
-        </div>
-    </div>
+    <th:block th:replace="fragments/title :: title('Hongs Community')"></th:block>
 </th:block>
 
 <th:block layout:fragment="script">

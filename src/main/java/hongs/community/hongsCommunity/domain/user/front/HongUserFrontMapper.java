@@ -18,7 +18,7 @@ public interface HongUserFrontMapper {
 
     void updatePwdFailCnt(HongUserUpdateFailCntDto dto);
 
-    void resetFailCnt(String userId);
+    void resetFailCntAndLastLoginDate(String userId);
 
     HongLoginUserVo findUserByUid(Long userUid);
 
@@ -35,4 +35,6 @@ public interface HongUserFrontMapper {
     Integer chkUserId(String userId);
 
     Integer chkUserEmail(String userEmail);
+
+    void updatePwdChangeDateAndLoginDate(String userEmail);
 }

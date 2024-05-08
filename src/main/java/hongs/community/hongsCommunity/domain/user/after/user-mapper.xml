@@ -39,4 +39,21 @@
         </if>
          where user_uid = #{userUid}
     </update>
+
+    <select id="list" resultType="HongUserListVo">
+        select user_uid
+              ,user_id
+              ,user_name
+              ,user_email
+              ,case when role = 'ROLE_SUPER' then '슈퍼 권한'
+                    when role = 'ROLE_ADMIN' then '어드민 권한'
+                    else '유저 권한'
+                end as role_name
+              ,is_enable
+              ,to_char(pwd_last_update, 'YYYY-MM-DD') as pwd_last_update
+              ,to_char(last_login_date, 'YYYY-MM-DD') as last_login_date
+              ,is_non_locked
+              ,social_user_uid
+          from hong_user
+    </select>
 </mapper>
