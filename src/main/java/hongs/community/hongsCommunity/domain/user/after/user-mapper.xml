@@ -56,4 +56,26 @@
               ,social_user_uid
           from hong_user
     </select>
+
+    <update id="unlock" parameterType="HongUserUnlockDto">
+        /* unlock */
+        update hong_user
+           set is_non_locked = true
+              ,pwd_fail_cnt = 0
+         where user_uid = #{userUid}
+    </update>
+
+    <update id="toEnable" parameterType="Long">
+        /* toEnable */
+        update hong_user
+           set is_enable = true
+         where user_uid = #{userUid}
+    </update>
+
+    <update id="toDisable" parameterType="Long">
+        /* toDisable */
+        update hong_user
+           set is_enable = false
+         where user_uid = #{userUid}
+    </update>
 </mapper>

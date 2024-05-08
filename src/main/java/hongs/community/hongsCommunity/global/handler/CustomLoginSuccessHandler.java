@@ -12,6 +12,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -27,8 +28,16 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         String userId = request.getParameter("userId");
         if(userId == null) {
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-            Map<String, Object> map = oAuth2User.getAttribute("response");
-            String userEmail = (String) map.get("email");
+            Map<String, Object> map = new HashMap<>();
+            String userEmail = "";
+
+            map = oAuth2User.getAttribute("response");
+            if(map == null) {
+                map = oAuth2User.getAttribute("kakao_account");
+                if(map == null) userEmail = oAuth2User.getAttribute("email");
+                else userEmail = (String) map.get("email");
+            } else userEmail = (String) map.get("email");
+
             log.info("Login success email : {} ", userEmail);
             frontLoginUserService.updatePwdChangeDateAndLoginDate(userEmail);
         } else {

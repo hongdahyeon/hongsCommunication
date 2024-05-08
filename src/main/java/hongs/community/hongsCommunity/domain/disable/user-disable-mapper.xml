@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="hongs.community.hongsCommunity.domain.disable.HongUserDisableMapper">	<!-- mapper 인터페이스가 위치하는 풀경로 -->
+
+    <select id="view" parameterType="Long" resultType="HongUserDisableViewVo">
+        /* view */
+        select hud.user_uid
+              ,to_char(hud.disable_date, 'YYYY-MM-DD') as disable_date
+              ,hud.disable_msg
+              ,hu.user_name as mdfr_name
+          from hong_user_disable hud
+          left join hong_user hu on hu.user_uid = hud.mdfr_id
+         where hud.user_uid = #{userUid}
+           and hud.delete_yn = 'N'
+    </select>
+
+    <update id="toEnable" parameterType="HongUserEnableDto">
+        /* toEnable */
+        update hong_user_disable
+           set delete_yn = 'Y'
+              ,mdfr_id = #{mdfrId}
+              ,mdfr_dt = now()
+         where user_uid = #{userUid}
+    </update>
+
+    <insert id="toDisable" parameterType="HongUserDisableDto">
+        /* toDisable */
+        insert into hong_user_disable (
+            user_uid
+           ,disable_date
+           ,disable_msg
+           ,delete_yn
+           ,reg_id
+           ,reg_dt
+           ,mdfr_id
+           ,mdfr_dt
+        ) values (
+            #{userUid}
+           ,now()
+           ,#{disableMsg}
+           ,'N'
+           ,#{regId}
+           ,now()
+           ,#{mdfrId}
+           ,now()
+        )
+    </insert>
+</mapper>

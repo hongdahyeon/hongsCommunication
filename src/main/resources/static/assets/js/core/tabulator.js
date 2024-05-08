@@ -150,6 +150,22 @@ class Table {
     }
 
     /*
+     * header middle
+     * */
+    headerCenter() {
+        this._columnHeaderVertAlign = "middle"
+        return this
+    }
+
+    /*
+     * header top
+     * */
+    headerTop() {
+        this._columnHeaderVertAlign = "top"
+        return this
+    }
+
+    /*
     * get selected rows list
     */
     getSelectedRows() {
@@ -261,7 +277,7 @@ class Table {
         const table = new Tabulator(dom, option)
 
         // if clicking row not null
-        if(this.ㅇ_rowClick) {
+        if(this._rowClick) {
             table.on('rowClick', (e, row) => {
                 if(!e.target.classList.contains("tabulator-checkbox") && !e.target.classList.contains("select")) {
                     this._rowClick(row.getData(), row._row)

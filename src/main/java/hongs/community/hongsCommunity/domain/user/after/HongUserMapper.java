@@ -1,5 +1,6 @@
 package hongs.community.hongsCommunity.domain.user.after;
 
+import hongs.community.hongsCommunity.domain.user.after.dto.HongUserUnlockDto;
 import hongs.community.hongsCommunity.domain.user.after.dto.HongUserUpdteDto;
 import hongs.community.hongsCommunity.domain.user.after.vo.HongUserCheckEmailVo;
 import hongs.community.hongsCommunity.domain.user.after.vo.HongUserInfoVo;
@@ -18,4 +19,10 @@ public interface HongUserMapper {
     void updateUser(HongUserUpdteDto dto);
 
     List<HongUserListVo> list();
+
+    Integer unlock(HongUserUnlockDto dto);
+
+    Integer toEnable(Long userUid);
+
+    Integer toDisable(Long userUid);
 }

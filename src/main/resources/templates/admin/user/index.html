@@ -3,19 +3,78 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
 
-
 <th:block layout:fragment="content">
-    <th:block th:replace="fragments/title :: title('사용자 관리')"></th:block>
+    <th:block th:replace="~{fragments/title :: title('사용자 관리')}"></th:block>
     <div id="dataTable"></div>
+
+    <!-- s: 사용자 활성화 to 비활성화 Modal -->
+    <div class="modal fade" id="userEnableToDisableModal" tabindex="-1" aria-labelledby="userEnableToDisableModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="card-body">
+                        <form id="userEnableToDisableModal-form" class="needs-validation" novalidate>
+                            <input type="hidden" id="userEnableToDisableModal-user-uid" name="userUid" />
+                            <div class="col-md-12 col-12">
+                                <div class="mb-1 margin-10">
+                                    <label class="form-label" for="userEnableToDisableModal-msg">비활성화 사유<span class="text-primary ms-50">*</span></label>
+                                    <textarea class="form-control" id="userEnableToDisableModal-msg" name="disableMsg" required></textarea>
+                                    <div class="invalid-feedback">계정 비활성화에 대한 사유를 입력해주세요.</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px" class="text-end">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                                <button type="button" class="btn btn-outline-primary" id="userEnableToDisableModal-btn">계정 비활성화</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- e: 사용자 활성화 to 비활성화 Modal -->
+
+    <!-- s: 사용자 비활성화 to 활성화 Modal -->
+    <div class="modal fade" id="userDisableToEnableModal" tabindex="-1" aria-labelledby="userDisableToEnableModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="card-body">
+                        <input type="hidden" id="userDisableToEnableModal-user-uid" name="userUid" />
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1 margin-10">
+                                <label class="form-label" for="userDisableToEnableModal-msg">비활성화 사유<span class="text-primary ms-50">*</span></label>
+                                <textarea class="form-control" id="userDisableToEnableModal-msg" name="disableMsg" readonly></textarea>
+                                <div class="invalid-feedback">계정 비활성화에 대한 사유를 입력해주세요.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 co-12">
+                            <span id="userDisableToEnableModal-mdfr-user"></span>
+                        </div>
+                        <div class="col-md-12 co-12">
+                            <span id="userDisableToEnableModal-mdfr-date"></span>
+                        </div>
+                        <div style="margin-top: 10px" class="text-end">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-outline-primary" id="userDisableToEnableModal-btn">계정 활성화</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- e: 사용자 비활성화 to 활성화 Modal -->
+
 </th:block>
 
 <th:block layout:fragment="script">
     <script>
+        let table = new Table("dataTable")
         $(document).ready(function() {
-
-            const table = new Table("dataTable")
+            table
                 .get('/api/user/list.json')
                 .usePagination()
+                .headerCenter()
                 .resizeable()
                 .add(new Column("index").title("#").width("5%").center())
                 .add(new Column("userId").title("아이디").width("20%").left())
@@ -26,8 +85,8 @@
                 .add(new Column("lastLoginDate").title("마지막 <br> 로그인 변경날짜").left())
                 .add(new Column("socialUserUid").title("소셜 로그인 <br> 계정 여부").left().formatter(function(cell) {
                     const rowData = cell.getData()
-                    if(rowData['socialUserUid'] !== null) return '소설 로그인 계정'
-                    else '일반 로그인 계정'
+                    if(rowData['socialUserUid'] !== null) return '소설'
+                    else return '일반'
                 }))
                 .add(new Column("isNonLocked").title("계정 <br> 잠김여부").left().center().formatter(function(cell) {
                     const rowData = cell.getData()
@@ -35,23 +94,89 @@
                 }))
                 .add(new Column("isEnable").title("계정 <br> 비활성화").width("10%").center().formatter(function(cell) {
                     const rowData = cell.getData()
-                    console.log('rowData: ', rowData)
                     const btnTxt = (rowData['isEnable']) ? '비활성화하기' : '비활성화풀기'
                     const btnColor = (rowData['isEnable']) ? 'btn-outline-primary' : 'btn-secondary'
                     return `<button type="button" class="btn btn-sm ${btnColor}" data-num="${rowData['userUid']}" data-enable="${rowData['isEnable']}" onclick="userChangeEnable(this)">${btnTxt}</button>`
                 }))
                 .init()
+
+            /* 사용자 계정 활성화 -> 비활성화 모달 닫기 */
+            $("#userEnableToDisableModal").on('hidden.bs.modal', (e) => {
+                e.preventDefault()
+                $("#userEnableToDisableModal-user-uid").val('')
+                $("#userEnableToDisableModal-msg").val('')
+                document.getElementById("userEnableToDisableModal-form").classList.remove('was-validated');
+            })
+
+            /* 사용자 계정 비활성화 -> 활성화 모달 닫기 */
+            $("#userDisableToEnableModal").on('hidden.bs.modal', (e) => {
+                e.preventDefault()
+                $("#userDisableToEnableModal-user-uid").val('')
+                $("#userDisableToEnableModal-msg").val('')
+                $("#userDisableToEnableModal-mdfr-user").val('')
+                $("#userDisableToEnableModal-mdfr-date").val('')
+            })
+
+            /* 사용자 계정 활성화 -> 비활성화 모달 버튼 */
+            $("#userEnableToDisableModal-btn").on('click', (e) => {
+                e.preventDefault()
+                const form = document.getElementById("userEnableToDisableModal-form")
+                if (form.checkValidity() === false) form.classList.add("was-validated")
+                else {
+                    FormDataToObj.getParameter("userEnableToDisableModal-form").then(obj => {
+                        Http.post('/api/admin/user-disable/to-disable.json', obj).then(res => {
+                            if (res['httpStatus'] === 200) Util.alert("해당 사용자의 계정이 비활성화되었습니다.").then(() => table.submit())
+                            else if (res['httpStatus'] === 400) Util.alert("해당 사용자의 계정 비활성화에 실패했습니다.")
+                            $("#userEnableToDisableModal").modal('hide')
+                        })
+                    })
+                }
+            })
+
+            /* 사용자 계정 비활성화 -> 활성화 모달 버튼 */
+            $("#userDisableToEnableModal-btn").on('click', (e) => {
+                e.preventDefault()
+                const userUid = $("#userDisableToEnableModal-user-uid").val()
+                Http.put('/api/admin/user-disable/to-enable.json', {userUid: userUid}).then(res => {
+                    if(res['httpStatus'] === 200) Util.alert("해당 사용자의 계정이 활성화되었습니다.").then(() => table.submit())
+                    else if(res['httpStatus'] === 400) Util.alert("해당 사용자의 계정 활성화에 실패했습니다.")
+                    $("#userDisableToEnableModal").modal('hide')
+                })
+            })
         })
 
         function userChangeEnable(This) {
             const userUid = This.getAttribute("data-num")
-            const enable = This.getAttribute("data-enable")
-            console.log('userUid: ', userUid , ' -> ', enable)
+            const isEnable = This.getAttribute("data-enable")
+
+            if(isEnable === 'false') {
+                // get not enable reason
+                Http.get(`/api/admin/user-disable/view.json?userUid=${userUid}`).then((res) => {
+                  if(res['httpStatus'] === 200) {
+                      const data = res.message
+                      $("#userDisableToEnableModal-user-uid").val(userUid)
+                      $("#userDisableToEnableModal-msg").val(data['disableMsg'])
+                      $("#userDisableToEnableModal-mdfr-user").text(`* 잠금한 사용자 : ${data['mdfrName']}`)
+                      $("#userDisableToEnableModal-mdfr-date").text(`* 잠금 날짜 : ${data['disableDate']}`)
+                      $("#userDisableToEnableModal").modal('show')
+                  }
+                })
+            } else {
+                $("#userEnableToDisableModal-user-uid").val(userUid)
+                $("#userEnableToDisableModal").modal('show')
+            }
         }
 
         function userChangeLocked(This) {
             const userUid = This.getAttribute("data-num")
-            console.log('userUid: ', userUid)
+            Util.confirm("해당 사용자의 경우 <br> 비밀번호 5회 오류로 계정이 잠겼습니다. <br> 해당 계정을 푸시겠습니까?").then((isOk) => {
+                if(isOk) {
+                    Http.put('/api/user/user-unlock.json', {userUid: userUid}).then((res) => {
+                        if(res['httpStatus'] === 200) Util.alert("해당 사용자의 계정이 풀렸습니다.").then(() => table.submit())
+                        else if(res['httpStatus'] === 400) Util.alert("해당 사용자의 계정 잠금 해제에 실패했습니다.")
+                    })
+                }
+            })
         }
     </script>
 </th:block>

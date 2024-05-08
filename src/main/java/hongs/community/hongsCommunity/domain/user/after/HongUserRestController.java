@@ -1,5 +1,6 @@
 package hongs.community.hongsCommunity.domain.user.after;
 
+import hongs.community.hongsCommunity.domain.user.after.dto.HongUserUnlockDto;
 import hongs.community.hongsCommunity.domain.user.after.dto.HongUserUpdteDto;
 import hongs.community.hongsCommunity.domain.user.after.vo.HongUserCheckEmailVo;
 import hongs.community.hongsCommunity.domain.user.after.vo.HongUserListVo;
@@ -65,5 +66,14 @@ public class HongUserRestController {
     public Response list() {
         List<HongUserListVo> list = userService.list();
         return Response.ok(list);
+    }
+
+    @PutMapping("/user-unlock.json")
+    @Operation(summary = "관리자 계정에서 사용자 계정 잠금 풀기", description = "관리자 계정에서 사용자 계정 잠금 풀기")
+    @ApiDocumentResponse
+    public Response unlock(@RequestBody HongUserUnlockDto dto) {
+        Integer unlocked = userService.unlock(dto);
+        if(unlocked == 1) return Response.ok();
+        else return Response.badRequest();
     }
 }

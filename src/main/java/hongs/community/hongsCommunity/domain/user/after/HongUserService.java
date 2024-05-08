@@ -1,5 +1,6 @@
 package hongs.community.hongsCommunity.domain.user.after;
 
+import hongs.community.hongsCommunity.domain.user.after.dto.HongUserUnlockDto;
 import hongs.community.hongsCommunity.domain.user.after.dto.HongUserUpdteDto;
 import hongs.community.hongsCommunity.domain.user.after.vo.HongUserCheckEmailVo;
 import hongs.community.hongsCommunity.domain.user.after.vo.HongUserInfoVo;
@@ -34,5 +35,17 @@ public class HongUserService {
 
     public List<HongUserListVo> list() {
         return hongUserMapper.list();
+    }
+
+    public Integer unlock(HongUserUnlockDto dto) {
+        return hongUserMapper.unlock(dto);
+    }
+
+    public Integer toEnable(Long userUid) {
+        return hongUserMapper.toEnable(userUid);
+    }
+
+    public Integer toDisable(Long userUid) {
+        return hongUserMapper.toDisable(userUid);
     }
 }

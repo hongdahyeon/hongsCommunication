@@ -9,6 +9,7 @@ $(document).ready(function(e) {
         const type = decodeURIComponent(params.get("type"))
         const errorMessage = decodeURIComponent(params.get("mssg"))
         const userId = decodeURIComponent(params.get("userId"))
+        const userEmail = decodeURIComponent(params.get("userEmail"))
         history.replaceState({}, null, '/login')
 
         pwdError.html(errorMessage.replace("\n", "<br>"))
@@ -41,8 +42,24 @@ $(document).ready(function(e) {
             })
         }
 
-        /* [소셜로그인 오류] : (현시점) 소셜 로그인 이메일이 중복되는 경우 */
-        if(type === "socialError") Util.alert(errorMessage.replace("\n", "<br>"))
+        /* [소셜로그인 오류] : 소셜 로그인 이메일이 중복되는 경우 */
+        if(type === "socialEmailDuplicate") Util.alert(errorMessage.replace("\n", "<br>"))
+
+        /* [소셜로그인 오류] : 소셜 아이디를 비활성화한 경우 */
+        if(type === "socialEnable") Util.alert(errorMessage.replace("\n", "<br>"))
+
+        /* [소셜로그인 오류] : 소셜 아이디를 잠근 경우 */
+        if(type === "socialLock") Util.alert(errorMessage.replace("\n", "<br>"))
+
+        /* [소셜로그인 오류] : 소셜 아이디로 로그인한지 1년이 넘은 경우 */
+        if(type === "socialExpired") {
+            Util.alert(errorMessage.replace("\n", "<br>")).then(() => {
+                $("#validateEmailModal-loginUserId").val(userId)
+                $("#chkEmail").val(userEmail)
+                $("#chkEmail").attr('readonly', true)
+                $("#validateEmailModal").modal('show')
+            })
+        }
     }
 
     /* 로그인 아이디 기억하기 -> localStorage에서 id가져오기 */

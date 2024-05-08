@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -40,8 +41,15 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
             if(exception instanceof AccountExpiredException) sendMssgAndRedirect(FailureException.AccountExpiredException.message, "account", userId, response);
             if(exception instanceof LockedException) sendMssgAndRedirect(FailureException.LockedException.message, "error", userId, response);
             if(exception instanceof OAuth2AuthenticationException) {
-                if(exception.getMessage() == null) sendMssgAndRedirect(FailureException.OAuth2AuthenticationException.message, "socialError", userId, response);
-                else sendMssgAndRedirect(exception.getMessage(), "socialError", userId, response);
+                OAuth2Error error = ((OAuth2AuthenticationException) exception).getError();
+                String errorCode = error.getErrorCode();
+                String userEmail = error.getDescription();
+                String socialUserId = error.getUri();
+                if("socialEmailDuplicate".equals(errorCode)) sendMssgAndRedirectSocial(exception.getMessage(), "socialEmailDuplicate", socialUserId, userEmail, response);
+                if("socialEnable".equals(errorCode)) sendMssgAndRedirectSocial(exception.getMessage(), "socialEnable", socialUserId, userEmail, response);
+                if("socialLock".equals(errorCode)) sendMssgAndRedirectSocial(exception.getMessage(), "socialLock", socialUserId, userEmail, response);
+                if("socialExpired".equals(errorCode)) sendMssgAndRedirectSocial(exception.getMessage(), "socialExpired", socialUserId, userEmail, response);
+                if(exception.getMessage() == null) sendMssgAndRedirectSocial(FailureException.OAuth2AuthenticationException.message, "socialError", socialUserId, userEmail, response);
             }
             if(exception instanceof InternalAuthenticationServiceException) sendMssgAndRedirect(FailureException.InternalAuthenticationServiceException.message, "error", userId, response);
         }
@@ -50,5 +58,10 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
     public void sendMssgAndRedirect(String message, String type, String userId, HttpServletResponse response) throws IOException {
         String sendMessage = URLEncoder.encode(message, "UTF-8");
         response.sendRedirect("/login?type="+type+"&userId="+userId+"&mssg="+sendMessage);
+    }
+
+    public void sendMssgAndRedirectSocial(String message, String type, String userId, String userEmail, HttpServletResponse response) throws IOException {
+        String sendMessage = URLEncoder.encode(message, "UTF-8");
+        response.sendRedirect("/login?type="+type+"&userId="+userId+"&userEmail="+userEmail+"&mssg="+sendMessage);
     }
 }
