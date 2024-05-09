@@ -14,6 +14,8 @@ public class HongUserListVo {
     private Boolean isEnable;
     private String pwdLastUpdate;
     private String lastLoginDate;
+    private Boolean isUserExpired;
+    private Boolean isCredentialExpired;
     private Boolean isNonLocked;
     private Long socialUserUid;
 }

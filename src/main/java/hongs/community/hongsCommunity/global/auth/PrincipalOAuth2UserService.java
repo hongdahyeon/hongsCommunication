@@ -5,6 +5,8 @@ import hongs.community.hongsCommunity.domain.menu.vo.HongMenuVo;
 import hongs.community.hongsCommunity.domain.user.front.service.HongSocialUserFrontService;
 import hongs.community.hongsCommunity.domain.user.front.dto.HongSocialUserInsertDto;
 import hongs.community.hongsCommunity.domain.user.front.vo.HongLoginUserVo;
+import hongs.community.hongsCommunity.global.auth.oatuh2.OAuth2ErrorCode;
+import hongs.community.hongsCommunity.global.auth.oatuh2.OAuth2ErrorCustom;
 import hongs.community.hongsCommunity.global.handler.FailureException;
 import hongs.community.hongsCommunity.global.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -73,12 +74,12 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
                 this.customUser(socialUser);
                 return new PrincipalDetails(socialUser, userInfo);
 
-            } else throw new OAuth2AuthenticationException(new OAuth2Error("socialEmailDuplicate", email, ""), FailureException.OAuth2AuthenticationExceptionEmailDuplicateMsg.message);
+            } else throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialEmailDuplicate, email, ""), FailureException.OAuth2AuthenticationExceptionEmailDuplicateMsg.message);
 
         } else {
-            if(!socialUser.getIsEnable()) throw new OAuth2AuthenticationException(new OAuth2Error("socialEnable", email, userId), FailureException.DisabledException.message);
-            if(!socialUser.getIsNonLocked()) throw new OAuth2AuthenticationException(new OAuth2Error("socialLock", email, userId), FailureException.OAuth2AuthenticationLockedException.message);
-            if(!TimeUtil.isXYearAfter(socialUser.getLastLoginDate(), 1)) throw new OAuth2AuthenticationException(new OAuth2Error("socialExpired", email, userId), FailureException.AccountExpiredException.message);
+            if(!socialUser.getIsEnable()) throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialEnable, email, userId), FailureException.DisabledException.message);
+            if(!socialUser.getIsNonLocked()) throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialLock, email, userId), FailureException.OAuth2AuthenticationLockedException.message);
+            if(!TimeUtil.isXYearAfter(socialUser.getLastLoginDate(), 1)) throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialExpired, email, userId), FailureException.AccountExpiredException.message);
         }
 
         this.customUser(socialUser);

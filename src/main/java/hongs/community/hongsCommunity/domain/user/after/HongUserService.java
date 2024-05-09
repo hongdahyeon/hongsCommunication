@@ -5,6 +5,7 @@ import hongs.community.hongsCommunity.domain.user.after.dto.HongUserUpdteDto;
 import hongs.community.hongsCommunity.domain.user.after.vo.HongUserCheckEmailVo;
 import hongs.community.hongsCommunity.domain.user.after.vo.HongUserInfoVo;
 import hongs.community.hongsCommunity.domain.user.after.vo.HongUserListVo;
+import hongs.community.hongsCommunity.global.hongs.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class HongUserService {
 
     private final HongUserMapper hongUserMapper;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public HongUserInfoVo userInfo(Long userUid) {
         return hongUserMapper.userInfo(userUid);
@@ -47,5 +49,15 @@ public class HongUserService {
 
     public Integer toDisable(Long userUid) {
         return hongUserMapper.toDisable(userUid);
+    }
+
+    public void sendExpiredEmail(Long userUid) {
+        String userEmail = hongUserMapper.getUserEmailByUid(userUid);
+        emailService.sendExpiredEmail(userEmail);
+    }
+
+    public void sendCredentialExpiredEmail(Long userUid) {
+        String userEmail = hongUserMapper.getUserEmailByUid(userUid);
+        emailService.sendCredentialExpiredEmail(userEmail);
     }
 }

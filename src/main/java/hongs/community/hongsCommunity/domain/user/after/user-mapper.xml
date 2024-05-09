@@ -54,6 +54,12 @@
               ,to_char(last_login_date, 'YYYY-MM-DD') as last_login_date
               ,is_non_locked
               ,social_user_uid
+              ,case when abs(datediff(last_login_date, now())) > 365 then true
+                    else false
+                end as is_user_expired
+              ,case when now() > pwd_last_update then true
+                    else false
+                end as is_credential_expired
           from hong_user
     </select>
 
@@ -78,4 +84,11 @@
            set is_enable = false
          where user_uid = #{userUid}
     </update>
+
+    <select id="getUserEmailByUid" parameterType="Long" resultType="String">
+        /* getUserEmailByUid */
+        select user_email
+          from hong_user
+         where user_uid = #{userUid}
+    </select>
 </mapper>

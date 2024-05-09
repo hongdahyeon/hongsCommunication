@@ -25,4 +25,6 @@ public interface HongUserMapper {
     Integer toEnable(Long userUid);
 
     Integer toDisable(Long userUid);
+
+    String getUserEmailByUid(Long userUid);
 }

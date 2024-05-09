@@ -76,4 +76,20 @@ public class HongUserRestController {
         if(unlocked == 1) return Response.ok();
         else return Response.badRequest();
     }
+
+    @GetMapping("/send-expired-email.json")
+    @Operation(summary = "로그인 안한지 1년이 지나 휴먼계정이 된 사용자에게 이메일 전송", description = "로그인 안한지 1년이 지나 휴먼계정이 된 사용자에게 이메일 전송")
+    @ApiDocumentResponse
+    public Response sendExpiredEmail(@RequestParam(required = true, name = "userUid") Long userUid) {
+        userService.sendExpiredEmail(userUid);
+        return Response.ok();
+    }
+
+    @GetMapping("/send-credential-expired-email.json")
+    @Operation(summary = "비밀번호 변경한지 90일이 지난 사용자에게 이메일 전송", description = "비밀번호 변경한지 90일이 지난 사용자에게 이메일 전송")
+    @ApiDocumentResponse
+    public Response sendCredentialExpiredEmail(@RequestParam(required = true, name = "userUid") Long userUid) {
+        userService.sendCredentialExpiredEmail(userUid);
+        return Response.ok();
+    }
 }

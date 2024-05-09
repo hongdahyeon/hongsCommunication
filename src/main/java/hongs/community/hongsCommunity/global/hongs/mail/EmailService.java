@@ -79,6 +79,38 @@ public class EmailService {
         this.sendEmail(to, subject, text);
     }
 
+    public void sendExpiredEmail(String to){
+        String subject = "휴먼 계정이 되었습니다.";
+        String content = "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<body>\n" +
+                "    <div class=\"container\">\n" +
+                "        <span style=\"font-size: 12px;\">" +
+                "           최근 로그인 시점으로부터 1년이 지났습니다. 로그인 하셔서 휴먼 계정을 풀어주세요.\n" +
+                "        </span>\n" +
+                "    </div>\n" +
+                "</body>\n" +
+                "</html>";
+
+        this.sendEmail(to, subject, content);
+    }
+
+    public void sendCredentialExpiredEmail(String to){
+        String subject = "비밀번호를 변경 안하신지 90일이 지났습니다.";
+        String content = "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<body>\n" +
+                "    <div class=\"container\">\n" +
+                "        <span style=\"font-size: 12px;\">" +
+                "           비밀번호를 변경 안하신지 90일이 지났습니다. 로그인 하셔서 비밀번호를 변경 혹은 90일 연장해주세요.\n" +
+                "        </span>\n" +
+                "    </div>\n" +
+                "</body>\n" +
+                "</html>";
+
+        this.sendEmail(to, subject, content);
+    }
+
     private void sendEmail(String to, String subject, String content) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try{

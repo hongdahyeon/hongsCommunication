@@ -2,6 +2,8 @@ package hongs.community.hongsCommunity.global.handler;
 
 import hongs.community.hongsCommunity.domain.user.front.service.HongFrontLoginUserService;
 import hongs.community.hongsCommunity.domain.user.front.vo.HongCheckUserVo;
+import hongs.community.hongsCommunity.global.auth.oatuh2.OAuth2ErrorCode;
+import hongs.community.hongsCommunity.global.auth.oatuh2.OAuth2ErrorCustom;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -41,14 +42,14 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
             if(exception instanceof AccountExpiredException) sendMssgAndRedirect(FailureException.AccountExpiredException.message, "account", userId, response);
             if(exception instanceof LockedException) sendMssgAndRedirect(FailureException.LockedException.message, "error", userId, response);
             if(exception instanceof OAuth2AuthenticationException) {
-                OAuth2Error error = ((OAuth2AuthenticationException) exception).getError();
-                String errorCode = error.getErrorCode();
-                String userEmail = error.getDescription();
-                String socialUserId = error.getUri();
-                if("socialEmailDuplicate".equals(errorCode)) sendMssgAndRedirectSocial(exception.getMessage(), "socialEmailDuplicate", socialUserId, userEmail, response);
-                if("socialEnable".equals(errorCode)) sendMssgAndRedirectSocial(exception.getMessage(), "socialEnable", socialUserId, userEmail, response);
-                if("socialLock".equals(errorCode)) sendMssgAndRedirectSocial(exception.getMessage(), "socialLock", socialUserId, userEmail, response);
-                if("socialExpired".equals(errorCode)) sendMssgAndRedirectSocial(exception.getMessage(), "socialExpired", socialUserId, userEmail, response);
+                OAuth2ErrorCustom error = (OAuth2ErrorCustom) ((OAuth2AuthenticationException) exception).getError();
+                OAuth2ErrorCode errorCode = error.getOAuth2ErrorCode();
+                String userEmail = error.getUserEmail();
+                String socialUserId = error.getUserId();
+                if(OAuth2ErrorCode.socialEmailDuplicate == errorCode) sendMssgAndRedirectSocial(exception.getMessage(), "socialEmailDuplicate", socialUserId, userEmail, response);
+                if(OAuth2ErrorCode.socialEnable == errorCode) sendMssgAndRedirectSocial(exception.getMessage(), "socialEnable", socialUserId, userEmail, response);
+                if(OAuth2ErrorCode.socialLock == errorCode) sendMssgAndRedirectSocial(exception.getMessage(), "socialLock", socialUserId, userEmail, response);
+                if(OAuth2ErrorCode.socialExpired == errorCode) sendMssgAndRedirectSocial(exception.getMessage(), "socialExpired", socialUserId, userEmail, response);
                 if(exception.getMessage() == null) sendMssgAndRedirectSocial(FailureException.OAuth2AuthenticationException.message, "socialError", socialUserId, userEmail, response);
             }
             if(exception instanceof InternalAuthenticationServiceException) sendMssgAndRedirect(FailureException.InternalAuthenticationServiceException.message, "error", userId, response);

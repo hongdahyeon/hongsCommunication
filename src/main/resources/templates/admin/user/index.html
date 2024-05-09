@@ -81,11 +81,19 @@
                 .add(new Column("userName").title("이름").width("10%").left())
                 .add(new Column("userEmail").title("이메일").width("15%").left())
                 .add(new Column("roleName").title("권한").width("10%").center())
-                .add(new Column("pwdLastUpdate").title("비밀번호 <br> 마지막 변경날짜").left())
-                .add(new Column("lastLoginDate").title("마지막 <br> 로그인 변경날짜").left())
+                .add(new Column("pwdLastUpdate").title("비밀번호 <br> 마지막 변경날짜").left().formatter(function(cell) {
+                    const rowData = cell.getData()
+                    if(rowData['isCredentialExpired']) return `<a href="#" onclick="userCredentialExpried(this)" data-num="${rowData['userUid']}">${rowData['pwdLastUpdate']}</a>`
+                    return rowData['pwdLastUpdate']
+                }))
+                .add(new Column("lastLoginDate").title("마지막 <br> 로그인 날짜").left().formatter(function (cell) {
+                    const rowData = cell.getData()
+                    if(rowData['isUserExpired']) return `<a href="#" onclick="userExpired(this)" data-num="${rowData['userUid']}">${rowData['lastLoginDate']}</a>`
+                    return rowData['lastLoginDate']
+                }))
                 .add(new Column("socialUserUid").title("소셜 로그인 <br> 계정 여부").left().formatter(function(cell) {
                     const rowData = cell.getData()
-                    if(rowData['socialUserUid'] !== null) return '소설'
+                    if(rowData['socialUserUid'] !== null) return '소셜'
                     else return '일반'
                 }))
                 .add(new Column("isNonLocked").title("계정 <br> 잠김여부").left().center().formatter(function(cell) {
@@ -144,6 +152,28 @@
                 })
             })
         })
+
+        function userCredentialExpried(This) {
+            const userUid = This.getAttribute("data-num")
+            Util.confirm("해당 사용자는 비밀번호 변경일자가 90일이 <br> 지나서 비밀번호가 만료됐습니다. <br> 해당 사용자에게 이메일을 발송하시겠습니까?").then((isOk) => {
+                if(isOk) {
+                    Http.get(`/api/user/send-credential-expired-email.json?userUid=${userUid}`).then((res) => {
+                        Util.alert("이메일이 발송되었습니다.")
+                    })
+                }
+            })
+        }
+
+        function userExpired(This) {
+            const userUid = This.getAttribute("data-num")
+            Util.confirm("해당 사용자는 최근 로그인일시가 1년이 지났습니다. <br> 해당 사용자에게 이메일을 발송하시겠습니까?").then((isOk) => {
+                if(isOk) {
+                    Http.get(`/api/user/send-expired-email.json?userUid=${userUid}`).then((res) => {
+                        Util.alert("이메일이 발송되었습니다.")
+                    })
+                }
+            })
+        }
 
         function userChangeEnable(This) {
             const userUid = This.getAttribute("data-num")
