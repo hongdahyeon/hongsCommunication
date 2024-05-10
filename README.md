@@ -224,3 +224,6 @@ $("#view-content").html(code)
 1. 코드 관리 : 상위 코드 추가/삭제/수정
 2. $.ajax 정리
 3. aspect deletMapping 추가
+
+
+(47) 24-05-10 : menu active
