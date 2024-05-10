@@ -1,5 +1,6 @@
-package hongs.community.hongsCommunity.domain.user.after;
+package hongs.community.hongsCommunity.domain.user.after.controller;
 
+import hongs.community.hongsCommunity.domain.user.after.HongUserService;
 import hongs.community.hongsCommunity.global.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

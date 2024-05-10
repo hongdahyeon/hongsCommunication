@@ -1,4 +1,4 @@
-package hongs.community.hongsCommunity.domain.disable;
+package hongs.community.hongsCommunity.domain.user.after.controller;
 
 
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("admin/user")
 @RequiredArgsConstructor
-public class HongUserDisableController {
+public class HongAdminUserController {
 
     private void setModalUrl(final Model model) {
         model.addAttribute("url", "/admin/user");
