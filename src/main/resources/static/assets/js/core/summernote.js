@@ -1,12 +1,12 @@
 class Summernote {
-    constructor(id) {
-        this._initSettings(id)
+    constructor(id, height = 300) {
+        this._initSettings(id, height)
         this._init()
     }
 
-    _initSettings(id){
+    _initSettings(id, height){
         this._editor = $(`#${id}`)
-        this._height = 300
+        this._height = height
         this._minHeight = null
         this._maxHeight = null
         this._focus = true
@@ -88,6 +88,10 @@ class Summernote {
 
     disable(){
         this._editor.summernote('disable')
+    }
+
+    destroy() {
+        this._editor.summernote('destroy')
     }
 
     setCode(code){
