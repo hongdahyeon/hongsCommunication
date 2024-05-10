@@ -23,10 +23,10 @@
                     <form id="addCalendarModal-form" class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="addCalendar-color" class="col-form-label">일정 색깔</label>
-                            <select class="form-select" id="addCalendar-color">
-                                <option value="green" data-text="white" selected>green</option>
-                                <option value="red" data-text="black">red</option>
-                                <option value="blue" data-text="white">blue</option>
+                            <select class="form-select" id="addCalendar-color" required>
+                                <th:block th:each="color, colorStat: ${colors}">
+                                    <option th:selected="${colorStat?.first}" th:value="${color?.codeVal}" th:data-text="${color?.memoCn}" th:text="${color?.codeName}"></option>
+                                </th:block>
                             </select>
                         </div>
                         <div class="form-group" style="margin-top: 10px;">
@@ -60,10 +60,10 @@
                     <form  id="updateCalendarModal-form" class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="updateCalendar-color" class="col-form-label">일정 색깔</label>
-                            <select class="form-select" id="updateCalendar-color">
-                                <option value="green" data-text="white" selected>green</option>
-                                <option value="red" data-text="black">red</option>
-                                <option value="blue" data-text="white">blue</option>
+                            <select class="form-select" id="updateCalendar-color" required>
+                                <th:block th:each="color, colorStat: ${colors}">
+                                    <option th:selected="${colorStat?.first}" th:value="${color?.codeVal}" th:data-text="${color?.memoCn}" th:text="${color?.codeName}"></option>
+                                </th:block>
                             </select>
                         </div>
                         <div class="form-group" style="margin-top: 10px;">
@@ -114,6 +114,7 @@
                     calendar
                         .setData('backgroundColor', addCalendarColor.find(":selected").val())
                         .setData('borderColor', addCalendarColor.find(":selected").val())
+                        .setData('textColor', updateCalendarColor.find(":selected").attr('data-text'))
                         .setData('title', $("#addCalendar-content").val())
 
                     const obj = calendar.getData()

@@ -35,7 +35,9 @@
         insert into hong_code (
             code_val
            ,code_name
+         <if test="memoCn != null">
            ,memo_cn
+         </if>
            ,use_yn
            ,delete_yn
            ,reg_id
@@ -45,7 +47,9 @@
         ) values (
             #{codeVal}
            ,#{codeName}
+         <if test="memoCn != null">
            ,#{memoCn}
+         </if>
            ,#{useYn}
            ,'N'
            ,#{regId}
@@ -86,9 +90,75 @@
         update hong_code
            set code_name = #{codeName}
               ,use_yn = #{useYn}
+            <if test="memoCn != null">
               ,memo_cn = #{memoCn}
+            </if>
               ,mdfr_id = #{mdfrId}
               ,mdfr_dt = now()
          where hong_code_uid = #{hongCodeUid}
     </update>
+
+    <insert id="insertEach" parameterType="HongCodeChildMergeDto">
+        /* insertEach */
+        <foreach collection="insertChild" separator=";" item="item" index="index">
+            insert into hong_code (
+                upper_code_val, code_val, code_name, use_yn,memo_cn
+                ,reg_id, reg_dt, mdfr_id, mdfr_dt, delete_yn
+            ) values (
+                #{upperCodeVal}, #{item.codeVal}, #{item.codeName}, #{item.useYn},#{item.memoCn}
+                ,#{regId}, now(), #{mdfrId}, now(), 'N'
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateEach" parameterType="HongCodeChildMergeDto">
+        /* updateEach */
+        <foreach collection="updateChild" separator=";" item="item" index="index">
+            update hong_code
+               set code_val = #{item.codeVal}
+                  ,code_name = #{item.codeName}
+                  ,use_yn = #{item.useYn}
+                  ,memo_cn = #{item.memoCn}
+                  ,mdfr_id = #{mdfrId}
+                  ,mdfr_dt = now()
+             where hong_code_uid = #{item.hongCodeUid}
+               and upper_code_val = #{upperCodeVal}
+        </foreach>
+    </update>
+
+    <update id="deleteEach" parameterType="HongCodeChildMergeDto">
+        /* deleteEach */
+        <foreach collection="delUids" separator=";" item="item" index="index">
+            update hong_code
+               set delete_yn = 'Y'
+                  ,mdfr_id = #{mdfrId}
+                  ,mdfr_dt = now()
+             where hong_code_uid = #{item}
+               and upper_code_val = #{upperCodeVal}
+        </foreach>
+    </update>
+
+    <select id="childList" parameterType="Long" resultType="HongChildCodeListVo">
+        /* childList */
+        select child.hong_code_uid
+              ,child.code_val
+              ,child.code_name
+              ,child.memo_cn
+              ,child.use_yn
+          from hong_code child
+         inner join hong_code parent on parent.code_val = child.upper_code_val and parent.hong_code_uid = #{hongCodeUid}
+         where child.delete_yn = 'N'
+    </select>
+
+    <select id="childListByVal" parameterType="String" resultType="HongChildCodeListVo">
+        /* childListByVal */
+        select child.hong_code_uid
+              ,child.code_val
+              ,child.code_name
+              ,child.memo_cn
+              ,child.use_yn
+          from hong_code child
+         where child.delete_yn = 'N'
+           and child.upper_code_val = #{upperCodeVal}
+    </select>
 </mapper>

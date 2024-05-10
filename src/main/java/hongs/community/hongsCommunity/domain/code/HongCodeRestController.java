@@ -1,6 +1,7 @@
 package hongs.community.hongsCommunity.domain.code;
 
 
+import hongs.community.hongsCommunity.domain.code.dto.HongCodeChildMergeDto;
 import hongs.community.hongsCommunity.domain.code.dto.HongCodeDeleteDto;
 import hongs.community.hongsCommunity.domain.code.dto.HongCodeInsertDto;
 import hongs.community.hongsCommunity.domain.code.dto.HongCodeUpdateDto;
@@ -69,5 +70,13 @@ public class HongCodeRestController {
     public Response update(@RequestBody HongCodeUpdateDto dto) {
         Integer update = hongCodeService.update(dto);
         return (update == 1) ? Response.ok() : Response.badRequest();
+    }
+
+    @PostMapping("/merge.json")
+    @Operation(summary = "자식코드 수정 및 저장", description = "자식코드 수정 및 저장")
+    @ApiDocumentResponse
+    public Response merge(@RequestBody HongCodeChildMergeDto dto) {
+        Integer merge = hongCodeService.merge(dto);
+        return Response.ok(merge);
     }
 }

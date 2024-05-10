@@ -30,6 +30,9 @@ public class MyBatisConfig {
     @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
 
+    @Value("${spring.datasource.allow-multi-query}")
+    private String allowMultiQuery;
+
     @Value("${spring.datasource.url}")
     private String datasourceUrl;
 
@@ -52,7 +55,7 @@ public class MyBatisConfig {
     public DataSource dataSource(){
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName(driverClassName);
-        dataSourceBuilder.url(datasourceUrl);
+        dataSourceBuilder.url(datasourceUrl + "?allowMultiQueries=" + allowMultiQuery);
         dataSourceBuilder.username(username);
         dataSourceBuilder.password(password);
         return dataSourceBuilder.build();
