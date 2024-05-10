@@ -235,3 +235,6 @@ $("#view-content").html(code)
 (50) 24-05-10 
 1. ckeditor 변경
 2. summernote view 용 test 추가 (추후 사용시 summernote.disable() 및 summernote 추가 style적용도 함께 사용해야함)
+
+
+(51) 24-05-10 :summernote 생성시 기본 height 설정 가능
