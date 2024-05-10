@@ -232,5 +232,6 @@ $("#view-content").html(code)
 (48-49) 24-05-10 : 자식 코드 추가/수정/삭제
 
 
-(50) 24-05-10 : 1. ckeditor 변경
+(50) 24-05-10 
+1. ckeditor 변경
 2. summernote view 용 test 추가 (추후 사용시 summernote.disable() 및 summernote 추가 style적용도 함께 사용해야함)
