@@ -5,7 +5,7 @@
 
 <th:block layout:fragment="content">
     <th:block th:replace="~{fragments/title :: title('사용자 관리')}"></th:block>
-    <div id="dataTable"></div>
+    <div id="table"></div>
 
     <!-- s: 사용자 활성화 to 비활성화 Modal -->
     <div class="modal fade" id="userEnableToDisableModal" tabindex="-1" aria-labelledby="userEnableToDisableModalLabel" aria-hidden="true">
@@ -69,18 +69,18 @@
 
 <th:block layout:fragment="script">
     <script>
-        let table = new Table("dataTable")
+        let table = new Table("table")
         $(document).ready(function() {
             table
                 .get('/api/user/list.json')
                 .usePagination()
                 .headerCenter()
                 .resizeable()
-                .add(new Column("index").title("#").width("5%").center())
-                .add(new Column("userId").title("아이디").width("20%").left())
-                .add(new Column("userName").title("이름").width("10%").left())
-                .add(new Column("userEmail").title("이메일").width("15%").left())
-                .add(new Column("roleName").title("권한").width("10%").center())
+                .add(new Column("index").title("#").width(5).center())
+                .add(new Column("userId").title("아이디").width(20).left())
+                .add(new Column("userName").title("이름").width(10).left())
+                .add(new Column("userEmail").title("이메일").width(15).left())
+                .add(new Column("roleName").title("권한").width(10).center())
                 .add(new Column("pwdLastUpdate").title("비밀번호 <br> 마지막 변경날짜").left().formatter(function(cell) {
                     const rowData = cell.getData()
                     if(rowData['isCredentialExpired']) return `<a href="#" onclick="userCredentialExpried(this)" data-num="${rowData['userUid']}">${rowData['pwdLastUpdate']}</a>`
@@ -100,7 +100,7 @@
                     const rowData = cell.getData()
                     if(!rowData['isNonLocked']) return `<button type="button" class="btn btn-sm btn-secondary" data-num="${rowData['userUid']}" onclick="userChangeLocked(this)">계정잠김풀기</button>`
                 }))
-                .add(new Column("isEnable").title("계정 <br> 비활성화").width("10%").center().formatter(function(cell) {
+                .add(new Column("isEnable").title("계정 <br> 비활성화").width(10).center().formatter(function(cell) {
                     const rowData = cell.getData()
                     const btnTxt = (rowData['isEnable']) ? '비활성화하기' : '비활성화풀기'
                     const btnColor = (rowData['isEnable']) ? 'btn-outline-primary' : 'btn-secondary'

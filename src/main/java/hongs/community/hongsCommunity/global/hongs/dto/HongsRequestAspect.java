@@ -15,7 +15,8 @@ import org.springframework.util.ObjectUtils;
 public class HongsRequestAspect {
 
     @Before("@annotation(org.springframework.web.bind.annotation.PostMapping) ||" +
-            "@annotation(org.springframework.web.bind.annotation.PutMapping)")
+            "@annotation(org.springframework.web.bind.annotation.PutMapping) ||" +
+            "@annotation(org.springframework.web.bind.annotation.DeleteMapping)")
     private void setCreatedBy(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         if (ObjectUtils.isEmpty(args) || args.length == 0) {

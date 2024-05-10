@@ -150,26 +150,12 @@ class Http {
             type: method,
             url: url,
             data: data,
-            contentType: 'application/json',
             beforeSend: function(xhr) {
                 const {token, header} = Http.getCookieInfo();
                 xhr.setRequestHeader(header, token)
             }
         }).catch(e => this.handleError(e))
     }
-
-    static deleteUrl(url, method = 'DELETE') {
-        return $.ajax({
-            type: method,
-            url: url,
-            contentType: 'application/json',
-            beforeSend: function(xhr) {
-                const {token, header} = Http.getCookieInfo();
-                xhr.setRequestHeader(header, token)
-            }
-        }).catch(e => this.handleError(e))
-    }
-
 
     static put(url, data, method='PUT') {
         return $.ajax({

@@ -183,7 +183,7 @@
                 const menuUid= sel.id
                 Util.confirm("메뉴를 삭제하시겠습니까?").then((isOk) => {
                     if(isOk) {
-                        Http.deleteUrl(`/api/super/menu/delete.json?menuUid=${menuUid}`).then((res) => {
+                        Http.delete(`/api/super/menu/delete.json?menuUid=${menuUid}`).then((res) => {
                             if(res.message === 1) Util.alert("해당 메뉴가 삭제되었습니다.").then(() => window.location.href = '/super/menu')
                         })
                     }

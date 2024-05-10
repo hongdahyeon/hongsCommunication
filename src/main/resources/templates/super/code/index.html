@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <th:block th:replace="~{fragments/title :: title('코드 관리')}"></th:block>
+
+    <div style="text-align: right;">
+        <button type="button" class="btn btn-primary" id="add-code">코드 추가하기</button>
+    </div>
+
+    <div id="table"></div>
+
+    <!-- s: add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModallLabel" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>상위코드 추가하기</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="addModal-form" class="needs-validation" novalidate>
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1 margin-10">
+                                <label for="addModal-codeVal">코드명<span class="text-primary ms-50">*</span></label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="addModal-codeVal" name="codeVal" required>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="addModal-codeVal-btn">중복확인</button>
+                                    </div>
+                                    <div class="invalid-feedback">코드명을 입력해주세요.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1 margin-10">
+                                <label for="addModal-codeName">코드이름<span class="text-primary ms-50">*</span></label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="addModal-codeName" name="codeName" required>
+                                </div>
+                                <div class="invalid-feedback">코드 이름을 입력해주세요.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12">
+                            <label>사용여부<span class="text-primary ms-50">*</span></label>
+                            <div class="mb-1 margin-10">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="useYn" id="addModal-useYn-Y" value="Y" required checked>
+                                    <label class="form-check-label" for="addModal-useYn-Y">사용</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="useYn" id="addModal-useYn-N" value="N" required>
+                                    <label class="form-check-label" for="addModal-useYn-N">미사용</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1 margin-10">
+                                <label class="form-label" for="addModal-memoCn">메모</label>
+                                <textarea class="form-control" id="addModal-memoCn" name="memoCn"></textarea>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 10px" class="text-end">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-outline-primary" id="addModal-btn">추가하기</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- e: add Modal -->
+
+    <!-- s: edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>상위코드 수정하기</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="editModal-form" class="needs-validation" novalidate>
+                        <input type="hidden" name="hongCodeUid" id="editModal-hongCodeUid" />
+                        <input type="hidden" id="editModal-childCodeCnt" />
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1 margin-10">
+                                <label for="addModal-codeVal">코드명<span class="text-primary ms-50">*</span></label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="editModal-codeVal" name="codeVal" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1 margin-10">
+                                <label for="editModal-codeName">코드이름<span class="text-primary ms-50">*</span></label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="editModal-codeName" name="codeName" required>
+                                </div>
+                                <div class="invalid-feedback">코드 이름을 입력해주세요.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12">
+                            <label>사용여부<span class="text-primary ms-50">*</span></label>
+                            <div class="mb-1 margin-10">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="useYn" id="editModal-useYn-Y" value="Y" required checked>
+                                    <label class="form-check-label" for="editModal-useYn-Y">사용</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="useYn" id="editModal-useYn-N" value="N" required>
+                                    <label class="form-check-label" for="editModal-useYn-N">미사용</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1 margin-10">
+                                <label class="form-label" for="editModal-memoCn">메모</label>
+                                <textarea class="form-control" id="editModal-memoCn" name="memoCn"></textarea>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 10px" class="text-end">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-outline-primary" id="del-code">코드 삭제하기</button>
+                            <button type="button" class="btn btn-primary" id="editModal-btn">수정하기</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- e: add Modal -->
+
+</th:block>
+
+<th:block layout:fragment="script">
+    <script>
+
+        let codeValChk = false
+        let table = new Table("table")
+
+        $(document).ready(function() {
+
+            table
+                .get('/api/super/code/upper-list.json')
+                .headerCenter()
+                .add(new Column("index").title("#").width(5).center())
+                .add(new Column("codeVal").title("상위코드명").width(15).left())
+                .add(new Column("codeName").title("상위코드이름").width(15).left())
+                .add(new Column("childCodeCnt").title("자식코드개수").width(10).center().formatter(function (cell) {
+                    return `${cell.getData()['childCodeCnt']}개`
+                }))
+                .add(new Column("useYn").title("사용여부").width(10).center().formatter(function (cell) {
+                    const cellData = cell.getData()
+                    return (cellData['useYn'] === 'Y') ? '<span style="color: green">사용</span>' : '<span style="color: red">미사용</span>'
+                }))
+                .add(new Column("regName").title("등록자").width(10).center())
+                .add(new Column("regDt").title("등록일").width(13).center())
+                .add(new Column("hongCodeUid").title("수정하기").width(10).center().formatter(function (cell) {
+                    return `<button type="button" class="btn btn-sm btn-outline-primary" data-num="${cell.getData()['hongCodeUid']}" onclick="changeCode(this)">코드수정</button>`
+                }))
+                .add(new Column("hongCodeUid").title("자식코드 <br> 관라하기").width(10).center().formatter(function (cell) {
+                    return `<button type="button" class="btn btn-sm btn-secondary" data-num="${cell.getData()['hongCodeUid']}" onclick="addChildCode(this)">자식코드수정</button>`
+                }))
+                .init()
+
+            /* 상위코드 추가 모달 띄우기 */
+            $("#add-code").on('click', (e) => {
+                $("#addModal").modal('show')
+            })
+
+            /* 상위코드 수정하기 모달 : 삭제하기 */
+            $("#del-code").on('click', (e) => {
+                const delUid = $("#editModal-hongCodeUid").val()
+                const childCnt = $("#editModal-childCodeCnt").val()
+                if(parseInt(childCnt) > 0) Util.alert("자식코드가 있어서 삭제가 불가능합니다.")
+                else {
+                    Util.confirm("해당 상위코드를 삭제하시겠습니까?").then((isOk) => {
+                        if(isOk) {
+                            Http.delete('/api/super/code/delete.json', {hongCodeUid: delUid}).then((res) => {
+                                if(res['httpStatus'] === 200) Util.alert("코드가 삭제되었습니다.").then(() => {
+                                    table.submit()
+                                    $("#editModal").modal('hide')
+                                })
+                                else if(res['httpStatus'] === 400) Util.alert("코드 삭제에 실패했습니다.")
+                            })
+                        }
+                    })
+                }
+            })
+
+            /* 상위 코드 추가하기 모달 : 저장버튼 클릭 */
+            $("#addModal-btn").on('click', (e) => {
+                e.preventDefault();
+                const form = document.getElementById("addModal-form")
+                if (form.checkValidity() === false) form.classList.add("was-validated")
+                else {
+                    if(!codeValChk) Util.alert("코드명 중복 확인을 해주세요.")
+                    else {
+                        FormDataToObj.getParameter("addModal-form").then(obj => {
+                            Http.post('/api/super/code/insert.json', obj).then((res) => {
+                                if(res['httpStatus'] === 400) Util.alert("코드명 추가에 실패했습니다.")
+                                else if(res['httpStatus'] === 201) {
+                                    Util.alert("코드명을 추가했습니다.").then(() => {
+                                        $("#addModal").modal('hide')
+                                        table.submit()
+                                    })
+                                }
+                            })
+                        })
+                    }
+                }
+            })
+
+            /* 상위 코드 수정하기 모달 : 저장버튼 클릭 */
+            $("#editModal-btn").on('click', (e) => {
+                e.preventDefault()
+                const form = document.getElementById("editModal-form")
+                if (form.checkValidity() === false) form.classList.add("was-validated")
+                else {
+                    FormDataToObj.getParameter("editModal-form").then(obj => {
+                        Http.put('/api/super/code/update.json', obj).then(res => {
+                            if(res['httpStatus'] === 200) Util.alert("코드 정보가 수정되었습니다.").then(() => {
+                                table.submit()
+                                $("#editModal").modal('hide')
+                            })
+                            else if(res['httpStatus'] === 400) Util.alert("코드 정보 수정에 실패했습니다.")
+                        })
+                    });
+                }
+            })
+
+            /* 상위 코드 추가하기 : 코드명 중복확인 */
+            $("#addModal-codeVal-btn").on('click', () => {
+                const codeVal = $("#addModal-codeVal").val()
+                if(codeVal.length === 0) Util.alert("코드명은 빈값일 수 없습니다.")
+                else {
+                    Http.get(`/api/super/code/check-duplicate.json?codeVal=${codeVal}`).then(res => {
+                        if(res['httpStatus'] === 400) Util.alert("코드명이 중복됩니다.")
+                        else if(res['httpStatus'] === 200) {
+                            Util.alert("사용 가능한 코드명입니다.").then(() => {
+                                $("#addModal-codeVal").attr('readonly', true)
+                                codeValChk = true
+                            })
+                        }
+                    })
+                }
+            })
+
+            /* 상위 코드 추가하기 : 모달 닫을때 */
+            $("#addModal").on('hidden.bs.modal', (e) => {
+                e.preventDefault()
+                codeValChk = false
+                $("#addModal-codeVal").val('')
+                $("#addModal-codeVal").attr('readonly', false)
+                $("#addModal-codeName").val('')
+                $("#addModal-useYn-Y").prop('checked', true)
+                $("#addModal-memoCn").val('')
+                document.getElementById("addModal-form").classList.remove('was-validated');
+            });
+
+
+            /* 상위 코드 수정하기 : 모달 닫을때 */
+            $("#editModal").on('hidden.bs.modal', (e) => {
+                e.preventDefault()
+                $("#editModal-codeVal").val('')
+                $("#editModal-codeName").val('')
+                $("#editModal-useYn-Y").prop('checked', true)
+                $("#editModal-memoCn").val('')
+                $("#editModal-hongCodeUid").val('')
+                document.getElementById("editModal-form").classList.remove('was-validated');
+            });
+
+        });
+
+        function changeCode(This){
+            const codeUid = This.getAttribute("data-num")
+            Http.get(`/api/super/code/upperView.json?hongCodeUid=${codeUid}`).then(res => {
+                if(res['httpStatus'] === 200) {
+                    const data = res.message
+                    $("#editModal-hongCodeUid").val(data['hongCodeUid'])
+                    $("#editModal-childCodeCnt").val(data['childCodeCnt'])
+                    $("#editModal-codeVal").val(data['codeVal'])
+                    $("#editModal-codeName").val(data['codeName'])
+                    $(`#editModal-useYn-${data['useYn']}`).prop('checked', true)
+                    $("#editModal-memoCn").val(data['memoCn'])
+                    $("#editModal").modal('show')
+                }
+            })
+        }
+
+        function addChildCode(This) {
+            const upperCodeUid = This.getAttribute("data-num")
+            console.log('upperCodeUid: ', upperCodeUid)
+        }
+
+    </script>
+</th:block>
+
+</html>

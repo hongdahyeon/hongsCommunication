@@ -313,8 +313,8 @@ class Column {
         return this
     }
 
-    width(width = '10%'){
-        this._width = width
+    width(width = 10){
+        this._width = `${width}%`
         return this
     }
 
