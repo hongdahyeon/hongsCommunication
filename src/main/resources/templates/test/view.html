@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<head>
+    <style>
+        .note-toolbar{
+            display: none !important;
+        }
+        .note-editor.note-frame .note-editing-area .note-editable[contenteditable=false]{
+            background-color: white !important;
+        }
+    </style>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="mt-4">Simple Sidebar</h1>
+            <button id="back-btn" class="btn btn-primary">back</button>
+        </div>
+        <div class="card-body">
+            <div class="form-control summernote" rows="5" id="content" name="content" required></div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="border p-3">
+                        <label class="form-label" for="upload-view-container">첨부파일 view</label>
+                        <div>
+                            <div id="upload-view-container" class="mt-1">
+                                사진 뷰
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        console.log("test edit page")
+
+        const uid = /*[[${uid}]]*/ null;
+        const fileUid = /*[[${fUid}]]*/ null;
+        const view = /*[[${view}]]*/ {};
+
+        const summernote = new Summernote("content")
+        const uploadView = new UploadView("upload-view-container")
+
+        $(function() {
+            summernote.setCode(view.name)
+            summernote.disable()
+            drawViewFile(fileUid)
+        })
+
+        function drawViewFile(fUid){
+            if(fUid !== null) {
+                Http.get(`/api/hong/files/list.json?fileUid=${fUid}`).then((res) => {
+                    const list = res.message
+                    uploadView.setData(list).draw()
+                })
+            } else uploadView.setData([]).draw()
+        }
+
+        $("#back-btn").on('click', () => {
+            window.location.href = `/test/edit/${uid}`
+        })
+
+    </script>
+</th:block>
+
+</html>

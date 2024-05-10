@@ -35,4 +35,14 @@ public class TestController {
         model.addAttribute("view", view);
         return "test/edit";
     }
+
+    @GetMapping("/view/{uid}")
+    public String view(@PathVariable(name = "uid") Long uid, Model model) {
+        this.setModalUrl(model);
+        TestVo view = testService.view(uid);
+        view.setName(StringUtil.unescape(view.getName()));
+        model.addAttribute("fUid", view.getFileUid());
+        model.addAttribute("view", view);
+        return "test/view";
+    }
 }

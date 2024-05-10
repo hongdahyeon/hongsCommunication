@@ -9,6 +9,7 @@
         <div class="card-header">
             <h1 class="mt-4">Simple Sidebar</h1>
             <button id="edit-btn" class="btn btn-primary">edit</button>
+            <button id="view-btn" class="btn btn-primary">view</button>
         </div>
         <div class="card-body">
             <div class="form-control summernote" rows="5" id="content" name="content" required></div>
@@ -77,6 +78,11 @@
                 window.location.href = `/test/edit/${uid}`
             })
         })
+
+        $("#view-btn").on('click', () => {
+            window.location.href = `/test/view/${uid}`
+        })
+
 
     </script>
 </th:block>
