@@ -183,9 +183,8 @@
             $("#del-code").on('click', (e) => {
                 const delUid = $("#editModal-hongCodeUid").val()
                 const childCnt = $("#editModal-childCodeCnt").val()
-                if(parseInt(childCnt) > 0) Util.alert("자식코드가 있어서 삭제가 불가능합니다.")
-                else {
-                    Util.confirm("해당 상위코드를 삭제하시겠습니까?").then((isOk) => {
+                if(parseInt(childCnt) > 0) {
+                    Util.confirm("자식 코드가 있습니다. <br> 그래도 삭제하시겠습니까?").then((isOk) => {
                         if(isOk) {
                             Http.delete('/api/super/code/delete.json', {hongCodeUid: delUid}).then((res) => {
                                 if(res['httpStatus'] === 200) Util.alert("코드가 삭제되었습니다.").then(() => {
@@ -195,6 +194,14 @@
                                 else if(res['httpStatus'] === 400) Util.alert("코드 삭제에 실패했습니다.")
                             })
                         }
+                    })
+                } else {
+                    Http.delete('/api/super/code/delete.json', {hongCodeUid: delUid}).then((res) => {
+                        if(res['httpStatus'] === 200) Util.alert("코드가 삭제되었습니다.").then(() => {
+                            table.submit()
+                            $("#editModal").modal('hide')
+                        })
+                        else if(res['httpStatus'] === 400) Util.alert("코드 삭제에 실패했습니다.")
                     })
                 }
             })
