@@ -16,13 +16,19 @@ public class TestController {
 
     private final TestService testService;
 
+    private void setModalUrl(final Model model) {
+        model.addAttribute("url", "/test");
+    }
+
     @GetMapping({"/", ""})
-    public String index(){
+    public String index(Model model){
+        this.setModalUrl(model);
         return "test/index";
     }
 
     @GetMapping("/edit/{uid}")
     public String edit(@PathVariable(name = "uid") Long uid, Model model) {
+        this.setModalUrl(model);
         TestVo view = testService.view(uid);
         view.setName(StringUtil.unescape(view.getName()));
         model.addAttribute("fUid", view.getFileUid());

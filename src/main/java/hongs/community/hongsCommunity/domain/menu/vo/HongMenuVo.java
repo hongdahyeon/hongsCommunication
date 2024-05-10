@@ -3,6 +3,7 @@ package hongs.community.hongsCommunity.domain.menu.vo;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,5 +27,6 @@ public class HongMenuVo {
     private Integer sortNo;
 
     private List<HongMenuVo> children;
+    private List<String> urlList = new ArrayList<>();
 }
 

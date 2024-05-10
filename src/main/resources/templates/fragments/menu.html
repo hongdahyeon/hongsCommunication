@@ -15,24 +15,45 @@
 
         <th:block th:each="menu : ${#authentication.principal.user.menu}">
 
+            <!-- 1-1. 부모 메뉴 + 자식메뉴가 있을 경우 -->
             <th:block th:if="${menu.upperMenuUid == null and #lists.size(menu.children) > 0}">
-                <li class="nav-item">
-                    <a class="nav-link collapsed" th:id="|menu${menu.menuUid}|" href="#" data-toggle="collapse" th:data-target="|#child${menu.menuUid}|" aria-expanded="false" th:aria-controls="|child${menu.menuUid}|">
-                        <i class="fas fa-fw fa-folder"></i>
-                        <span th:text="${menu.menuText}"></span>
-                    </a>
-                    <div th:id="|child${menu.menuUid}|" class="collapse" >
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <th:block th:each="child : ${menu.children}">
-                                <a class="collapse-item" th:href="${child.menuUrl}" th:text="${child.menuText}"></a>
-                            </th:block>
+                <li class="nav-item" th:classappend="${#lists.contains(menu.urlList, url) ? 'active' : ''}">
+
+                    <!-- 1-1-1. 자식 메뉴들 중에 현재 active 메뉴가 있을 경우 -->
+                    <th:block th:if="${#lists.contains(menu.urlList, url)}">
+                        <a class="nav-link" th:id="|menu${menu.menuUid}|" href="#" data-toggle="collapse" th:data-target="|#child${menu.menuUid}|" aria-expanded="true" th:aria-controls="|child${menu.menuUid}|">
+                            <i class="fas fa-fw fa-folder"></i>
+                            <span th:text="${menu.menuText}"></span>
+                        </a>
+                        <div th:id="|child${menu.menuUid}|" class="collapse show" >
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <th:block th:each="child : ${menu.children}">
+                                    <a class="collapse-item" th:classappend="${url eq child.menuUrl} ? 'active' : ''" th:href="${child.menuUrl}" th:text="${child.menuText}"></a>
+                                </th:block>
+                            </div>
                         </div>
-                    </div>
+                    </th:block>
+
+                    <!-- 1-1-2. 자식 메뉴들 중에 현재 active 메뉴가 없을 경우 -->
+                    <th:block th:unless="${#lists.contains(menu.urlList, url)}">
+                        <a class="nav-link collapsed" th:id="|menu${menu.menuUid}|" href="#" data-toggle="collapse" th:data-target="|#child${menu.menuUid}|" aria-expanded="false" th:aria-controls="|child${menu.menuUid}|">
+                            <i class="fas fa-fw fa-folder"></i>
+                            <span th:text="${menu.menuText}"></span>
+                        </a>
+                        <div th:id="|child${menu.menuUid}|" class="collapse" >
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <th:block th:each="child : ${menu.children}">
+                                    <a class="collapse-item" th:classappend="${url eq child.menuUrl} ? 'active' : ''" th:href="${child.menuUrl}" th:text="${child.menuText}"></a>
+                                </th:block>
+                            </div>
+                        </div>
+                    </th:block>
                 </li>
             </th:block>
 
+            <!-- 1-2. 부모 메뉴 + 자식메뉴가 없을 경우 -->
             <th:block th:if="${menu.upperMenuUid == null and #lists.size(menu.children) == 0}">
-                <li class="nav-item">
+                <li class="nav-item" th:classappend="${url eq menu.menuUrl} ? 'active' : ''">
                     <a class="nav-link" th:href="${menu.menuUrl}" th:id="|menu${menu.menuUid}|">
                         <i class="fas fa-fw fa-folder"></i>
                         <span th:text="${menu.menuText}"></span></a>
@@ -44,9 +65,9 @@
         <hr class="sidebar-divider d-none d-md-block">
 
         <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
+        <!--<div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
+        </div>-->
 
     </ul>
     <!-- End of Sidebar -->

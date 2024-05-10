@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,11 +17,23 @@ import java.util.List;
 public class HongMenuService {
 
     private final HongMenuMapper mapper;
+
     public List<HongMenuVo> list(String menuRole) {
+
+        /* 1. 부모 리스트 */
         List<HongMenuVo> parentList = mapper.parentList(new HongMenuDto(menuRole, "Y", "N"));
         return parentList.stream().map(hongMenuVo -> {
+
+            /* 2. 자식 리스트 */
             List<HongMenuVo> childList = mapper.childList(new HongMenuDto(hongMenuVo.getMenuUid(), "Y", "N"));
+
+            /* 3. 부모+자식 url 리스트 */
+            List<String> urlList = new ArrayList<>();
+            if(!childList.isEmpty()) urlList = childList.stream().map(childs -> childs.getMenuUrl()).toList();
+            if(hongMenuVo.getMenuUrl() != null && hongMenuVo.getMenuUrl().length() > 0) urlList.add(hongMenuVo.getMenuUrl());
+
             hongMenuVo.setChildren(childList);
+            hongMenuVo.setUrlList(urlList);
             return hongMenuVo;
         }).toList();
     }

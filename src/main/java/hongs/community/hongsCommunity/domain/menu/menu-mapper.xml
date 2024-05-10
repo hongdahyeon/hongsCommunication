@@ -4,6 +4,7 @@
 <mapper namespace="hongs.community.hongsCommunity.domain.menu.HongMenuMapper">
 
     <select id="parentList" parameterType="HongMenuDto" resultType="HongMenuVo">
+        /* parentList */
         SELECT menu_Uid
               ,upper_menu_uid
               ,menu_url
@@ -21,6 +22,7 @@
     </select>
 
     <select id="childList" parameterType="HongMenuDto" resultType="HongMenuVo">
+        /* childList */
         SELECT menu_Uid
              ,upper_menu_uid
              ,menu_url
@@ -38,6 +40,7 @@
     </select>
 
     <select id="superList" parameterType="HongMenuSuperDto" resultType="HongMenuSuperVo">
+        /* superList */
         WITH RECURSIVE menu_hierarchy AS (
             SELECT menu_uid
                   ,upper_menu_uid

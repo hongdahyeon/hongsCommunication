@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -20,7 +21,8 @@ public class HomeController {
     private final TestService testService;
 
     @GetMapping("")
-    public String index(){
+    public String index(Model model){
+        model.addAttribute("url", "/");
         List<TestVo> testList = testService.getTestList();
         log.info("testList : {} ", testList);
         return "index";
