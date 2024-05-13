@@ -3,17 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
 
-<head>
-    <style>
-        .note-toolbar{
-            display: none !important;
-        }
-        .note-editor.note-frame .note-editing-area .note-editable[contenteditable=false]{
-            background-color: white !important;
-        }
-    </style>
-</head>
-
 <th:block layout:fragment="content">
 
     <div class="card">
@@ -21,8 +10,8 @@
             <h1 class="mt-4">Simple Sidebar</h1>
             <button id="back-btn" class="btn btn-primary">back</button>
         </div>
-        <div class="card-body">
-            <div class="form-control summernote" rows="5" id="content" name="content" required></div>
+        <div class="container-fluid" style="margin-top: 10px; overflow-y: auto; height: 500px">
+            <div id="content"></div>
         </div>
         <div class="card-body">
             <div class="row">
@@ -54,7 +43,7 @@
 
         $(function() {
             summernote.setCode(view.name)
-            summernote.disable()
+            summernote.destroy()
             drawViewFile(fileUid)
         })
 

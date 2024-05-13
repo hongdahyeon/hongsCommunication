@@ -1,6 +1,7 @@
 package hongs.community.hongsCommunity.global.config;
 
 import hongs.community.hongsCommunity.global.interceptor.LoggingInterceptor;
+import hongs.community.hongsCommunity.global.interceptor.user.UserIneterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +33,11 @@ public class WebConfig implements WebMvcConfigurer {
         return new LoggingInterceptor();
     }
 
+    @Bean
+    public UserIneterceptor userIneterceptor() {
+        return new UserIneterceptor();
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
@@ -48,8 +54,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry
-                .addInterceptor(loggingInterceptor())
-                .excludePathPatterns("/assets/**", "/error");
+        registry.addInterceptor(loggingInterceptor()).excludePathPatterns("/assets/**", "/error");
+        registry.addInterceptor(userIneterceptor()).excludePathPatterns("/assets/**", "/error");
     }
 }
