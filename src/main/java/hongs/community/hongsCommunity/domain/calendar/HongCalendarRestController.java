@@ -2,13 +2,12 @@ package hongs.community.hongsCommunity.domain.calendar;
 
 import hongs.community.hongsCommunity.domain.calendar.dto.HongCalendarDto;
 import hongs.community.hongsCommunity.domain.calendar.vo.HongCalendarVo;
-import hongs.community.hongsCommunity.global.auth.PrincipalDetails;
 import hongs.community.hongsCommunity.global.hongs.dto.response.ApiDocumentResponse;
 import hongs.community.hongsCommunity.global.hongs.dto.response.Response;
+import hongs.community.hongsCommunity.global.util.UserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +23,8 @@ public class HongCalendarRestController {
     @GetMapping("/list.json")
     @Operation(summary = "캘린더 리스트", description = "로그인한 사용자의 캘린더 리스트 정보를 가져온다.")
     @ApiDocumentResponse
-    public Response list(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Long userUid = principalDetails.getUser().getUserUid();
+    public Response list() {
+        Long userUid = UserUtil.getLoginUser().getUserUid();
         List<HongCalendarVo> list = service.list(userUid);
         return Response.ok(list);
     }
@@ -33,8 +32,8 @@ public class HongCalendarRestController {
     @PostMapping("/insert.json")
     @Operation(summary = "일정 저장", description = "로그인한 사용자에 대해 일정 정보를 저장한다.")
     @ApiDocumentResponse
-    public Response join(@RequestBody HongCalendarDto dto, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        Long userUid = principalDetails.getUser().getUserUid();
+    public Response join(@RequestBody HongCalendarDto dto){
+        Long userUid = UserUtil.getLoginUser().getUserUid();
         dto.setUserUid(userUid);
         Long joinId = service.join(dto);
         return Response.created(joinId);

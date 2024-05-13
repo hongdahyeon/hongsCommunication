@@ -12,7 +12,7 @@ import java.util.List;
 * @author dahyeon
 * @version 1.0.0
 * @date 2024-05-03
-* @summary 로그인 사용자 vo
+* @summary 로그인 사용자 vo (따로 화면에 뿌리기용으로는 사용하지 말것..)
 **/
 
 @Getter @Setter
