@@ -72,7 +72,7 @@
         let table = new Table("table")
         $(document).ready(function() {
             table
-                .get('/api/user/list.json')
+                .get('/api/admin/user/list.json')
                 .usePagination()
                 .headerCenter()
                 .resizeable()
@@ -157,7 +157,7 @@
             const userUid = This.getAttribute("data-num")
             Util.confirm("해당 사용자는 비밀번호 변경일자가 90일이 <br> 지나서 비밀번호가 만료됐습니다. <br> 해당 사용자에게 이메일을 발송하시겠습니까?").then((isOk) => {
                 if(isOk) {
-                    Http.get(`/api/user/send-credential-expired-email.json?userUid=${userUid}`).then((res) => {
+                    Http.get(`/api/admin/user/send-credential-expired-email.json?userUid=${userUid}`).then((res) => {
                         Util.alert("이메일이 발송되었습니다.")
                     })
                 }
@@ -168,7 +168,7 @@
             const userUid = This.getAttribute("data-num")
             Util.confirm("해당 사용자는 최근 로그인일시가 1년이 지났습니다. <br> 해당 사용자에게 이메일을 발송하시겠습니까?").then((isOk) => {
                 if(isOk) {
-                    Http.get(`/api/user/send-expired-email.json?userUid=${userUid}`).then((res) => {
+                    Http.get(`/api/admin/user/send-expired-email.json?userUid=${userUid}`).then((res) => {
                         Util.alert("이메일이 발송되었습니다.")
                     })
                 }
@@ -180,7 +180,6 @@
             const isEnable = This.getAttribute("data-enable")
 
             if(isEnable === 'false') {
-                // get not enable reason
                 Http.get(`/api/admin/user-disable/view.json?userUid=${userUid}`).then((res) => {
                   if(res['httpStatus'] === 200) {
                       const data = res.message
@@ -201,7 +200,7 @@
             const userUid = This.getAttribute("data-num")
             Util.confirm("해당 사용자의 경우 <br> 비밀번호 5회 오류로 계정이 잠겼습니다. <br> 해당 계정을 푸시겠습니까?").then((isOk) => {
                 if(isOk) {
-                    Http.put('/api/user/user-unlock.json', {userUid: userUid}).then((res) => {
+                    Http.put('/api/admin/user/user-unlock.json', {userUid: userUid}).then((res) => {
                         if(res['httpStatus'] === 200) Util.alert("해당 사용자의 계정이 풀렸습니다.").then(() => table.submit())
                         else if(res['httpStatus'] === 400) Util.alert("해당 사용자의 계정 잠금 해제에 실패했습니다.")
                     })

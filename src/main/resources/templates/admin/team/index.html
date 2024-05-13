@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <th:block th:replace="~{fragments/title :: title('팀 관리')}"></th:block>
+    <div id="table"></div>
+
+    <!-- s: team-user modal -->
+    <div class="modal fade" id="team-user-modal" tabindex="-1" aria-labelledby="teamUserModalLabel" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 800px; font-size: 20px;">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <span id="team-user-modal-title" style="font-weight: bold"></span><span> 팀의 사용자 리스트</span>
+                    </div>
+                    <button type="button" class="btn-close" id="close-userList-log-btn" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div id="team-user-modal-table"></div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">닫기</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- e: team-user modal -->
+</th:block>
+
+<th:block layout:fragment="script">
+    <script>
+        let table = new Table("table")
+        let teamUserTable = new Table("team-user-modal-table", false)
+
+        $(document).ready(function() {
+            table
+                .get('/api/admin/team/list.json')
+                .usePagination()
+                .headerCenter()
+                .resizeable()
+                .add(new Column("index").title("#").width(5).center())
+                .add(new Column("teamCategoryName").title("팀유형").width(10).center())
+                .add(new Column("teamNm").title("팀이름").width(15).center())
+                .add(new Column("memberNum").title("팀인원수").width(10).center().formatter(function (cell) {
+                    const rowData = cell.getData()
+                    return `${rowData['totalMemberNum']} / ${rowData['memberNum']}`
+                }))
+                .add(new Column("teamShortIntro").title("팀소개").width(20).center())
+                .add(new Column("representName").title("팀대표명").width(10).center())
+                .add(new Column("approvalStr").title("승인여부").width(10).center().formatter(function (cell) {
+                    const rowData = cell.getData()
+                    const color = (rowData['approvalYn'] === 'N') ? 'red': 'green'
+                    return `<a style="color: ${color}" href="#" data-num="${rowData['hongTeamUid']}" data-now="${rowData['approvalYn']}" onclick="teamApproval(this)">${rowData['approvalStr']}</a>`
+                }))
+                .add(new Column("useStr").title("사용여부").width(10).center().formatter(function (cell) {
+                    const rowData = cell.getData()
+                    const color = (rowData['useYn'] === 'N') ? 'red': 'green'
+                    return `<a style="color: ${color}" href="#" data-num="${rowData['hongTeamUid']}" data-now="${rowData['useYn']}" onclick="teamUse(this)">${rowData['useStr']}</a>`
+                }))
+                .add(new Column("hongTeamUid").title("팀멤버 보기").width(10).center().formatter(function (cell) {
+                    const rowData = cell.getData()
+                    return `<button type="button" class="btn btn-sm btn-outline-primary" data-name="${rowData['teamNm']}" data-num="${rowData['hongTeamUid']}" onclick="showUsers(this)">팀멤버 보기</button>`
+                }))
+                .init()
+
+            teamUserTable
+                .add(new Column("index").title("#").width(5).center())
+                .add(new Column("userName").title("사용자 이름").width(20).center())
+                .add(new Column("userEmail").title("사용자 이메일").width(30).center())
+                .add(new Column("userRoleName").title("사용자 권한").width(20).center())
+                .add(new Column("representYn").title("대표 여부").width(20).center())
+        });
+
+        function teamApproval(This) {
+            const teamUid = This.getAttribute("data-num")
+            const nowApproval = This.getAttribute("data-now")
+            const message = (nowApproval === 'N') ? '현재 해당 팀은 미승인 상태입니다. <br> 승인 상태로 변경하시겠습니까?' : '현재 해당 팀은 승인 상태입니다. <br> 미승인 상태로 변경하시겠습니까?'
+            const changeApproval = (nowApproval === 'Y') ? 'N' : 'Y'
+            Util.confirm(message).then((isOk) => {
+                if(isOk) {
+                    Http.put('/api/admin/team/change-approval.json', {hongTeamUid: teamUid, approvalYn: changeApproval}).then((res) => {
+                        if(res['httpStatus'] === 200) Util.alert("팀의 승인상태를 변경하였습니다.").then(() => table.submit())
+                        else if(res['httpStatus'] === 400) Util.alert("팀의 승인상태 변경에 실패했습니다.")
+                    })
+                }
+            })
+        }
+
+        function teamUse(This) {
+            const teamUid = This.getAttribute("data-num")
+            const nowUse = This.getAttribute("data-now")
+            const message = (nowUse === 'Y') ? '현재 해당 팀은 사용 가능 상태입니다. <br> 미사용 상태로 변경하시겠습니까?' : '현재 해당 팀은 미사용 상태입니다. <br> 사용 가능 상태로 변경하시겠습니까?'
+            const changeUse = (nowUse === 'Y') ? 'N' : 'Y'
+            Util.confirm(message).then((isOk) => {
+                if(isOk) {
+                    Http.put('/api/admin/team/change-use.json', {hongTeamUid: teamUid, useYn: changeUse}).then((res) => {
+                        if(res['httpStatus'] === 200) Util.alert("팀의 사용여부를 변경하였습니다.").then(() => table.submit())
+                        else if(res['httpStatus'] === 400) Util.alert("팀의 사용여부 변경에 실패했습니다.")
+                    })
+                }
+            })
+        }
+
+        function showUsers(This) {
+            const teamUid = This.getAttribute("data-num")
+            const teamNm = This.getAttribute("data-name")
+            Http.get(`/api/admin/team/team-user-list.json?hongTeamUid=${teamUid}`).then((res) => {
+                const data = res['message']
+                teamUserTable.setData(data).init()
+                $("#team-user-modal-title").text(teamNm)
+                $("#team-user-modal").modal('show')
+            })
+        }
+
+    </script>
+</th:block>
+
+</html>

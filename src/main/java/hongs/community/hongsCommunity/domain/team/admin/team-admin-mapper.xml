@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hongs.community.hongsCommunity.domain.team.admin.HongTeamAdminMapper">
+
+    <select id="list" resultType="HongTeamAdminListVo">
+        /* list */
+        select hteam.hong_team_uid
+              ,hteam.team_category
+              ,hcode.code_name as team_category_name
+              ,hteam.team_nm
+              ,hteam.member_num
+              ,hteam.team_short_intro
+              ,hteam.team_intro
+              ,hteam.team_profile
+              ,hteam.represent_id
+              ,huser.user_name as represent_name
+              ,hteam.approval_yn
+              ,case when hteam.approval_yn = 'Y' then '승인'
+               else '미승인'
+                end as approval_str
+              ,hteam.use_yn
+              ,case when hteam.use_yn = 'Y' then '사용'
+               else '미사용'
+                end as use_str
+              ,hteam.delete_yn
+              ,( select count(*)
+                   from hong_team_user htuser
+                  where htuser.hong_team_uid = hteam.hong_team_uid
+                    and htuser.delete_yn = 'N'
+               ) as total_member_num
+          from hong_team hteam
+          left join hong_user huser on hteam.represent_id = huser.user_uid
+          left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
+          left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY'
+         where hteam.delete_yn = 'N'
+    </select>
+
+    <update id="changeApproval" parameterType="HongTeamAdminChangeDto">
+        /* changeApproval */
+        update hong_team
+           set approval_yn = #{approvalYn}
+              ,mdfr_id = #{mdfrId}
+              ,mdfr_dt = now()
+         where hong_team_uid = #{hongTeamUid}
+    </update>
+
+    <update id="changeUse" parameterType="HongTeamAdminChangeDto">
+        /* changeUse */
+        update hong_team
+           set use_yn = #{useYn}
+              ,mdfr_id = #{mdfrId}
+              ,mdfr_dt = now()
+        where hong_team_uid = #{hongTeamUid}
+    </update>
+
+    <select id="teamUserList" parameterType="Long" resultType="HongTeamUserAdminListVo">
+        /* teamUserList */
+        select hteam.hong_team_uid as hong_team_uid
+              ,huser.user_uid as user_uid
+              ,huser.user_name as user_name
+              ,huser.user_email as user_email
+              ,huser.role as user_role
+              ,hcode.code_name as user_role_name
+              ,case when hteam.represent_id = htuser.user_uid then '대표'
+               else '팀원'
+                end as represent_yn
+          from hong_team hteam
+         inner join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid
+         inner join hong_user huser on huser.user_uid = htuser.user_uid
+          left join hong_code hcod on hcode.code_val = huser.role and hcode.upper_code_val = 'USER_ROLE'
+    </select>
+</mapper>

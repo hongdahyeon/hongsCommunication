@@ -5,16 +5,14 @@
 
     <select id="userInfo" parameterType="Long" resultType="HongUserInfoVo">
         /* userInfo */
-        select user_Uid
-              ,user_id
-              ,user_name
-              ,user_email
-              ,role
-              ,case when role = 'ROLE_SUPER' then '슈퍼 권한'
-                    when role = 'ROLE_ADMIN' then '어드민 권한'
-                    else '유저 권한'
-                end as role_name
-          from hong_user
+        select huser.user_Uid
+              ,huser.user_id
+              ,huser.user_name
+              ,huser.user_email
+              ,huser.role
+              ,hcode.code_name as role_name
+          from hong_user huser
+          left join hong_code hcode on hcode.code_val = huser.role and hcode.upper_code_val = 'USER_ROLE'
          where user_uid = #{userUid}
     </select>
 
@@ -41,26 +39,24 @@
     </update>
 
     <select id="list" resultType="HongUserListVo">
-        select user_uid
-              ,user_id
-              ,user_name
-              ,user_email
-              ,case when role = 'ROLE_SUPER' then '슈퍼 권한'
-                    when role = 'ROLE_ADMIN' then '어드민 권한'
-                    else '유저 권한'
-                end as role_name
-              ,is_enable
-              ,to_char(pwd_last_update, 'YYYY-MM-DD') as pwd_last_update
-              ,to_char(last_login_date, 'YYYY-MM-DD') as last_login_date
-              ,is_non_locked
-              ,social_user_uid
-              ,case when abs(datediff(last_login_date, now())) > 365 then true
-                    else false
+        select huser.user_uid
+              ,huser.user_id
+              ,huser.user_name
+              ,huser.user_email
+              ,hcode.code_name as role_name
+              ,huser.is_enable
+              ,to_char(huser.pwd_last_update, 'YYYY-MM-DD') as pwd_last_update
+              ,to_char(huser.last_login_date, 'YYYY-MM-DD') as last_login_date
+              ,huser.is_non_locked
+              ,huser.social_user_uid
+              ,case when abs(datediff(huser.last_login_date, now())) > 365 then true
+               else false
                 end as is_user_expired
-              ,case when now() > pwd_last_update then true
-                    else false
+              ,case when now() > huser.pwd_last_update then true
+               else false
                 end as is_credential_expired
-          from hong_user
+          from hong_user huser
+          left join hong_code hcode on hcode.code_val = huser.role and hcode.upper_code_val = 'USER_ROLE'
     </select>
 
     <update id="unlock" parameterType="HongUserUnlockDto">
