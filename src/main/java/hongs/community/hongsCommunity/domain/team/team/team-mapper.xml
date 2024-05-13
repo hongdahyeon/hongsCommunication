@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hongs.community.hongsCommunity.domain.team.team.HongTeamMapper">
+
+    <select id="list" resultType="HongTeamListVo">
+        /* list */
+        select hteam.hong_team_uid
+              ,hteam.team_category
+              ,hcode.code_name as team_category_name
+              ,hteam.team_nm
+              ,hteam.member_num
+              ,hteam.team_short_intro
+              ,hteam.team_intro
+              ,hteam.team_profile
+              ,hfile.file_url as team_profile_url
+              ,hteam.represent_id
+              ,huser.user_name as represent_name
+              ,hteam.approval_yn
+              ,hteam.use_yn
+              ,hteam.delete_yn
+              ,( select count(*)
+                   from hong_team_user htuser
+                  where htuser.hong_team_uid = hteam.hong_team_uid
+                    and htuser.delete_yn = 'N'
+               ) as total_member_num
+          from hong_team hteam
+          left join hong_user huser on hteam.represent_id = huser.user_uid
+          left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
+          left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY'
+         where hteam.delete_yn = 'N'
+           and hteam.approval_yn = 'Y'
+           and hteam.use_yn = 'Y'
+    </select>
+</mapper>

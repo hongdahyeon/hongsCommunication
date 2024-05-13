@@ -68,6 +68,6 @@
           from hong_team hteam
          inner join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid
          inner join hong_user huser on huser.user_uid = htuser.user_uid
-          left join hong_code hcod on hcode.code_val = huser.role and hcode.upper_code_val = 'USER_ROLE'
+          left join hong_code hcode on hcode.code_val = huser.role and hcode.upper_code_val = 'USER_ROLE'
     </select>
 </mapper>

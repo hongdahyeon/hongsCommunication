@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <th:block th:replace="~{fragments/title :: title('팀 정보')}"></th:block>
+
+   <div class="container-fluid">
+       <div class="row">
+           <!-- Basic Card Example -->
+           <th:block th:each="team , teamStat : ${teams}">
+               <div class="col-md-4">
+                   <div class="card shadow mb-4">
+                       <div class="card-header py-3">
+                           <h6 class="m-0 font-weight-bold text-primary" th:text="${team?.teamNm}"></h6>
+                       </div>
+                       <div class="card-body">
+
+                           <div th:if="${team?.teamProfile != null}">
+                               <img th:src="|/api/hong/files/download?fileUrl=${team?.teamProfileUrl}|" style="width: 100px; height: 100px; border-radius: 7px;">
+                           </div>
+
+                           <hr th:if="${team?.teamProfile != null}" />
+
+                           <span style="font-size: 13px; color: gray;">팀 분류</span>
+                           <div>
+                               <span th:text="${team?.teamCategoryName}"></span>
+                           </div>
+
+                           <hr/>
+
+                           <span style="font-size: 13px; color: gray;">팀 소개</span>
+                           <div>
+                               <span th:text="${team?.teamShortIntro}"></span>
+                           </div>
+
+                           <hr/>
+
+                           <span style="font-size: 13px; color: gray;">첨여인원</span>
+                           <div>
+                               <span th:text="|${team?.totalMemberNum} / ${team?.memberNum}|"></span>
+                           </div>
+
+                           <div class="d-flex justify-content-end">
+                               <button type="button" class="btn btn-sm btn-primary" style="margin-right: 5px" th:onclick="'updateTeam(\'' + ${team?.hongTeamUid} + '\')'" th:if="${#authentication.principal.user.userUid == team?.representId}">수정하기</button>
+                               <button type="button" class="btn btn-sm btn-outline-primary" style="margin-right: 5px" th:onclick="'joinTeam(\'' + ${team?.hongTeamUid} + '\')'" th:disabled="${team?.totalMemberNum == team?.memberNum}">참여하기</button>
+                               <button type="button" class="btn btn-sm btn-secondary" th:onclick="'viewTeam(\'' + ${team?.hongTeamUid} + '\')'">구경하기</button>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </th:block>
+
+           <div class="col-md-4">
+               <div class="card shadow mb-4">
+                   <div class="card-body">
+                       <div class="card-body d-flex justify-content-center align-items-center" style="display: flex; flex-direction: column;">
+                           <span>팀생성하기</span>
+                           <i data-feather="plus-square" class="front-medium-2" style="width: 50px; height: 50px;" href="#" onclick="addTeam()"></i>
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+       </div>
+   </div>
+
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        function addTeam() {
+            Util.alert("add team?")
+        }
+
+        function joinTeam(teamUid) {
+            console.log('joinTeam: ', teamUid)
+        }
+
+        function viewTeam(teamUid) {
+            console.log('viewTeam: ', teamUid)
+        }
+
+        function updateTeam(teamUid) {
+            console.log('updateTeam: ', teamUid)
+        }
+
+    </script>
+</th:block>
+
+</html>
