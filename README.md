@@ -243,3 +243,6 @@ $("#view-content").html(code)
 (52) 24-05-13
 1. summernote view test 화면
 2. userutil -> loginUser 정보 가져올 수 있도록
+
+
+(53) 24-05-13 : 팀 관리 화면 추가
