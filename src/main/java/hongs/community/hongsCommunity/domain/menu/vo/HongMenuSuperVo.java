@@ -23,6 +23,7 @@ public class HongMenuSuperVo {
     private String menuRole;
     private String useYn;
     private String deleteYn;
+    private String landingPageYn;
     private Integer sortNo;
     private String menuPath;
 

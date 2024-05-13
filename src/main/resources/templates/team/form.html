@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <th:block th:replace="~{fragments/title :: title('팀 생성하기')}"></th:block>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script>
+        console.log("team form page")
+    </script>
+</th:block>
+
+</html>

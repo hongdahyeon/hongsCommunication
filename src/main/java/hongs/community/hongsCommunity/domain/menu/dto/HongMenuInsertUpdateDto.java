@@ -19,6 +19,7 @@ public class HongMenuInsertUpdateDto extends CreateRequest {
     private String menuText;
     private String menuUrl;
     private String useYn;
+    private String landingPageYn;
     private String menuRole;
     private Integer sortNo;
 }

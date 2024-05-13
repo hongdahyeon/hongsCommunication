@@ -56,4 +56,8 @@ public class HongMenuService {
     public Integer delete(Long menuUid) {
         return mapper.delete(menuUid);
     }
+
+    public String getLandingPageById(String userRole) {
+        return mapper.getLandingPage(userRole);
+    }
 }

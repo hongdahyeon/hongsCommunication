@@ -77,6 +77,20 @@
                                 <input type="number" class="form-control" id="sortNo" name="sortNo" required>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <!-- 네 번째 row: 사용 여부와 정렬 순서 -->
+                            <div class="col-md-6">
+                                <label class="form-label">랜딩 페이지 여부</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="landingPageYn" id="landingPageYn_Y" value="Y" required>
+                                    <label class="form-check-label" for="landingPageYn_Y">랜딩</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="landingPageYn" id="landingPageYn_N" value="N" required>
+                                    <label class="form-check-label" for="landingPageYn_N">랜딩X</label>
+                                </div>
+                            </div>
+                        </div>
                         <!-- 버튼 영역 -->
                         <div class="row mb-3">
                             <div class="col-md-12 text-end">
@@ -99,6 +113,7 @@
 <th:block layout:fragment="script">
     <script>
 
+        /* url을 통해 트리 정보 조회 */
         const menu_tree = new Tree("tree")
             .setUrl('/api/super/menu/list.json')
             .setParams({menuRole: $("#menu-role").find(":selected").val()})
@@ -106,6 +121,7 @@
 
         $(function () {
 
+            /* 트리 node 클릭 이벤트 */
             menu_tree.nodeClick((e, data) => {
                 const node = data.node
                 document.getElementById("menu-form-body").style.display = "block"
@@ -113,8 +129,10 @@
                 setForm(node)
             })
 
+            /* 메뉴 추가 버튼 */
             $("#add-menu-btn").on('click', () => {
                 const {ref, sel} = menu_tree.getSelectNode()
+                /* 아직 상위 메뉴가 db에 등록되지 않았다면... */
                 if(sel) {
                     if(sel.id === "new") Util.alert("상위 메뉴를 먼저 등록해주세요.")
                     else {
@@ -143,12 +161,14 @@
                 }
             })
 
+            /* 사용자 권한 select 변경됐을 때 -> 트리 재호출(refresh) */
             $("#menu-role").change(() => {
                 menu_tree
                     .setParams({menuRole: $("#menu-role").find(":selected").val()})
                     .refresh()
             })
 
+            /* 저장/수정 버튼 클릭 */
             $("#save-btn").on('click', (e) => {
                 e.preventDefault();
                 const form = document.getElementById("menu-form")
@@ -177,6 +197,7 @@
                 }
             })
 
+            /* 삭제 버튼 클릭 */
             $("#delete-btn").on('click', (e) => {
                 e.preventDefault();
                 const {ref, sel} = menu_tree.getSelectNode()
@@ -198,6 +219,7 @@
             $("#menuText").val(data.data['menuText'])
             $("#menuUrl").val(data.data['menuUrl'])
             $(`#useYn_${data.data['useYn']}`).prop("checked", true)
+            $(`#landingPageYn_${data.data['landingPageYn']}`).prop("checked", true)
             $("#sortNo").val(data.data['sortNo'])
             $("#save-btn").text((data.id === 'new') ? "저장" : "수정")
             $("#delete-btn").css("visibility", (data.id === 'new') ? "hidden" : "visible");

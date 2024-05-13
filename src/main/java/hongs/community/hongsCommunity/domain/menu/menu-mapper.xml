@@ -49,6 +49,7 @@
                   ,menu_role
                   ,use_yn
                   ,delete_yn
+                  ,landing_page_yn
                   ,sort_no
                   ,json_array(menu_text) as path_nm
                   ,json_array(menu_uid) as path
@@ -68,6 +69,7 @@
                   ,m.menu_role
                   ,m.use_yn
                   ,m.delete_yn
+                  ,m.landing_page_yn
                   ,m.sort_no
                   ,json_array_append(mh.path_nm, '$', m.menu_text) as path_nm
                   ,json_array_append(mh.PATH, '$', m.sort_no) as path
@@ -88,6 +90,7 @@
                ,mh.menu_role
                ,mh.use_yn
                ,mh.delete_yn
+               ,mh.landing_page_yn
                ,mh.sort_no
                ,mh.path
                ,mh.level
@@ -104,6 +107,7 @@
             ,menu_url
         </if>
            ,use_yn
+           ,landing_page_yn
            ,delete_yn
            ,sort_no
            ,menu_role
@@ -120,6 +124,7 @@
             ,#{menuUrl}
         </if>
            ,#{useYn}
+           ,#{landingPageYn}
            ,'N'
            ,#{sortNo}
            ,#{menuRole}
@@ -141,6 +146,7 @@
               ,menu_url = #{menuUrl}
              </if>
               ,use_yn = #{useYn}
+              ,landing_page_yn = #{landingPageYn}
               ,sort_no = #{sortNo}
               ,menu_role = #{menuRole}
             <if test="upperMenuUid != null">
@@ -156,4 +162,16 @@
            set delete_yn = 'Y'
          where menu_uid = #{menuUid}
     </delete>
+
+    <select id="getLandingPage" resultType="String" parameterType="String">
+        /* getLandingPage */
+        select menu_url
+          from hong_menu
+         where menu_role = #{menuRole}
+           and delete_yn = 'N'
+           and use_yn = 'Y'
+           and landing_page_yn = 'Y'
+         order by sort_no desc
+         limit 1
+    </select>
 </mapper>

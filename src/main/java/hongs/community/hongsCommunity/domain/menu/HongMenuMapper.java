@@ -23,5 +23,7 @@ public interface HongMenuMapper {
     Integer update(HongMenuInsertUpdateDto dto);
 
     Integer delete(Long menuUid);
+
+    String getLandingPage(String userRole);
 }
 

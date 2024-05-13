@@ -1,6 +1,7 @@
 package hongs.community.hongsCommunity.domain.team.team;
 
 
+import hongs.community.hongsCommunity.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,5 +24,11 @@ public class HongTeamController {
         this.setModalUrl(model);
         model.addAttribute("teams", teamService.list());
         return "team/index";
+    }
+
+    @GetMapping("/form")
+    public String form(Model model) {
+        this.setModalUrl(model);
+        return "team/form";
     }
 }
