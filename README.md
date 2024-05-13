@@ -238,3 +238,8 @@ $("#view-content").html(code)
 
 
 (51) 24-05-10 :summernote 생성시 기본 height 설정 가능
+
+
+(52) 24-05-13
+1. summernote view test 화면
+2. userutil -> loginUser 정보 가져올 수 있도록
