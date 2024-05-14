@@ -4,15 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
-* @fileName HongTeamListVo
+* @fileName HongTeamViewVo
 * @author dahyeon
 * @version 1.0.0
 * @date 2024-05-14
-* @summary  팀 리스트 조회 vo
+* @summary  팀 단건 조회
 **/
 
 @Getter @Setter
-public class HongTeamListVo {
+public class HongTeamViewVo {
 
     private Long hongTeamUid;
     private String teamCategory;
@@ -20,6 +20,7 @@ public class HongTeamListVo {
     private String teamNm;
     private Integer memberNum;
     private String teamShortIntro;
+    private String teamIntro;
     private Long teamProfile;
     private String teamProfileUrl;
     private Long representId;

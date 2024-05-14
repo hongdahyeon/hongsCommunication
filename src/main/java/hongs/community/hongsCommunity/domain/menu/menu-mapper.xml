@@ -4,7 +4,7 @@
 <mapper namespace="hongs.community.hongsCommunity.domain.menu.HongMenuMapper">
 
     <select id="parentList" parameterType="HongMenuDto" resultType="HongMenuVo">
-        /* parentList */
+        /* menu.parentList */
         SELECT menu_Uid
               ,upper_menu_uid
               ,menu_url
@@ -22,7 +22,7 @@
     </select>
 
     <select id="childList" parameterType="HongMenuDto" resultType="HongMenuVo">
-        /* childList */
+        /* menu.childList */
         SELECT menu_Uid
              ,upper_menu_uid
              ,menu_url
@@ -40,7 +40,7 @@
     </select>
 
     <select id="superList" parameterType="HongMenuSuperDto" resultType="HongMenuSuperVo">
-        /* superList */
+        /* menu.superList */
         WITH RECURSIVE menu_hierarchy AS (
             SELECT menu_uid
                   ,upper_menu_uid
@@ -100,7 +100,7 @@
     </select>
 
     <insert id="join" parameterType="HongMenuInsertUpdateDto">
-        /* HongMenuInsertUpdateDto.join */
+        /* menu.join */
         insert into hong_menu (
             menu_text
         <if test="menuUrl != null">
@@ -139,7 +139,7 @@
     </insert>
 
     <update id="update" parameterType="HongMenuInsertUpdateDto">
-        /* HongMenuInsertUpdateDto.update */
+        /* menu.update */
         update hong_menu
            set menu_text = #{menuText}
              <if test="menuUrl != null">
@@ -158,13 +158,14 @@
     </update>
 
     <delete id="delete" parameterType="Long">
+        /* menu.delete */
         update hong_menu
            set delete_yn = 'Y'
          where menu_uid = #{menuUid}
     </delete>
 
     <select id="getLandingPage" resultType="String" parameterType="String">
-        /* getLandingPage */
+        /* menu.getLandingPage */
         select menu_url
           from hong_menu
          where menu_role = #{menuRole}

@@ -37,14 +37,21 @@
 
                            <hr/>
 
-                           <span style="font-size: 13px; color: gray;">첨여인원</span>
+                           <span style="font-size: 13px; color: gray;">참여인원</span>
                            <div>
                                <span th:text="|${team?.totalMemberNum} / ${team?.memberNum}|"></span>
                            </div>
 
                            <div class="d-flex justify-content-end">
-                               <button type="button" class="btn btn-sm btn-primary" style="margin-right: 5px" th:onclick="'updateTeam(\'' + ${team?.hongTeamUid} + '\')'" th:if="${#authentication.principal.user.userUid == team?.representId}">수정하기</button>
-                               <button type="button" class="btn btn-sm btn-outline-primary" style="margin-right: 5px" th:onclick="'joinTeam(\'' + ${team?.hongTeamUid} + '\')'" th:disabled="${team?.totalMemberNum == team?.memberNum}">참여하기</button>
+                               <button type="button" class="btn btn-sm btn-primary" style="margin-right: 5px"
+                                       th:onclick="'updateTeam(\'' + ${team?.hongTeamUid} + '\')'"
+                                       th:if="${#authentication.principal.user.userUid == team?.representId}">수정하기
+                               </button>
+                               <button type="button" class="btn btn-sm btn-outline-primary" style="margin-right: 5px"
+                                       th:onclick="'joinTeam(\'' + ${team?.hongTeamUid} + '\')'"
+                                       th:disabled="${team?.totalMemberNum == team?.memberNum}"
+                                       th:if="${!team?.ifJoined}">참여신청하기
+                               </button>
                                <button type="button" class="btn btn-sm btn-secondary" th:onclick="'viewTeam(\'' + ${team?.hongTeamUid} + '\')'">구경하기</button>
                            </div>
                        </div>
@@ -75,11 +82,18 @@
         }
 
         function joinTeam(teamUid) {
+            Util.confirm('해당 팀에 신청하시겠습니까? <br> 팀대표의 승인을 통해 팀에 참여하실 수 있습니다.').then((isOk) => {
+                if(isOk) {
+                    Http.post('/api/team/join-team.json', {approvalYn: 'N', hongTeamUid: teamUid}).then((res) => {
+                        if(res['httpStatus'] === 201) Util.alert("팀 신청을 완료하였습니다.").then(() => window.location.href = '/team')
+                    })
+                }
+            })
             console.log('joinTeam: ', teamUid)
         }
 
         function viewTeam(teamUid) {
-            console.log('viewTeam: ', teamUid)
+            window.location.href = `/team/view/${teamUid}`
         }
 
         function updateTeam(teamUid) {

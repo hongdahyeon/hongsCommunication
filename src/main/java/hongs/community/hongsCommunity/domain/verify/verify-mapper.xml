@@ -4,7 +4,7 @@
 <mapper namespace="hongs.community.hongsCommunity.domain.verify.HongVerifyCodeMapper">
 
     <insert id="join" parameterType="HongVerifyCodeInsertDto">
-        /* HongVerifyCodeInsertDto.join */
+        /* verify.join */
         insert into hong_verify_code (
             user_email
            ,verify_check
@@ -21,7 +21,7 @@
     </insert>
 
     <select id="checkVerify" parameterType="HongVerifyCheckDto" resultType="String">
-        /* HongVerifyCheckDto.checkVerify */
+        /* verify.checkVerify */
         select verify_code
           from hong_verify_code
          where user_email = #{userEmail}
@@ -32,14 +32,14 @@
     </select>
 
     <update id="changeVerifyCheck" parameterType="String">
-        /* changeVerifyCheck */
+        /* verify.changeVerifyCheck */
         update hong_verify_code
            set verify_check = true
          where user_email = #{userEmail}
     </update>
 
     <update id="changeUserLastLoginDate" parameterType="String">
-        /* changeUserLastLoginDate */
+        /* verify.changeUserLastLoginDate */
         update hong_user
            set last_login_date = now()
          where user_id = #{userId}

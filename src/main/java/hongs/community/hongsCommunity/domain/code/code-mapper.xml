@@ -4,7 +4,7 @@
 <mapper namespace="hongs.community.hongsCommunity.domain.code.HongCodeMapper">
 
     <select id="upperList" resultType="HongUpperCodeListVo">
-        /* upperList */
+        /* code.upperList */
         select parent.hong_code_uid as hong_code_uid
               ,parent.code_val as code_val
               ,parent.code_name as code_name
@@ -23,7 +23,7 @@
     </select>
 
     <select id="checkIfDuplicate" resultType="int" parameterType="String">
-        /* checkIfDuplicate */
+        /* code.checkIfDuplicate */
         select count(*)
           from hong_code
          where delete_yn = 'N'
@@ -31,7 +31,7 @@
     </select>
 
     <insert id="insert" parameterType="HongCodeInsertDto">
-        /* insert */
+        /* code.insert */
         insert into hong_code (
             code_val
            ,code_name
@@ -60,7 +60,7 @@
     </insert>
 
     <select id="upperView" parameterType="Long" resultType="HongCodeViewVo">
-        /* upperView */
+        /* code.upperView */
         select parent.hong_code_uid
               ,parent.upper_code_val
               ,parent.code_val
@@ -77,7 +77,7 @@
     </select>
 
     <delete id="delete" parameterType="HongCodeDeleteDto">
-        /* delete */
+        /* code.delete */
         update hong_code
            set delete_yn = 'Y'
               ,mdfr_id = #{mdfrId}
@@ -99,7 +99,7 @@
     </update>
 
     <insert id="insertEach" parameterType="HongCodeChildMergeDto">
-        /* insertEach */
+        /* code.insertEach */
         <foreach collection="insertChild" separator=";" item="item" index="index">
             insert into hong_code (
                 upper_code_val, code_val, code_name, use_yn,memo_cn
@@ -112,7 +112,7 @@
     </insert>
 
     <update id="updateEach" parameterType="HongCodeChildMergeDto">
-        /* updateEach */
+        /* code.updateEach */
         <foreach collection="updateChild" separator=";" item="item" index="index">
             update hong_code
                set code_val = #{item.codeVal}
@@ -127,7 +127,7 @@
     </update>
 
     <update id="deleteEach" parameterType="HongCodeChildMergeDto">
-        /* deleteEach */
+        /* code.deleteEach */
         <foreach collection="delUids" separator=";" item="item" index="index">
             update hong_code
                set delete_yn = 'Y'
@@ -139,7 +139,7 @@
     </update>
 
     <select id="childList" parameterType="Long" resultType="HongChildCodeListVo">
-        /* childList */
+        /* code.childList */
         select child.hong_code_uid
               ,child.code_val
               ,child.code_name
@@ -151,7 +151,7 @@
     </select>
 
     <select id="childListByVal" parameterType="String" resultType="HongChildCodeListVo">
-        /* childListByVal */
+        /* code.childListByVal */
         select child.hong_code_uid
               ,child.code_val
               ,child.code_name

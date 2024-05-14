@@ -1,7 +1,11 @@
 class Upload {
-    constructor(selector) {
+    constructor(selector, maxCnt = 10, uploadTy = ['zip', 'text', 'pptx', 'xls', 'ppt', 'xlsx', 'jpg', 'hwp' ,'pdf', 'doc' ,'jpeg', 'png', 'gif', 'txt', 'csv', 'mp4', 'json']) {
         this._selector = selector
         this.upload_uuid = this.getUUID();
+        this.maxUploadCnt = maxCnt
+        this.uploading = false
+        this.tempUploadCnt = 0
+        this.uploadTy = uploadTy
         this._removes = []
         this._uid = null
         this._currentFiles = {}
@@ -11,12 +15,36 @@ class Upload {
             locale,
             autoProceed: true,
             onBeforeFileAdded: (file) => {
+
+                const fileExtension = file.extension
+
+                if(!this.uploading) {
+                    if(this.tempUploadCnt === this.maxUploadCnt) {
+                        Util.alert(`최대 업로드 가능한 파일 개수는 ${this.maxUploadCnt}개 입니다.`)
+                        return false
+                    }
+
+                    if(!this.uploadTy.includes(fileExtension)) {
+                        Util.alert("업로드 불가능한 확장자입니다.")
+                        return false
+                    }
+                }
+
+                if(this.uploading) {
+
+                    if(this.tempUploadCnt === this.maxUploadCnt) Util.alert(`최대 업로드 가능한 파일 개수는 ${this.maxUploadCnt}개 입니다. <br> 확인부탁드립니다.`)
+                    if(!this.uploadTy.includes(fileExtension)) Util.alert("업로드 불가능한 확장자가 있습니다. <br> 확인부탁드립니다.")
+
+                }
+
                 if(this._uid != null) {
                     file.meta = {
                         ...file.meta,
                         uid: this._uid
                     }
                 }
+
+                this.tempUploadCnt ++;
                 return file
             }
         })
@@ -46,7 +74,6 @@ class Upload {
         })
 
         this._uppy.on('upload-success', (file, upload) => {
-            console.log("upload-success")
             file.meta.url = upload.uploadURL
             file.meta.saved = false
             if( !file.meta.saved ) {
@@ -55,14 +82,12 @@ class Upload {
         })
 
         this._uppy.on('upload-error', (file, responseObject) => {
-            console.log("upload-error")
+            console.error("upload-error")
         })
 
         this._uppy.on('file-removed', (file, reason) => {
-            console.log("file-removed")
             this._removeFile(file, reason)
         })
-
     }
 
     getUUID() { // UUID v4 generator in JavaScript (RFC4122 compliant)
@@ -87,9 +112,9 @@ class Upload {
     }
 
     _removeFile(file, reason) {
-        console.log('file: ', file)
         const fileUrl = file.meta.url
         if(reason === 'removed-by-user') {
+            this.tempUploadCnt --;
             if( !file.meta.saved ) {
                 Http.delete(`/api/tus/files/temp/delete.json?fileUrl=${fileUrl}`)
             } else this._removes.push(fileUrl)
@@ -102,7 +127,6 @@ class Upload {
 
     getTempFiles(){
         const allFiles = this._uppy.getFiles();
-        console.log('allFiles: ', allFiles)
         const tempFiles = allFiles.filter(x => !x.meta.saved).map(x => ({
             fileName: x.name,
             fileUrl: x.meta.url,
@@ -139,6 +163,7 @@ class Upload {
 
     _addStaticFile(file) {
         const options = {}
+        this.uploading = true;
 
         let fileData;
         if( file.fileType.toString().includes('image') ) {

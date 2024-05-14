@@ -5,11 +5,111 @@
 
 <th:block layout:fragment="content">
     <th:block th:replace="~{fragments/title :: title('팀 생성하기')}"></th:block>
+
+    <div class="card">
+        <div class="card-body" id="form-body">
+
+            <form id="form" class="needs-validation" novalidate>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="teamNm" class="form-label">팀명</label>
+                        <input type="text" class="form-control" name="teamNm" id="teamNm" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="teamCategory" class="form-label">팀분류</label>
+                        <select class="form-select" name="teamCategory" id="teamCategory" required>
+                            <th:block th:each="teamCat, teamCatStat: ${teamCategory}">
+                                <option th:selected="${teamCatStat?.first}" th:value="${teamCat?.codeVal}" th:text="${teamCat?.codeName}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="memberNum" class="form-label">팀 최대 인원</label>
+                        <input type="number" class="form-control" name="memberNum" id="memberNum" required>
+                        <label style="color: gray; font-size: 12px;">*팀 인원은 팀 주최자 본인을 포함한 인원수로 계산해주세요.</label>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="teamShortIntro" class="form-label">팀의 짧은 소개</label>
+                        <input type="text" class="form-control" name="teamShortIntro" id="teamShortIntro" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">팀소개</label>
+                        <div class="form-control summernote" rows="5" id="content" name="content" required></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">팀 프로필</label>
+                        <div class="border p-3">
+                            <label class="form-label" for="upload-container">첨부파일</label>
+                            <div>
+                                <div id="upload-container" class="mt-1"></div>
+                            </div>
+                            <div>
+                                <div style="color: gray; margin-top: 5px;">* 업로드 가능 확장자: jpg, png</div>
+                                <div style="color: gray;">* 최대 업로드 가능 개수: 1개</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 버튼 영역 -->
+                <div class="row mb-3">
+                    <div class="col-md-12 text-end">
+                        <button type="button" class="btn btn-secondary" id="goback-btn">뒤로가기</button>
+                        <button type="button" class="btn btn-primary" id="save-btn">저장</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </th:block>
 
 <th:block layout:fragment="script">
     <script>
-        console.log("team form page")
+
+        const fileUid = null;
+
+        const summernote = new Summernote("content")
+        const upload = new Upload("#upload-container", 1, ['png','jpg'])
+
+        $(document).ready(function() {
+            upload.setUid(fileUid)
+
+            $("#goback-btn").on('click', () => {
+                Util.confirm("작성중이던 정보는 사라집니다. <br> 뒤로 돌아가시겠습니까?").then((isOk) => {
+                    if(isOk) window.location.href = '/team'
+                })
+            })
+
+            $("#save-btn").on('click', (e) => {
+                e.preventDefault()
+                const form = document.getElementById("form")
+                if (form.checkValidity() === false) form.classList.add("was-validated");
+                else {
+                    FormDataToObj.getParameter("form").then(obj => {
+
+                        if(obj['files']) delete obj['files']
+                        obj['teamProfile'] = fileUid
+                        obj['addFile'] = upload.getTempFiles()
+                        obj['delFile'] = upload.getRemoveFileUrls()
+                        obj['teamIntro'] = summernote.getCode()
+
+                        Http.post('/api/team/insert.json', obj).then((res) => {
+                            if(res['httpStatus'] === 201) {
+                                Util.alert("팀이 생성되었습니다. <br> 승인을 기다려주세요.").then(() => window.location.href = '/team')
+                            }
+                        })
+
+                    })
+                }
+            })
+
+        })
     </script>
 </th:block>
 

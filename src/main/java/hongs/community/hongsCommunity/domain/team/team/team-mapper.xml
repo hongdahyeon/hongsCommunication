@@ -3,8 +3,8 @@
 
 <mapper namespace="hongs.community.hongsCommunity.domain.team.team.HongTeamMapper">
 
-    <select id="list" resultType="HongTeamListVo">
-        /* list */
+    <select id="list" resultType="HongTeamListVo" parameterType="Long">
+        /* team.list */
         select hteam.hong_team_uid
               ,hteam.team_category
               ,hcode.code_name as team_category_name
@@ -19,10 +19,16 @@
               ,hteam.approval_yn
               ,hteam.use_yn
               ,hteam.delete_yn
+              ,( select case when count(*) >= 1 then true else false end as if_joined
+                   from hong_team_user htuser
+                  where htuser.hong_team_uid = hteam.hong_team_uid
+                    and htuser.delete_yn = 'N'
+                    and htuser.user_uid = #{loginUser} ) as if_joined
               ,( select count(*)
                    from hong_team_user htuser
                   where htuser.hong_team_uid = hteam.hong_team_uid
                     and htuser.delete_yn = 'N'
+                    and htuser.approval_yn = 'Y'
                ) as total_member_num
           from hong_team hteam
           left join hong_user huser on hteam.represent_id = huser.user_uid
@@ -31,5 +37,99 @@
          where hteam.delete_yn = 'N'
            and hteam.approval_yn = 'Y'
            and hteam.use_yn = 'Y'
+    </select>
+
+    <insert id="insertTeam" parameterType="HongTeamInsertDto" useGeneratedKeys="true" keyProperty="hongTeamUid">
+        /* team.insertTeam */
+        insert into hong_team (
+            team_category
+           ,team_nm
+           ,member_num
+           ,team_short_intro
+           <if test="teamIntro != null">
+           ,team_intro
+           </if>
+           <if test="teamProfile != null">
+           ,team_profile
+           </if>
+           ,represent_id
+           ,approval_yn
+           ,use_yn
+           ,delete_yn
+           ,reg_id
+           ,reg_dt
+           ,mdfr_id
+           ,mdfr_dt
+        ) values (
+            #{teamCategory}
+           ,#{teamNm}
+           ,#{memberNum}
+           ,#{teamShortIntro}
+          <if test="teamIntro != null">
+           ,#{teamIntro}
+          </if>
+          <if test="teamProfile != null">
+           ,#{teamProfile}
+          </if>
+           ,#{representId}
+           ,'N'
+           ,'Y'
+           ,'N'
+           ,#{regId}
+           ,now()
+           ,#{mdfrId}
+           ,now()
+        )
+    </insert>
+
+    <insert id="insertTeamUser" parameterType="HongTeamUserInsertDto">
+        /* team.insertTeamUser */
+        insert into hong_team_user (
+             user_uid
+            ,hong_team_uid
+            ,delete_yn
+            ,join_date
+            ,approval_yn
+        ) values (
+             #{userUid}
+            ,#{hongTeamUid}
+            ,'N'
+            ,now()
+            ,#{approvalYn}
+        )
+    </insert>
+
+    <select id="view" parameterType="HongTeamViewDto" resultType="HongTeamViewVo">
+        /* team.view */
+        select hteam.hong_team_uid
+              ,hteam.team_category
+              ,hcode.code_name as team_category_name
+              ,hteam.team_nm
+              ,hteam.member_num
+              ,hteam.team_short_intro
+              ,hteam.team_intro
+              ,hteam.team_profile
+              ,hfile.file_url as team_profile_url
+              ,hteam.represent_id
+              ,huser.user_name as represent_name
+              ,hteam.approval_yn
+              ,hteam.use_yn
+              ,hteam.delete_yn
+              ,( select case when count(*) >= 1 then true else false end as if_joined
+                   from hong_team_user htuser
+                  where htuser.hong_team_uid = hteam.hong_team_uid
+                    and htuser.delete_yn = 'N'
+                    and htuser.user_uid = #{loginUser} ) as if_joined
+              ,( select count(*)
+                   from hong_team_user htuser
+                  where htuser.hong_team_uid = hteam.hong_team_uid
+                    and htuser.delete_yn = 'N'
+                    and htuser.approval_yn = 'Y'
+               ) as total_member_num
+          from hong_team hteam
+          left join hong_user huser on hteam.represent_id = huser.user_uid
+          left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
+          left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY'
+         where hteam.hong_team_uid = #{hongTeamUid}
     </select>
 </mapper>

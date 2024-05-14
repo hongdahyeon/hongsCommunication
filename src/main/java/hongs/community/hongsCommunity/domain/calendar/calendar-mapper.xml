@@ -5,6 +5,7 @@
 <mapper namespace="hongs.community.hongsCommunity.domain.calendar.HongCalendarMapper">	<!-- mapper 인터페이스가 위치하는 풀경로 -->
 
     <select id="list" parameterType="Long" resultType="HongCalendarVo">
+        /* calendar.list */
         SELECT cal_uid as uid
               ,title
               ,start_date as start
@@ -18,6 +19,7 @@
     </select>
 
     <insert id="join" parameterType="HongCalendarDto" keyProperty="calUid" useGeneratedKeys="true">
+        /* calendar.join */
         insert into hong_calendar (
             title
            ,user_uid
@@ -40,6 +42,7 @@
     </insert>
 
     <update id="update" parameterType="HongCalendarDto">
+        /* calendar.update */
         update hong_calendar
            set start_date = #{start}
               ,end_date = #{end}
@@ -50,6 +53,7 @@
     </update>
 
     <update id="updateDate" parameterType="HongCalendarDto">
+        /* calendar.updateDate */
         update hong_calendar
            set start_date = #{start}
               ,end_date = #{end}
@@ -57,6 +61,7 @@
     </update>
 
     <delete id="delete" parameterType="Long">
+        /* calendar.delete */
         delete from hong_calendar
          where cal_uid = #{calUid}
     </delete>

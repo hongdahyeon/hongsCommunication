@@ -5,7 +5,7 @@
 <mapper namespace="hongs.community.hongsCommunity.domain.disable.HongUserDisableMapper">	<!-- mapper 인터페이스가 위치하는 풀경로 -->
 
     <select id="view" parameterType="Long" resultType="HongUserDisableViewVo">
-        /* view */
+        /* user-disable.view */
         select hud.user_uid
               ,to_char(hud.disable_date, 'YYYY-MM-DD') as disable_date
               ,hud.disable_msg
@@ -17,7 +17,7 @@
     </select>
 
     <update id="toEnable" parameterType="HongUserEnableDto">
-        /* toEnable */
+        /* user-disable.toEnable */
         update hong_user_disable
            set delete_yn = 'Y'
               ,mdfr_id = #{mdfrId}
@@ -26,7 +26,7 @@
     </update>
 
     <insert id="toDisable" parameterType="HongUserDisableDto">
-        /* toDisable */
+        /* user-disable.toDisable */
         insert into hong_user_disable (
             user_uid
            ,disable_date

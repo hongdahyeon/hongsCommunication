@@ -4,7 +4,7 @@
 <mapper namespace="hongs.community.hongsCommunity.domain.team.admin.HongTeamAdminMapper">
 
     <select id="list" resultType="HongTeamAdminListVo">
-        /* list */
+        /* team-admin.list */
         select hteam.hong_team_uid
               ,hteam.team_category
               ,hcode.code_name as team_category_name
@@ -37,7 +37,7 @@
     </select>
 
     <update id="changeApproval" parameterType="HongTeamAdminChangeDto">
-        /* changeApproval */
+        /* team-admin.changeApproval */
         update hong_team
            set approval_yn = #{approvalYn}
               ,mdfr_id = #{mdfrId}
@@ -46,7 +46,7 @@
     </update>
 
     <update id="changeUse" parameterType="HongTeamAdminChangeDto">
-        /* changeUse */
+        /* team-admin.changeUse */
         update hong_team
            set use_yn = #{useYn}
               ,mdfr_id = #{mdfrId}
@@ -55,7 +55,7 @@
     </update>
 
     <select id="teamUserList" parameterType="Long" resultType="HongTeamUserAdminListVo">
-        /* teamUserList */
+        /* team-admin.teamUserList */
         select hteam.hong_team_uid as hong_team_uid
               ,huser.user_uid as user_uid
               ,huser.user_name as user_name
@@ -65,9 +65,14 @@
               ,case when hteam.represent_id = htuser.user_uid then '대표'
                else '팀원'
                 end as represent_yn
+              ,to_char(htuser.join_date, 'YYYY-MM-DD') as join_date
+              ,case when htuser.approval_yn = 'Y' then '승인'
+               else '미승인'
+                end as approval_yn_str
           from hong_team hteam
          inner join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid
          inner join hong_user huser on huser.user_uid = htuser.user_uid
           left join hong_code hcode on hcode.code_val = huser.role and hcode.upper_code_val = 'USER_ROLE'
+         where hteam.hong_team_uid = #{hongTeamUid}
     </select>
 </mapper>

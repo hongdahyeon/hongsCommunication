@@ -9,6 +9,7 @@ import lombok.Setter;
 * @version 1.0.0
 * @date 2024-05-13
 * @summary   팀 관리 : 팀 멤버 리스트 조회
+ *              -> 삭제여부 N
 **/
 
 @Getter @Setter
@@ -21,4 +22,6 @@ public class HongTeamUserAdminListVo {
     private String userRole;
     private String userRoleName;
     private String representYn;
+    private String joinDate;
+    private String approvalYnStr;
 }

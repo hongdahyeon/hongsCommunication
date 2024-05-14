@@ -4,7 +4,7 @@
 <mapper namespace="hongs.community.hongsCommunity.domain.user.front.HongUserFrontMapper">
 
     <select id="findUser" parameterType="String" resultType="HongLoginUserVo">
-        /* HongLoginUserVo.findUser */
+        /* user-front.findUser */
         select user_uid
               ,user_id
               ,password
@@ -21,7 +21,7 @@
     </select>
 
     <select id="findSocialUser" parameterType="String" resultType="HongLoginUserVo">
-        /* HongLoginUserVo.findSocialUser */
+        /* user-front.findSocialUser */
         select hu.user_uid
               ,hu.user_id
               ,hu.password
@@ -40,7 +40,7 @@
     </select>
 
     <insert id="joinUser" parameterType="HongUserInsertDto" keyProperty="userUid" useGeneratedKeys="true">
-        /* HongUserInsertDto.joinUser */
+        /* user-front.joinUser */
         insert into hong_user (
              user_id
             ,password
@@ -73,7 +73,7 @@
     </insert>
 
     <select id="checkUser" parameterType="String" resultType="HongCheckUserVo">
-        /* HongCheckUserVo.checkUser */
+        /* user-front.checkUser */
         select user_id
               ,pwd_fail_cnt
           from hong_user
@@ -81,7 +81,7 @@
     </select>
 
     <update id="updatePwdFailCnt" parameterType="HongUserUpdateFailCntDto">
-        /* HongUserUpdateFailCntDto.updatePwdFailCnt */
+        /* user-front.updatePwdFailCnt */
         update hong_user
            set pwd_fail_cnt = #{pwdFailCnt}
         <if test="pwdFailCnt != null and pwdFailCnt == 5">
@@ -91,7 +91,7 @@
     </update>
 
     <update id="resetFailCntAndLastLoginDate" parameterType="String">
-        /* resetFailCntAndLastLoginDate */
+        /* user-front.resetFailCntAndLastLoginDate */
         update hong_user
            set pwd_fail_cnt = 0
               ,last_login_date = now()
@@ -99,7 +99,7 @@
     </update>
 
     <select id="findUserByUid" parameterType="Long" resultType="HongLoginUserVo">
-        /* HongLoginUserVo.findUserByUid */
+        /* user-front.findUserByUid */
         select user_uid
               ,user_id
               ,password
@@ -115,13 +115,13 @@
     </select>
 
     <insert id="joinSocialUser" parameterType="HongSocialUserInsertDto" keyProperty="socialUserUid" useGeneratedKeys="true">
-        /* HongSocialUserInsertDto.joinSocialUser */
+        /* user-front.joinSocialUser */
         insert into hong_social_user ( user_id )
         values ( #{userId} )
     </insert>
 
     <select id="searchId" parameterType="HongSearchIdPwdDto" resultType="String">
-        /* searchId */
+        /* user-front.searchId */
         select user_id
           from hong_user
          where user_name = #{userName}
@@ -129,7 +129,7 @@
     </select>
 
     <update id="updateUserPwd" parameterType="HongUserUpdatePwdDto">
-        /* HongUserUpdatePwdDto.updateUserPwd */
+        /* user-front.updateUserPwd */
         update hong_user
            set password = #{password}
          where user_email = #{userEmail}
@@ -137,7 +137,7 @@
     </update>
 
     <update id="chngPwd" parameterType="HongUserChngPwdDto">
-        /* HongUserChngPwdDto.chngPwd */
+        /* user-front.chngPwd */
         update hong_user
            set pwd_last_update = #{pwdLastUpdate}
         <if test="chngPwd == true">
@@ -147,7 +147,7 @@
     </update>
 
     <select id="searchUser" parameterType="HongUserSendEmailDto" resultType="int">
-        /* HongUserSendEmailDto.searchUser */
+        /* user-front.searchUser */
         select count(*)
           from hong_user
          where user_id = #{userId}
@@ -155,21 +155,21 @@
     </select>
 
     <select id="chkUserId" parameterType="String" resultType="int">
-        /* chkUserId */
+        /* user-front.chkUserId */
         select count(*)
           from hong_user
          where user_id = #{userId}
     </select>
 
     <select id="chkUserEmail" parameterType="String" resultType="int">
-        /* chkUserEmail */
+        /* user-front.chkUserEmail */
         select count(*)
           from hong_user
          where user_email = #{userEmail}
     </select>
 
     <update id="updatePwdChangeDateAndLoginDate" parameterType="String">
-        /* updatePwdChangeDateAndLoginDate */
+        /* user-front.updatePwdChangeDateAndLoginDate */
         update hong_user
            set pwd_last_update = date_add(now(), interval '90' day)
               ,last_login_date = now()

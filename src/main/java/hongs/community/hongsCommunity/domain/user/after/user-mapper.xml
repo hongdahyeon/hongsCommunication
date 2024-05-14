@@ -4,7 +4,7 @@
 <mapper namespace="hongs.community.hongsCommunity.domain.user.after.HongUserMapper">
 
     <select id="userInfo" parameterType="Long" resultType="HongUserInfoVo">
-        /* userInfo */
+        /* user-after.userInfo */
         select huser.user_Uid
               ,huser.user_id
               ,huser.user_name
@@ -17,7 +17,7 @@
     </select>
 
     <select id="chkUserEmail" parameterType="HongUserCheckEmailVo" resultType="int">
-        /* chkUserEmail */
+        /* user-after.chkUserEmail */
         select count(*)
           from hong_user
          where user_email = #{userEmail}
@@ -25,7 +25,7 @@
     </select>
     
     <update id="updateUser" parameterType="HongUserUpdteDto">
-        /* updateUser */
+        /* user-after.updateUser */
         update hong_user
            set user_name = #{userName}
         <if test="password != null">
@@ -39,6 +39,7 @@
     </update>
 
     <select id="list" resultType="HongUserListVo">
+        /* user-after.list */
         select huser.user_uid
               ,huser.user_id
               ,huser.user_name
@@ -60,7 +61,7 @@
     </select>
 
     <update id="unlock" parameterType="HongUserUnlockDto">
-        /* unlock */
+        /* user-after.unlock */
         update hong_user
            set is_non_locked = true
               ,pwd_fail_cnt = 0
@@ -68,21 +69,21 @@
     </update>
 
     <update id="toEnable" parameterType="Long">
-        /* toEnable */
+        /* user-after.toEnable */
         update hong_user
            set is_enable = true
          where user_uid = #{userUid}
     </update>
 
     <update id="toDisable" parameterType="Long">
-        /* toDisable */
+        /* user-after.toDisable */
         update hong_user
            set is_enable = false
          where user_uid = #{userUid}
     </update>
 
     <select id="getUserEmailByUid" parameterType="Long" resultType="String">
-        /* getUserEmailByUid */
+        /* user-after.getUserEmailByUid */
         select user_email
           from hong_user
          where user_uid = #{userUid}
