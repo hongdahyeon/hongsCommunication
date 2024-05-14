@@ -257,3 +257,5 @@ $("#view-content").html(code)
 2. 유저입장 팀 생성 및 가입신청 로직 구현
 3-1. admin: 팀멤버리스트 deleteYn = N
 3-2. list: 팀멤버리스트 deleteYn = N, approvalYn = Y
+
+(57) 24-05-14 : 팀정보 수정 로직 추가
