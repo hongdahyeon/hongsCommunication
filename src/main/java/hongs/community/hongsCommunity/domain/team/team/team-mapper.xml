@@ -3,7 +3,7 @@
 
 <mapper namespace="hongs.community.hongsCommunity.domain.team.team.HongTeamMapper">
 
-    <select id="list" resultType="HongTeamListVo" parameterType="Long">
+    <select id="list" resultType="HongTeamListVo" parameterType="HongTeamListDto">
         /* team.list */
         select hteam.hong_team_uid
               ,hteam.team_category
@@ -39,6 +39,16 @@
          where hteam.delete_yn = 'N'
            and hteam.approval_yn = 'Y'
            and hteam.use_yn = 'Y'
+        <if test="search == 'wait'">
+           and htuser.approval_yn = 'N'
+        </if>
+        <if test="search == 'member'">
+           and htuser.approval_yn = 'Y'
+           and hteam.represent_id != #{loginUser}
+        </if>
+        <if test="search == 'repre'">
+           and hteam.represent_id = #{loginUser}
+        </if>
     </select>
 
     <insert id="insertTeam" parameterType="HongTeamInsertDto" useGeneratedKeys="true" keyProperty="hongTeamUid">
@@ -153,5 +163,32 @@
               ,mdfr_id = #{mdfrId}
               ,mdfr_dt = now()
          where hong_team_uid = #{hongTeamUid}
+    </update>
+
+    <select id="userList" parameterType="Long" resultType="HongTeamUserListVo">
+        /* team.userList */
+        select htuser.hong_team_user_uid as hong_team_user_uid
+              ,htuser.hong_team_uid as hong_team_uid
+              ,hteam.team_nm as team_nm
+              ,htuser.user_uid as user_uid
+              ,huser.user_name as user_name
+              ,huser.user_email as user_email
+              ,hcode.code_name as user_role
+              ,to_char(htuser.join_date, 'YYYY-MM-DD') as join_date
+              ,htuser.approval_yn as approval_yn
+              ,case when htuser.approval_yn = 'Y' then '승인' else '미승인' end as approval_yn_str
+          from hong_team_user htuser
+         inner join hong_team hteam on hteam.hong_team_uid = htuser.hong_team_uid
+         inner join hong_user huser on huser.user_uid = htuser.user_uid
+          left join hong_code hcode on hcode.code_val = huser.role and hcode.upper_code_val = 'USER_ROLE'
+         where htuser.hong_team_uid = #{hongTeamUid}
+           and htuser.user_uid != hteam.represent_id
+    </select>
+
+    <update id="userApproval" parameterType="HongTeamUserApprovalDto">
+        /* team.userApproval */
+        update hong_team_user
+           set approval_yn = 'Y'
+         where hong_team_user_uid = #{hongTeamUserUid}
     </update>
 </mapper>

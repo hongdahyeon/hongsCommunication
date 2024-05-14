@@ -2,7 +2,9 @@ package hongs.community.hongsCommunity.domain.team.team;
 
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamInsertDto;
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUpdateDto;
+import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUserApprovalDto;
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUserInsertDto;
+import hongs.community.hongsCommunity.domain.team.team.vo.HongTeamUserListVo;
 import hongs.community.hongsCommunity.global.hongs.dto.response.ApiDocumentResponse;
 import hongs.community.hongsCommunity.global.hongs.dto.response.Response;
 import hongs.community.hongsCommunity.global.util.UserUtil;
@@ -10,6 +12,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,4 +48,19 @@ public class HongTeamRestController {
         return (update == 1) ? Response.ok() : Response.badRequest();
     }
 
+    @GetMapping("/user-list.json")
+    @Operation(summary = "팀 정보 수정하기", description = "팀 정보 수정하기")
+    @ApiDocumentResponse
+    public Response list(@RequestParam(required = true, name = "hongTeamUid") Long hongTeamUid) {
+        List<HongTeamUserListVo> teamUserList = teamService.userList(hongTeamUid);
+        return Response.ok(teamUserList);
+    }
+
+    @PutMapping("/user-approval.json")
+    @Operation(summary = "팀 정보 수정하기", description = "팀 정보 수정하기")
+    @ApiDocumentResponse
+    public Response userApproval(@RequestBody HongTeamUserApprovalDto dto) {
+        Integer userApproval = teamService.userApproval(dto);
+        return (userApproval == 1) ? Response.ok() : Response.badRequest();
+    }
 }

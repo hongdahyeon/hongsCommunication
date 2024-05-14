@@ -1,10 +1,8 @@
 package hongs.community.hongsCommunity.domain.team.team;
 
-import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamInsertDto;
-import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUpdateDto;
-import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUserInsertDto;
-import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamViewDto;
+import hongs.community.hongsCommunity.domain.team.team.dto.*;
 import hongs.community.hongsCommunity.domain.team.team.vo.HongTeamListVo;
+import hongs.community.hongsCommunity.domain.team.team.vo.HongTeamUserListVo;
 import hongs.community.hongsCommunity.domain.team.team.vo.HongTeamViewVo;
 import hongs.community.hongsCommunity.global.hongs.file.common.HongCommonFileService;
 import hongs.community.hongsCommunity.global.util.UserUtil;
@@ -21,9 +19,9 @@ public class HongTeamService {
     private final HongTeamMapper teamMapper;
     private final HongCommonFileService hongCommonFileService;
 
-    public List<HongTeamListVo> list() {
+    public List<HongTeamListVo> list(String search) {
         Long userUid = UserUtil.getLoginUser().getUserUid();
-        return teamMapper.list(userUid);
+        return teamMapper.list(new HongTeamListDto(userUid, search));
     }
 
     @Transactional(readOnly = false)
@@ -50,5 +48,13 @@ public class HongTeamService {
         Long fUid = hongCommonFileService.saveAndDelFiles(dto.getTeamProfile(), dto.getAddFile(), dto.getDelFile());
         dto.setTeamProfile(fUid);
         return teamMapper.update(dto);
+    }
+
+    public List<HongTeamUserListVo> userList(Long hongTeamUid) {
+        return teamMapper.userList(hongTeamUid);
+    }
+
+    public Integer userApproval(HongTeamUserApprovalDto dto) {
+        return teamMapper.userApproval(dto);
     }
 }

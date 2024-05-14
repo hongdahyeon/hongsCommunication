@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,9 +25,11 @@ public class HongTeamController {
     }
 
     @GetMapping({"", "/"})
-    public String index(Model model) {
+    public String index(@RequestParam(name = "search", required = false) String search, Model model) {
         this.setModalUrl(model);
-        model.addAttribute("teams", teamService.list());
+        if (search == null) search = "all";
+        model.addAttribute("search", search);
+        model.addAttribute("teams", teamService.list(search));
         return "team/index";
     }
 
@@ -54,5 +57,11 @@ public class HongTeamController {
         model.addAttribute("teamCategory", codeService.childListByVal("TEAM_CATEGORY"));
         model.addAttribute("teamEdit", teamEdit);
         return "team/edit";
+    }
+
+    @GetMapping("/user/list/{uid}")
+    public String userList(@PathVariable(name = "uid") Long uid, Model model) {
+        this.setModalUrl(model);
+        return "team/user/index";
     }
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <th:block th:replace="~{fragments/title :: title('신청자 조회')}"></th:block>
+
+    <div style="text-align: right;">
+        <button type="button" class="btn btn-primary" id="goback-btn">뒤로가기</button>
+    </div>
+
+    <div id="table"></div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        let table = new Table("table")
+        const uid = /*[[${uid}]]*/ null;
+
+        $(document).ready(function() {
+
+            table
+                .get(`/api/team/user-list.json?hongTeamUid=${uid}`)
+                .headerCenter()
+                .usePagination()
+                .add(new Column("index").title("#").width(5).center())
+                .add(new Column("teamNm").title("팀명").width(15).left())
+                .add(new Column("userName").title("참가신청자 <br> 이름").width(15).left())
+                .add(new Column("userEmail").title("참가신청자 <br> 이메일").width(15).left())
+                .add(new Column("userRole").title("참가신청자 <br> 권한").width(15).left())
+                .add(new Column("joinDate").title("참가신청자 <br> 날짜").width(15).left())
+                .add(new Column("approvalYnStr").title("승인여부").width(15).left().formatter(function (cell) {
+                    const rowData = cell.getData()
+                    const color = (rowData['approvalYn'] === 'N') ? 'red': 'green'
+                    if(rowData['approvalYn'] === 'N') return `<a style="color: red" href="#" data-num="${rowData['hongTeamUserUid']}" onclick="userApproval(this)">${rowData['approvalYnStr']}</a>`
+                    else return `<span style="color: green">${rowData['approvalYnStr']}</span>`
+
+                }))
+                .init()
+
+            $("#goback-btn").on('click', () => {
+                window.location.href = '/team'
+            })
+        })
+
+        function userApproval(This) {
+            const teamUserUid = This.getAttribute("data-num")
+            Util.confirm("해당 사용자를 승인하시겠습니까?").then((isOk) => {
+                if(isOk) {
+                    Http.put('/api/team/user-approval.json', {hongTeamUserUid: teamUserUid}).then((res) => {
+                        if(res['httpStatus'] === 200) Util.alert("해당 사용자가 승인되었습니다.").then(() => table.submit())
+                        else if(res['httpStatus'] === 400) Util.alert("해당 사용자의 승인 상태 변경에 실패했습니다.")
+                    })
+                }
+            })
+        }
+
+    </script>
+</th:block>
+
+</html>
