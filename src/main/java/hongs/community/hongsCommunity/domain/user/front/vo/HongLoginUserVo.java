@@ -24,6 +24,7 @@ public class HongLoginUserVo {
     private String password;
     private String userName;
     private String userEmail;
+    private String profileUrl;
     private String role;
     private Boolean isEnable;
     private String pwdLastUpdate;

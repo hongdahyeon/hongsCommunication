@@ -21,4 +21,5 @@ public class HongUserInfoVo {
     private String userEmail;
     private String role;
     private String roleName;
+    private Long profile;
 }

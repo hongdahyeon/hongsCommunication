@@ -27,4 +27,6 @@ public interface HongUserMapper {
     Integer toDisable(Long userUid);
 
     String getUserEmailByUid(Long userUid);
+
+    String getProfileUrl(Long userUid);
 }

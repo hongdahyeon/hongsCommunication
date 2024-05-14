@@ -35,7 +35,7 @@
                        <div class="card-body">
 
                            <div th:if="${team?.teamProfile != null}">
-                               <img th:src="|/api/hong/files/download?fileUrl=${team?.teamProfileUrl}|" style="width: 100px; height: 100px; border-radius: 7px;">
+                               <img th:src="|/api/hong/files/download?fileUrl=${team?.teamProfileUrl}|" onerror="this.src='/assets/src/img/profile.svg'" style="width: 100px; height: 100px; border-radius: 7px;">
                            </div>
 
                            <hr th:if="${team?.teamProfile != null}" />

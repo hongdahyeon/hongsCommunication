@@ -3,6 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
 
+<th:block th:fragment="head">
+  <style>
+    #upload-container .uppy-Root .uppy-Dashboard-inner{ height: 200px !important; }
+  </style>
+</th:block>
+
 <th:block layout:fragment="content">
   <div class="card">
     <div class="card-header">
@@ -10,64 +16,84 @@
         <h3>회원정보 변경하기</h3>
       </div>
     </div>
+
     <div class="card-body">
       <form id="form" class="needs-validation" novalidate>
         <input type="hidden" th:value="${user?.userUid}" name="userUid" id="userUid" />
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <label for="userId">아이디</label>
-              <input type="text" class="form-control" id="userId" th:value="${user?.userId}" readonly disabled>
-            </div>
-          </div>
 
-          <div class="col">
-            <div class="form-group">
-              <label for="role">권한</label>
-              <input type="text" class="form-control" id="role" th:value="${user?.roleName}" readonly disabled>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col">
-            <label for="userEmail">이메일</label>
-            <input type="hidden" id="origin-userEmail" th:value="${user?.userEmail}"/>
-            <div class="input-group mb-3">
-              <input type="email" class="form-control" id="userEmail" name="userEmail" aria-describedby="change-edit-email-btn" th:value="${user?.userEmail}" readonly disabled required>
-              <div class="input-group-append">
-                <button class="btn btn-outline-primary" type="button" id="change-edit-email-btn">이메일 변경하기</button>
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <label class="form-label">팀 프로필</label>
+            <div class="border p-3">
+              <label class="form-label" for="upload-container">첨부파일</label>
+              <div>
+                <div id="upload-container" class="mt-1"></div>
               </div>
-              <div class="invalid-feedback">이메일을 입력하세요.</div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="form-group">
-              <label for="userName">이름</label>
-              <input type="text" class="form-control" id="userName" name="userName" th:value="${user?.userName}" required>
-              <div class="invalid-feedback">이름을 입력하세요.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col">
-            <label for="password">비밀번호</label>
-            <div class="input-group mb-3">
-              <input type="password" class="form-control" id="password" name="password" aria-describedby="change-pwd-btn" readonly disabled required>
-              <div class="input-group-append">
-                <button class="btn btn-outline-primary" type="button" id="change-pwd-btn">비밀번호 변경하기</button>
+              <div>
+                <div style="color: gray; margin-top: 5px;">* 업로드 가능 확장자: jpg, png</div>
+                <div style="color: gray;">* 최대 업로드 가능 개수: 1개</div>
               </div>
-              <div class="invalid-feedback">비밀번호를 입력하세요.</div>
             </div>
           </div>
 
-          <div class="col">
-            <div class="form-group">
-              <label for="passwordChk">비밀번호 확인</label>
-              <input type="password" class="form-control" id="passwordChk" readonly disabled required>
-              <div class="invalid-feedback">비밀번호가 일치하지 않습니다.</div>
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="userId">아이디</label>
+                  <input type="text" class="form-control" id="userId" th:value="${user?.userId}" readonly disabled>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-group">
+                  <label for="role">권한</label>
+                  <input type="text" class="form-control" id="role" th:value="${user?.roleName}" readonly disabled>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label for="userEmail">이메일</label>
+                <input type="hidden" id="origin-userEmail" th:value="${user?.userEmail}"/>
+                <div class="input-group mb-3">
+                  <input type="email" class="form-control" id="userEmail" name="userEmail" aria-describedby="change-edit-email-btn" th:value="${user?.userEmail}" readonly disabled required>
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="button" id="change-edit-email-btn">이메일 변경하기</button>
+                  </div>
+                  <div class="invalid-feedback">이메일을 입력하세요.</div>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-group">
+                  <label for="userName">이름</label>
+                  <input type="text" class="form-control" id="userName" name="userName" th:value="${user?.userName}" required>
+                  <div class="invalid-feedback">이름을 입력하세요.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label for="password">비밀번호</label>
+                <div class="input-group mb-3">
+                  <input type="password" class="form-control" id="password" name="password" aria-describedby="change-pwd-btn" readonly disabled required>
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="button" id="change-pwd-btn">비밀번호 변경하기</button>
+                  </div>
+                  <div class="invalid-feedback">비밀번호를 입력하세요.</div>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-group">
+                  <label for="passwordChk">비밀번호 확인</label>
+                  <input type="password" class="form-control" id="passwordChk" readonly disabled required>
+                  <div class="invalid-feedback">비밀번호가 일치하지 않습니다.</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -86,7 +112,10 @@
 </th:block>
 
 <th:block layout:fragment="script">
-  <script>
+  <script th:inline="javascript">
+
+    const profile = /*[[${user.profile}]]*/ null;
+    const upload = new Upload("#upload-container", 1, ['png','jpg'])
 
     const emailChngBtn = $("#change-edit-email-btn")
     let emailChangeBtnClicked = false
@@ -99,6 +128,7 @@
     const passwordChk = $("#passwordChk")
 
     $(function () {
+      upload.drawEditFile(profile, upload)
 
       emailChngBtn.on('click', () => {
         if(!emailChangeBtnClicked) {
@@ -162,6 +192,10 @@
 
           FormDataToObj.getParameter("form").then(obj => {
             if(emailChangeBtnClicked) obj['userEmail'] = userEmailInput.val()
+
+            obj['profile'] = profile
+            obj['addFile'] = upload.getTempFiles()
+            obj['delFile'] = upload.getRemoveFileUrls()
             Http.put('/api/user/update.json', obj).then((res) => {
               if(res['httpStatus'] === 200) {
                 Util.alert("회원정보가 변경되었습니다.").then(() => window.location.href = '/')

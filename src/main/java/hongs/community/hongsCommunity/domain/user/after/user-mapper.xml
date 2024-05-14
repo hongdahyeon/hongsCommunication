@@ -10,6 +10,7 @@
               ,huser.user_name
               ,huser.user_email
               ,huser.role
+              ,huser.profile
               ,hcode.code_name as role_name
           from hong_user huser
           left join hong_code hcode on hcode.code_val = huser.role and hcode.upper_code_val = 'USER_ROLE'
@@ -35,7 +36,10 @@
         <if test="userEmail != null">
               ,user_email = #{userEmail}
         </if>
-         where user_uid = #{userUid}
+        <if test="profile != null">
+              ,profile = #{profile}
+        </if>
+       where user_uid = #{userUid}
     </update>
 
     <select id="list" resultType="HongUserListVo">
@@ -87,5 +91,13 @@
         select user_email
           from hong_user
          where user_uid = #{userUid}
+    </select>
+
+    <select id="getProfileUrl" parameterType="Long" resultType="String">
+        /* getProfileUrl */
+        select hfile.file_url as profile_url
+          from hong_user huser
+          left join hong_file hfile on hfile.hong_file_uid = huser.profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
+         where huser.user_uid = #{userUid}
     </select>
 </mapper>

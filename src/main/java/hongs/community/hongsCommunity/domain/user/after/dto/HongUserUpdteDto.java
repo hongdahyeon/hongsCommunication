@@ -1,5 +1,6 @@
 package hongs.community.hongsCommunity.domain.user.after.dto;
 
+import hongs.community.hongsCommunity.global.hongs.dto.request.FileRequest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,10 +13,11 @@ import lombok.Setter;
 **/
 
 @Getter @Setter
-public class HongUserUpdteDto {
+public class HongUserUpdteDto extends FileRequest {
 
     private Long userUid;
     private String userName;
     private String password;
     private String userEmail;
+    private Long profile;
 }

@@ -5,19 +5,21 @@
 
     <select id="findUser" parameterType="String" resultType="HongLoginUserVo">
         /* user-front.findUser */
-        select user_uid
-              ,user_id
-              ,password
-              ,user_name
-              ,user_email
-              ,role
-              ,is_enable
-              ,pwd_last_update
-              ,last_login_date
-              ,is_non_locked
-              ,social_user_uid
-          from hong_user
-         where user_id = #{userId}
+        select huser.user_uid
+              ,huser.user_id
+              ,huser.password
+              ,huser.user_name
+              ,huser.user_email
+              ,huser.role
+              ,huser.is_enable
+              ,huser.pwd_last_update
+              ,huser.last_login_date
+              ,huser.is_non_locked
+              ,huser.social_user_uid
+              ,hfile.file_url as profile_url
+          from hong_user huser
+          left join hong_file hfile on hfile.hong_file_uid = huser.profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
+         where huser.user_id = #{userId}
     </select>
 
     <select id="findSocialUser" parameterType="String" resultType="HongLoginUserVo">

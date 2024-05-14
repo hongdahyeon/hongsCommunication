@@ -42,25 +42,29 @@ public class HongCommonFileService {
     public ResponseEntity<Resource> download(HttpServletRequest req) {
         String fileUrl = req.getParameter("fileUrl");
 
-        HongFileViewVo view = this.view(fileUrl);
+        if(!"null".equals(fileUrl)) {
+            HongFileViewVo view = this.view(fileUrl);
 
-        String download = req.getParameter("download");
-        if("Y".equals(download)) this.updateDownCntAndLog(view.getHongFileUid(), fileUrl);
+            String download = req.getParameter("download");
+            if ("Y".equals(download)) this.updateDownCntAndLog(view.getHongFileUid(), fileUrl);
 
-        File targetFile = new File(String.format("%s%s%s%s%s%s%s", tusStoragePath, File.separator, "uploads" ,  File.separator, view.getFileId(), File.separator, "data"));
-        Resource resource = new FileSystemResource(targetFile.getPath());
+            File targetFile = new File(String.format("%s%s%s%s%s%s%s", tusStoragePath, File.separator, "uploads", File.separator, view.getFileId(), File.separator, "data"));
+            Resource resource = new FileSystemResource(targetFile.getPath());
 
-        String fileName = "";
-        try{
-            fileName = URLEncoder.encode(view.getFileName(), "UTF-8");
-        } catch(UnsupportedEncodingException e) {}
+            String fileName = "";
+            try {
+                fileName = URLEncoder.encode(view.getFileName(), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+            }
 
-        String disposition = "attachment;filename=" + fileName + ";";
+            String disposition = "attachment;filename=" + fileName + ";";
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header("Content-Disposition", disposition)
-                .body(resource);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .header("Content-Disposition", disposition)
+                    .body(resource);
+        }
+        return null;
     }
 
     public HongFileViewVo view(String fileUrl) {
