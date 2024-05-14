@@ -259,3 +259,5 @@ $("#view-content").html(code)
 3-2. list: 팀멤버리스트 deleteYn = N, approvalYn = Y
 
 (57) 24-05-14 : 팀정보 수정 로직 추가
+
+(58) 24-05-14 : 팀 신청한 사용자 조회 및 승인 로직
