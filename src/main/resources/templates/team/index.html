@@ -6,14 +6,21 @@
 <th:block layout:fragment="content">
     <th:block th:replace="~{fragments/title :: title('팀 정보')}"></th:block>
 
-   <div class="container-fluid">
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-sm btn-outline-primary" id="go-to-myTeam">내가 신청한 팀 <br> 보러가기</button>
+    </div>
+
+   <div style="margin-top: 10px;">
        <div class="row">
            <!-- Basic Card Example -->
            <th:block th:each="team , teamStat : ${teams}">
                <div class="col-md-4">
                    <div class="card shadow mb-4">
                        <div class="card-header py-3">
-                           <h6 class="m-0 font-weight-bold text-primary" th:text="${team?.teamNm}"></h6>
+                           <div class="d-flex justify-content-between align-items-center">
+                               <h6 class="m-0 font-weight-bold text-primary" th:text="${team?.teamNm}"></h6>
+                               <h6 class="m-0 font-weight-bold text-secondary" th:text="${(team?.joinedStatus != null) ? team?.joinedStatus : '신청가능'}"></h6>
+                           </div>
                        </div>
                        <div class="card-body">
 
@@ -77,9 +84,6 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        function addTeam() {
-            Util.alert("add team?")
-        }
 
         function joinTeam(teamUid) {
             Util.confirm('해당 팀에 신청하시겠습니까? <br> 팀대표의 승인을 통해 팀에 참여하실 수 있습니다.').then((isOk) => {
@@ -89,7 +93,6 @@
                     })
                 }
             })
-            console.log('joinTeam: ', teamUid)
         }
 
         function viewTeam(teamUid) {
@@ -97,7 +100,7 @@
         }
 
         function updateTeam(teamUid) {
-            console.log('updateTeam: ', teamUid)
+            window.location.href = `/team/edit/${teamUid}`
         }
 
     </script>

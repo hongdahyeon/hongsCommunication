@@ -45,4 +45,14 @@ public class HongTeamController {
         model.addAttribute("teamView", teamView);
         return "team/view";
     }
+
+    @GetMapping("/edit/{uid}")
+    public String edit(@PathVariable(name = "uid") Long uid, Model model) {
+        this.setModalUrl(model);
+        HongTeamViewVo teamEdit = teamService.view(uid);
+        teamEdit.setTeamIntro(StringUtil.unescape(teamEdit.getTeamIntro()));
+        model.addAttribute("teamCategory", codeService.childListByVal("TEAM_CATEGORY"));
+        model.addAttribute("teamEdit", teamEdit);
+        return "team/edit";
+    }
 }

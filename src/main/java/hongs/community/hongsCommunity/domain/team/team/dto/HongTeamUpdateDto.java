@@ -9,11 +9,11 @@ import lombok.Setter;
 * @author dahyeon
 * @version 1.0.0
 * @date 2024-05-14
-* @summary  팀 생성 dto
+* @summary  팀 수정 dto
 **/
 
 @Getter @Setter
-public class HongTeamInsertDto extends FileRequest {
+public class HongTeamUpdateDto extends FileRequest {
 
     private Long hongTeamUid;
     private String teamCategory;
@@ -23,9 +23,4 @@ public class HongTeamInsertDto extends FileRequest {
     private String teamIntro;
     private Long teamProfile;
     private Long representId;
-
-    public void setRepresent_Profile(Long teamProfile, Long representId) {
-        this.teamProfile = teamProfile;
-        this.representId = representId;
-    }
 }

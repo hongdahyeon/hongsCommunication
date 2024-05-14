@@ -1,6 +1,7 @@
 package hongs.community.hongsCommunity.domain.team.team;
 
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamInsertDto;
+import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUpdateDto;
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUserInsertDto;
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamViewDto;
 import hongs.community.hongsCommunity.domain.team.team.vo.HongTeamListVo;
@@ -19,4 +20,6 @@ public interface HongTeamMapper {
     Integer insertTeamUser(HongTeamUserInsertDto dto);
 
     HongTeamViewVo view(HongTeamViewDto dto);
+
+    Integer update(HongTeamUpdateDto dto);
 }

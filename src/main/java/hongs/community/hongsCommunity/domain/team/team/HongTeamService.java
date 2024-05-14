@@ -1,10 +1,12 @@
 package hongs.community.hongsCommunity.domain.team.team;
 
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamInsertDto;
+import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUpdateDto;
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUserInsertDto;
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamViewDto;
 import hongs.community.hongsCommunity.domain.team.team.vo.HongTeamListVo;
 import hongs.community.hongsCommunity.domain.team.team.vo.HongTeamViewVo;
+import hongs.community.hongsCommunity.global.hongs.file.common.HongCommonFileService;
 import hongs.community.hongsCommunity.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.List;
 public class HongTeamService {
 
     private final HongTeamMapper teamMapper;
+    private final HongCommonFileService hongCommonFileService;
 
     public List<HongTeamListVo> list() {
         Long userUid = UserUtil.getLoginUser().getUserUid();
@@ -25,8 +28,9 @@ public class HongTeamService {
 
     @Transactional(readOnly = false)
     public Integer insertTeam(HongTeamInsertDto dto) {
+        Long fUid = hongCommonFileService.saveAndDelFiles(dto.getTeamProfile(), dto.getAddFile(), dto.getDelFile());
         Long representId = UserUtil.getLoginUser().getUserUid();
-        dto.setRepresentId(representId);
+        dto.setRepresent_Profile(fUid, representId);
         Integer insertTeam = teamMapper.insertTeam(dto);
         Integer insertTeamUser = this.insertTeamUser(new HongTeamUserInsertDto(representId, dto.getHongTeamUid(), "Y"));
         return (insertTeam + insertTeamUser);
@@ -39,5 +43,12 @@ public class HongTeamService {
 
     public HongTeamViewVo view(Long hongTeamUid){
         return teamMapper.view(new HongTeamViewDto(hongTeamUid, UserUtil.getLoginUser().getUserUid()));
+    }
+
+    @Transactional(readOnly = false)
+    public Integer update(HongTeamUpdateDto dto) {
+        Long fUid = hongCommonFileService.saveAndDelFiles(dto.getTeamProfile(), dto.getAddFile(), dto.getDelFile());
+        dto.setTeamProfile(fUid);
+        return teamMapper.update(dto);
     }
 }

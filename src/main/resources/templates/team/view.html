@@ -8,7 +8,10 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary" th:text="${teamView?.teamNm}"></h6>
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary" th:text="${teamView?.teamNm}"></h6>
+                <h6 class="m-0 font-weight-bold text-secondary" th:text="${(teamView?.joinedStatus != null) ? teamView?.joinedStatus : '신청가능'}"></h6>
+            </div>
         </div>
         <div class="card-body">
 
@@ -96,11 +99,17 @@
         })
 
         function joinTeam(teamUid) {
-            console.log('joinTeam: ', teamUid)
+            Util.confirm('해당 팀에 신청하시겠습니까? <br> 팀대표의 승인을 통해 팀에 참여하실 수 있습니다.').then((isOk) => {
+                if(isOk) {
+                    Http.post('/api/team/join-team.json', {approvalYn: 'N', hongTeamUid: teamUid}).then((res) => {
+                        if(res['httpStatus'] === 201) Util.alert("팀 신청을 완료하였습니다.").then(() => window.location.href = '/team')
+                    })
+                }
+            })
         }
 
         function updateTeam(teamUid) {
-            console.log('updateTeam: ', teamUid)
+            window.location.href = `/team/edit/${teamUid}`
         }
     </script>
 </th:block>

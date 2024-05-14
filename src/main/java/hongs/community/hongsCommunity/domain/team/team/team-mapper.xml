@@ -19,11 +19,12 @@
               ,hteam.approval_yn
               ,hteam.use_yn
               ,hteam.delete_yn
-              ,( select case when count(*) >= 1 then true else false end as if_joined
-                   from hong_team_user htuser
-                  where htuser.hong_team_uid = hteam.hong_team_uid
-                    and htuser.delete_yn = 'N'
-                    and htuser.user_uid = #{loginUser} ) as if_joined
+              ,case when htuser.hong_team_user_uid is not null then true
+                    else false end as if_joined
+              ,case when hteam.represent_id = #{loginUser} then '팀대표'
+                    when htuser.approval_yn = 'Y' then '팀원'
+                    when htuser.approval_yn = 'N' then '승인대기중'
+                    else '신청가능' end as joined_status
               ,( select count(*)
                    from hong_team_user htuser
                   where htuser.hong_team_uid = hteam.hong_team_uid
@@ -34,6 +35,7 @@
           left join hong_user huser on hteam.represent_id = huser.user_uid
           left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
           left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY'
+          left join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid and htuser.delete_yn = 'N' and htuser.user_uid = #{loginUser}
          where hteam.delete_yn = 'N'
            and hteam.approval_yn = 'Y'
            and hteam.use_yn = 'Y'
@@ -115,11 +117,12 @@
               ,hteam.approval_yn
               ,hteam.use_yn
               ,hteam.delete_yn
-              ,( select case when count(*) >= 1 then true else false end as if_joined
-                   from hong_team_user htuser
-                  where htuser.hong_team_uid = hteam.hong_team_uid
-                    and htuser.delete_yn = 'N'
-                    and htuser.user_uid = #{loginUser} ) as if_joined
+              ,case when htuser.hong_team_user_uid is not null then true
+                    else false end as if_joined
+              ,case when hteam.represent_id = #{loginUser} then '팀대표'
+                    when htuser.approval_yn = 'Y' then '팀원'
+                    when htuser.approval_yn = 'N' then '승인대기중'
+                    else '신청가능' end as joined_status
               ,( select count(*)
                    from hong_team_user htuser
                   where htuser.hong_team_uid = hteam.hong_team_uid
@@ -130,6 +133,25 @@
           left join hong_user huser on hteam.represent_id = huser.user_uid
           left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
           left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY'
+          left join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid and htuser.delete_yn = 'N' and htuser.user_uid = #{loginUser}
          where hteam.hong_team_uid = #{hongTeamUid}
     </select>
+
+    <update id="update" parameterType="HongTeamUpdateDto">
+        /* team.update */
+        update hong_team
+           set team_nm = #{teamNm}
+              ,team_category = #{teamCategory}
+              ,team_short_intro = #{teamShortIntro}
+              <if test="teamIntro != null">
+              ,team_intro = #{teamIntro}
+              </if>
+              <if test="teamProfile != null">
+              ,team_profile = #{teamProfile}
+              </if>
+              ,member_num = #{memberNum}
+              ,mdfr_id = #{mdfrId}
+              ,mdfr_dt = now()
+         where hong_team_uid = #{hongTeamUid}
+    </update>
 </mapper>

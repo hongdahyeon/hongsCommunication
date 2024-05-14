@@ -29,5 +29,6 @@ public class HongTeamViewVo {
     private String useYn;
     private String deleteYn;
     private Integer totalMemberNum;
+    private String joinedStatus;
     private Boolean ifJoined;
 }

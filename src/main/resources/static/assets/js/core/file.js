@@ -32,8 +32,15 @@ class Upload {
 
                 if(this.uploading) {
 
-                    if(this.tempUploadCnt === this.maxUploadCnt) Util.alert(`최대 업로드 가능한 파일 개수는 ${this.maxUploadCnt}개 입니다. <br> 확인부탁드립니다.`)
-                    if(!this.uploadTy.includes(fileExtension)) Util.alert("업로드 불가능한 확장자가 있습니다. <br> 확인부탁드립니다.")
+                    if(this.tempUploadCnt === this.maxUploadCnt) {
+                        Util.alert(`최대 업로드 가능한 파일 개수는 ${this.maxUploadCnt}개 입니다. <br> 확인부탁드립니다.`)
+                        return false
+                    }
+
+                    if(!this.uploadTy.includes(fileExtension)) {
+                        Util.alert("업로드 불가능한 확장자가 있습니다. <br> 확인부탁드립니다.")
+                        return false
+                    }
 
                 }
 
