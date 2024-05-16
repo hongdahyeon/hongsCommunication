@@ -34,7 +34,7 @@
           from hong_team hteam
           left join hong_user huser on hteam.represent_id = huser.user_uid
           left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
-          left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY'
+          left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY' and hcode.use_yn = 'Y' and hcode.delete_yn = 'N'
           left join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid and htuser.delete_yn = 'N' and htuser.user_uid = #{loginUser}
          where hteam.delete_yn = 'N'
            and hteam.approval_yn = 'Y'
@@ -142,7 +142,7 @@
           from hong_team hteam
           left join hong_user huser on hteam.represent_id = huser.user_uid
           left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
-          left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY'
+          left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY' and hcode.use_yn = 'Y' and hcode.delete_yn = 'N'
           left join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid and htuser.delete_yn = 'N' and htuser.user_uid = #{loginUser}
          where hteam.hong_team_uid = #{hongTeamUid}
     </select>
@@ -180,7 +180,7 @@
           from hong_team_user htuser
          inner join hong_team hteam on hteam.hong_team_uid = htuser.hong_team_uid
          inner join hong_user huser on huser.user_uid = htuser.user_uid
-          left join hong_code hcode on hcode.code_val = huser.role and hcode.upper_code_val = 'USER_ROLE'
+          left join hong_code hcode on hcode.code_val = huser.role and hcode.upper_code_val = 'USER_ROLE' and hcode.use_yn = 'Y' and hcode.delete_yn = 'N'
          where htuser.hong_team_uid = #{hongTeamUid}
            and htuser.user_uid != hteam.represent_id
     </select>
