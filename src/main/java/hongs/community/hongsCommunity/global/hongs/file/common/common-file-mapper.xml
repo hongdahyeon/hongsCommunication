@@ -5,12 +5,14 @@
 <mapper namespace="hongs.community.hongsCommunity.global.hongs.file.common.HongCommonFileMapper">
 
     <select id="generateKey" resultType="Long">
-        SELECT NVL(MAX(hong_file_uid)+1, 1) as uid
-          FROM hong_file
+        /* common-file.generateKey */
+        select NVL(MAX(hong_file_uid)+1, 1) as uid
+          from hong_file
     </select>
 
     <insert id="saveFile" parameterType="HongSaveFileDto">
-        INSERT INTO hong_file (
+        /* common-file.saveFile */
+        insert into hong_file (
            hong_file_uid
           ,file_name
           ,file_url
@@ -44,6 +46,7 @@
     </insert>
 
     <update id="deleteFile" parameterType="HongDeleteFileDto">
+        /* common-file.deleteFile */
         update hong_file
         set saved = #{saved}
           ,delete_yn = #{deleteYn}
@@ -53,6 +56,7 @@
     </update>
 
     <select id="list" parameterType="Long" resultType="HongFileViewVo">
+        /* common-file.list */
         select hong_file_uid
               ,file_url
               ,file_id
@@ -70,6 +74,7 @@
     </select>
 
     <select id="view" parameterType="String" resultType="HongFileViewVo">
+        /* common-file.view */
         select hong_file_uid
              ,file_url
              ,file_id
@@ -86,6 +91,7 @@
     </select>
 
     <update id="updateDownCnt" parameterType="HongCommonFileDownloadDto">
+        /* common-file.updateDownCnt */
         update hong_file
            set down_cnt = down_cnt + 1
          where hong_file_uid = #{hongFileUid}
@@ -93,6 +99,7 @@
     </update>
 
     <insert id="insertLog" parameterType="HongCommonFileDownloadDto">
+        /* common-file.insertLog */
         insert into hong_file_log (
              hong_file_uid
             ,file_url

@@ -14,7 +14,8 @@
               ,case when hcomment.reg_id = #{loginUser} then true else false end as can_edit
           from hong_comment hcomment
           left join hong_user huser on huser.user_uid = hcomment.reg_id
-          left join hong_file hfile on hfile.hong_file_uid = huser.profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED' where hcomment.delete_yn = 'N'
+          left join hong_file hfile on hfile.hong_file_uid = huser.profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
+         where hcomment.delete_yn = 'N'
            and hcomment.target_type = #{type}
            and hcomment.target_id = #{targetId}
     </select>
