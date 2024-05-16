@@ -25,11 +25,11 @@
             <div class="container-fluid" style="margin-top: 10px">
                 <th:block layout:fragment="content"></th:block>
             </div>
+            <th:block th:replace="~{fragments/footer :: footer}"></th:block>
             <!-- e: Page content-->
         </div>
     </div>
 
-    <th:block th:replace="~{fragments/footer :: footer}"></th:block>
     <th:block th:replace="~{fragments/script :: script}"></th:block>
     <th:block layout:fragment="script"></th:block>
     <script th:inline="javascript">
