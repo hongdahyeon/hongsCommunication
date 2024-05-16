@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<script th:inline="javascript">
+
+  $(document).ready(function() {
+      drawComments()
+  })
+
+  function commentAdd(This) {
+      const parentType = /*[[${type}]]*/ "";
+      const parentUid = /*[[${uid}]]*/ null;
+
+      const container = This.closest('.contents');
+
+      const hiddenInput = container.querySelector('.hidden-uid');
+      const textarea = container.querySelector('textarea');
+
+      const uid = hiddenInput.value
+      const comment = textarea.value
+
+      if(uid == 0) {
+          Http.post('/api/comment/insert.json', {targetType: parentType, targetId: parentUid, commentCnt: comment}).then((res) => {
+              if(res['httpStatus'] === 201) drawComments()
+              else if(res['httpStatus'] === 400) Util.alert('댓글 등록에 실피했습니다.')
+          })
+      } else {
+        Http.put('/api/comment/update.json', {commentUid: uid, commentCnt: comment}).then(res => {
+            if(res['httpStatus'] === 200) drawComments()
+            else if(res['httpStatus'] === 400) Util.alert("댓글 수정에 실패했습니다.")
+        })
+      }
+  }
+
+  function commentDelete(uid) {
+      Util.confirm('해당 댓글을 삭제하시겠습니까?').then((isOk) => {
+          if(isOk) {
+              Http.delete(`/api/comment/delete.json?uid=${uid}`).then(res => {
+                  if(res['httpStatus'] === 200) drawComments()
+                  else if(res['httpStatus'] === 400) Util.alert("댓글 삭제에 실패했습니다.")
+              })
+          }
+      })
+  }
+
+  function commentEdit(uid) {
+      document.getElementById(`add-btn-${uid}`).style.display = 'block'
+      $(`#comment-${uid}`).prop('readonly', false)
+  }
+
+  async function drawComments() {
+      const parentType = /*[[${type}]]*/ "";
+      const parentUid = /*[[${uid}]]*/ null;
+      const res = await Http.get(`/api/comment/list.json?type=${parentType}&targetId=${parentUid}`)
+      if (res['httpStatus'] === 201) getHandlebars("comment-div-template", "comment-div", res)
+      else getHandlebars("comment-div-template", "comment-div", res)
+  }
+
+  function getHandlebars(templateId, insertId, data) {
+      const dom = $("#" + templateId);
+      const source = dom.html();
+      const template = Handlebars.compile(source);
+      const items = template(data)
+      $("#"+ insertId).html(items);
+  }
+
+</script>
+</html>

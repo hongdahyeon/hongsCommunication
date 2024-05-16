@@ -42,7 +42,7 @@ public class HongCommonFileService {
     public ResponseEntity<Resource> download(HttpServletRequest req) {
         String fileUrl = req.getParameter("fileUrl");
 
-        if(!"null".equals(fileUrl)) {
+        if((!"null".equals(fileUrl)) && (fileUrl != null) && (fileUrl.length() != 0)) {
             HongFileViewVo view = this.view(fileUrl);
 
             String download = req.getParameter("download");

@@ -20,14 +20,13 @@ public class HongTeamService {
     private final HongCommonFileService hongCommonFileService;
 
     public List<HongTeamListVo> list(String search) {
-        Long userUid = UserUtil.getLoginUser().getUserUid();
-        return teamMapper.list(new HongTeamListDto(userUid, search));
+        return teamMapper.list(new HongTeamListDto(UserUtil.getLoginUserUid(), search));
     }
 
     @Transactional(readOnly = false)
     public Integer insertTeam(HongTeamInsertDto dto) {
         Long fUid = hongCommonFileService.saveAndDelFiles(dto.getTeamProfile(), dto.getAddFile(), dto.getDelFile());
-        Long representId = UserUtil.getLoginUser().getUserUid();
+        Long representId = UserUtil.getLoginUserUid();
         dto.setRepresent_Profile(fUid, representId);
         Integer insertTeam = teamMapper.insertTeam(dto);
         Integer insertTeamUser = this.insertTeamUser(new HongTeamUserInsertDto(representId, dto.getHongTeamUid(), "Y"));
@@ -40,7 +39,7 @@ public class HongTeamService {
     }
 
     public HongTeamViewVo view(Long hongTeamUid){
-        return teamMapper.view(new HongTeamViewDto(hongTeamUid, UserUtil.getLoginUser().getUserUid()));
+        return teamMapper.view(new HongTeamViewDto(hongTeamUid, UserUtil.getLoginUserUid()));
     }
 
     @Transactional(readOnly = false)

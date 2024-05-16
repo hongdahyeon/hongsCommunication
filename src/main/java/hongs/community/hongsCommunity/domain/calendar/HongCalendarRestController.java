@@ -24,8 +24,7 @@ public class HongCalendarRestController {
     @Operation(summary = "캘린더 리스트", description = "로그인한 사용자의 캘린더 리스트 정보를 가져온다.")
     @ApiDocumentResponse
     public Response list() {
-        Long userUid = UserUtil.getLoginUser().getUserUid();
-        List<HongCalendarVo> list = service.list(userUid);
+        List<HongCalendarVo> list = service.list(UserUtil.getLoginUserUid());
         return Response.ok(list);
     }
 
@@ -33,8 +32,7 @@ public class HongCalendarRestController {
     @Operation(summary = "일정 저장", description = "로그인한 사용자에 대해 일정 정보를 저장한다.")
     @ApiDocumentResponse
     public Response join(@RequestBody HongCalendarDto dto){
-        Long userUid = UserUtil.getLoginUser().getUserUid();
-        dto.setUserUid(userUid);
+        dto.setUserUid(UserUtil.getLoginUserUid());
         Long joinId = service.join(dto);
         return Response.created(joinId);
     }

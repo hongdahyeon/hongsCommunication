@@ -46,6 +46,7 @@ public class HongTeamController {
         HongTeamViewVo teamView = teamService.view(uid);
         teamView.setTeamIntro(StringUtil.unescape(teamView.getTeamIntro()));
         model.addAttribute("teamView", teamView);
+        model.addAttribute("type", "TEAM_VIEW_COMM");
         return "team/view";
     }
 

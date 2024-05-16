@@ -35,7 +35,7 @@ public class HongTeamRestController {
     @Operation(summary = "팀 가입 신청하기", description = "팀에 가입 신청을 할 수 있다.")
     @ApiDocumentResponse
     public Response joinTeam(@RequestBody HongTeamUserInsertDto dto){
-        dto.setUserUid(UserUtil.getLoginUser().getUserUid());
+        dto.setUserUid(UserUtil.getLoginUserUid());
         Integer insertTeamUser = teamService.insertTeamUser(dto);
         return Response.created(insertTeamUser);
     }

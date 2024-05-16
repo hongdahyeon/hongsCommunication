@@ -89,33 +89,12 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-12 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col-auto">
-                        <img class="img-profile rounded-circle" th:src="|/api/hong/files/download?fileUrl=${#authentication.principal.user.profileUrl}|" onerror="this.src='/assets/src/img/profile.svg'" style="width: 50px; height: 50px;">
-                    </div>
-                    <div class="col mr-2" style="margin-left: 10px;">
-                        <div class="text-xl font-weight-bold text-primary mb-1">
-                            <span th:text="${#authentication.principal.user.userName}"></span>
-                            <div class="text-black-50 small">
-                                <span th:text="${#authentication.principal.user.userEmail}"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end" style="margin-top: 10px;">
-                    <textarea class="form-control" rows="3" style="margin-right: 5px;"></textarea>
-                    <button type="button" class="btn btn-sm btn-outline-primary" style="width: 5%">댓글 <br> 달기</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <th:block th:replace="fragments/comments/comment :: comment"></th:block>
 
 </th:block>
 
 <th:block layout:fragment="script">
+    <th:block th:replace="fragments/comments/comment-script :: script"></th:block>
     <script th:inline="javascript">
 
         const summernote = new Summernote("content")

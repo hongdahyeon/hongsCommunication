@@ -15,6 +15,6 @@ public class HongCommonFileDownloadDto extends CreateRequest {
     public HongCommonFileDownloadDto(Long hongFileUid, String fileUrl) {
         this.hongFileUid = hongFileUid;
         this.fileUrl = fileUrl;
-        this.regId = UserUtil.getLoginUser().getUserUid();
+        this.regId = UserUtil.getLoginUserUid();
     }
 }

@@ -12,6 +12,11 @@ public class UserUtil {
         return getUser(WebUtil.nowRequest());
     }
 
+    public static Long getLoginUserUid() {
+        HongLoginUserVo user = getUser(WebUtil.nowRequest());
+        return user.getUserUid();
+    }
+
     public static HongLoginUserVo getUser(HttpServletRequest request) {
         Object user = request.getAttribute(REQUEST_USER_KEY);
         return user != null ? (HongLoginUserVo) user : null;

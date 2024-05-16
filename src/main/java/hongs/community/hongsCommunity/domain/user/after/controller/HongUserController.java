@@ -17,8 +17,7 @@ public class HongUserController {
 
     @GetMapping({"", "/"})
     public String index(Model model){
-        Long userUid = UserUtil.getLoginUser().getUserUid();
-        model.addAttribute("user", userService.userInfo(userUid));
+        model.addAttribute("user", userService.userInfo(UserUtil.getLoginUserUid()));
         return "profile/index";
     }
 }
