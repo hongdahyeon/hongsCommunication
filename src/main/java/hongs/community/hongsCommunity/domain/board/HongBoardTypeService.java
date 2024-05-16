@@ -34,4 +34,7 @@ public class HongBoardTypeService {
         return boardTypeMapper.delete(hongBoardTypeUid);
     }
 
+    public Long latestBoardType(String hongBoardType) {
+        return boardTypeMapper.latestBoardType(hongBoardType);
+    }
 }

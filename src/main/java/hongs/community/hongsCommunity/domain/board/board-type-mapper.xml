@@ -78,4 +78,15 @@
            set delete_yn = 'Y'
          where hong_board_type_uid = #{hongBoardTypeUid}
     </delete>
+    
+    <select id="latestBoardType" parameterType="String" resultType="Long">
+        /* board-type.latestBoardType */
+        select hong_board_type_uid
+          from hong_board_type
+         where board_type_cd = #{hongBoardType}
+           and use_yn = 'Y'
+           and delete_yn = 'N'
+         order by reg_dt desc
+         limit 1
+    </select>
 </mapper>

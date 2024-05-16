@@ -19,4 +19,6 @@ public interface HongBoardTypeMapper {
     Integer update(HongBoardTypeInsertUpdateDto dto);
 
     Integer delete(Long hongBoardTypeUid);
+
+    Long latestBoardType(String hongBoardType);
 }
