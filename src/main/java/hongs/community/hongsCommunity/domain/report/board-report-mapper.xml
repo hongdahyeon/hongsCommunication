@@ -88,4 +88,11 @@
               ,mdfr_dt = now()
         where hong_board_report_uid = #{hongBoardReportUid}
     </update>
+
+    <update id="delete" parameterType="Long">
+        /* board-report.delete */
+        update hong_board_report
+           set delete_yn = 'Y'
+         where hong_board_report_uid = #{reportUid}
+    </update>
 </mapper>

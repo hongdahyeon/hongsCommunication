@@ -18,4 +18,6 @@ public interface HongBoardReportMapper {
     HongBoardReportViewVo view(Long reportUid);
 
     Integer update(HongBoardReportInsertUpdateDto dto);
+
+    Integer delete(Long reportUid);
 }

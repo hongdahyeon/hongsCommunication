@@ -36,4 +36,8 @@ public class HongBoardReportService {
         dto.setFileUid(fUid);
         return boardReportMapper.update(dto);
     }
+
+    public Integer delete(Long reportUid){
+        return boardReportMapper.delete(reportUid);
+    }
 }

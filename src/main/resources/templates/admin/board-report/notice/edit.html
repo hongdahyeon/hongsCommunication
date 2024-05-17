@@ -11,7 +11,7 @@
 
             <form id="form" class="needs-validation" novalidate>
                 <input type="hidden" th:value="${typeUid}" name="hongBoardTypeUid" />
-                <input type="hidden" th:value="${reportUid}" name="hongBoardReportUid" />
+                <input type="hidden" th:value="${reportUid}" name="hongBoardReportUid" id="hongBoardReportUid" />
                 <div class="row mb-3">
                     <div class="col-md-9">
                         <label for="reportTitle" class="form-label">제목</label>
@@ -50,6 +50,7 @@
                 <!-- 버튼 영역 -->
                 <div class="row mb-3">
                     <div class="col-md-12 text-end">
+                        <button type="button" class="btn btn-outline-primary" id="del-btn">삭제하기</button>
                         <button type="button" class="btn btn-secondary" id="goback-btn">뒤로가기</button>
                         <button type="button" class="btn btn-primary" id="save-btn">저장</button>
                     </div>
@@ -80,6 +81,14 @@
             $("#goback-btn").on('click', () => {
                 Util.confirm("수정중이던 정보는 사라집니다. <br> 뒤로 돌아가시겠습니까?").then((isOk) => {
                     if(isOk) window.location.href = `/admin/board/report/${type}?typeUid=${typeUid}`
+                })
+            })
+
+            $("#del-btn").on("click", () => {
+                const reportUid = $("#hongBoardReportUid").val()
+                Http.delete(`/api/admin/board/report/delete.json?reportUid=${reportUid}`).then((res) => {
+                    if(res['httpStatus'] === 200) Util.alert("게시글이 삭제되었습니다.").then(() => window.location.href = `/admin/board/report/${type}?typeUid=${typeUid}`)
+                    else if(res['httpStatus'] === 400) Util.alert("게시글 삭제에 실피했습니다.")
                 })
             })
 

@@ -45,4 +45,13 @@ public class HongBoardReportRestController {
         Integer update = boardReportService.update(dto);
         return (update == 1) ? Response.ok() : Response.badRequest();
     }
+
+
+    @DeleteMapping("/delete.json")
+    @Operation(summary = "게시글 단건 삭제", description = "게시글 단건 삭제")
+    @ApiDocumentResponse
+    public Response delete(@RequestParam(name = "reportUid", required = true) Long reportUid){
+        Integer delete = boardReportService.delete(reportUid);
+        return (delete == 1) ? Response.ok() : Response.badRequest();
+    }
 }
