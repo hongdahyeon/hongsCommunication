@@ -5,6 +5,10 @@
 
 <th:block layout:fragment="content">
     <th:block th:replace="~{fragments/title :: title('공지사항 관리')}"></th:block>
+    <div style="text-align: right;">
+        <button type="button" class="btn btn-primary" id="add-board">게시글 작성</button>
+    </div>
+    <div id="table"></div>
 </th:block>
 
 <th:block layout:fragment="script">
@@ -13,8 +17,37 @@
         const type = /*[[${type}]]*/ "";
         history.replaceState({}, null, `/admin/board/report/${type}`)
 
-        console.log('boardTypeUid: ', boardTypeUid)
-        console.log('type: ', type)
+        let table = new Table("table")
+
+        $(document).ready(function() {
+            table
+                .setParams({typeUid: boardTypeUid})
+                .get('/api/admin/board/report/list.json')
+                .usePagination()
+                .headerCenter()
+                .add(new Column("index").title("#").width(5).center())
+                .add(new Column("title").title("제목").width(10).left())
+                .add(new Column("noticeYn").title("공지여부").width(5).center())
+
+            makeTable()
+
+            $("#add-board").on('click', () => {
+                window.location.href = `/admin/board/report/${type}/form?uid=${boardTypeUid}`
+            })
+        })
+
+        function makeTable() {
+            Http.get(`/api/admin/board/type/view.json?hongBoardTypeUid=${boardTypeUid}`).then((res) => {
+                if(res['httpStatus'] === 200) {
+                    const data = res.message
+                    if(data['commentYn'] === 'Y') table.add(new Column("commentCnt").title("댓글개수").width(5).center())
+                    if(data['fileAtchYn'] === 'Y') table.add(new Column("fileCnt").title("첨부개수").width(5).center())
+                    table
+                        .add(new Column("regName").title("등록자").width(10).center())
+                        .add(new Column("regDt").title("등록일").width(10).center())
+                }
+            }).then(() => { table.init() })
+        }
     </script>
 </th:block>
 

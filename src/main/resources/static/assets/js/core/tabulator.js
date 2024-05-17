@@ -2,6 +2,7 @@ class Table {
 
     constructor(id, useUrl = true) {
         this._id = id
+        this._params = {}
         this._useUrl = useUrl
         this._subTable = false                              // 서브 테이블 여부
         this._layout = "fitDataFill"                        // 테이블 레이아웃
@@ -34,12 +35,17 @@ class Table {
     * table data reload
     */
     submit(){
-        Http.get(`${this._url}`).then((res) => {
+        Http.get(`${this._url}`, this._params).then((res) => {
             if (res['httpStatus'] === 200) {
                 const data = res.message.map((item, index) => ({...item, index: index + 1}))
                 this._table.replaceData(data)
             }
         })
+    }
+
+    setParams(obj = {}){
+        this._params = obj
+        return this
     }
 
     /*
@@ -193,7 +199,7 @@ class Table {
             const data = this._data.map((item, index) => ({ ...item, index: index + 1 }))
             this._initOptions(data)
         }else {
-            Http.get(`${this._url}`).then((res) => {
+            Http.get(`${this._url}`, this._params).then((res) => {
                 if (res['httpStatus'] === 200) {
                     // 1. data with index
                     const data = res.message.map((item, index) => ({...item, index: index + 1}))

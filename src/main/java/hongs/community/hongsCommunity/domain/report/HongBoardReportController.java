@@ -25,4 +25,14 @@ public class HongBoardReportController {
         return "admin/board-report/" + type + "/index";
     }
 
+    @GetMapping("/{type}/form")
+    public String form(@PathVariable(name = "type") String type, @RequestParam(name = "uid", required = false) Long uid, Model model) {
+        if(uid == null) model.addAttribute("boardTypeUid", boardTypeService.latestBoardType(type));
+        else model.addAttribute("boardTypeUid", uid);
+        model.addAttribute("type", type);
+        model.addAttribute("typeView", boardTypeService.view(uid));
+        model.addAttribute("url", "/admin/board/report/"+type);
+        return "admin/board-report/" + type + "/form";
+    }
+
 }
