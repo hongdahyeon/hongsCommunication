@@ -1,6 +1,7 @@
 package hongs.community.hongsCommunity.domain.board;
 
 import hongs.community.hongsCommunity.domain.board.dto.HongBoardTypeInsertUpdateDto;
+import hongs.community.hongsCommunity.domain.board.dto.HongBoardYnUpdateDto;
 import hongs.community.hongsCommunity.domain.board.vo.HongBoardTypeListVo;
 import hongs.community.hongsCommunity.domain.board.vo.HongBoardTypeViewVo;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,9 @@ public class HongBoardTypeService {
 
     public Long latestBoardType(String hongBoardType) {
         return boardTypeMapper.latestBoardType(hongBoardType);
+    }
+
+    public Integer ynUpdate(HongBoardYnUpdateDto dto) {
+        return boardTypeMapper.ynUpdate(dto);
     }
 }

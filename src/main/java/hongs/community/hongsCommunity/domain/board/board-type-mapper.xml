@@ -8,8 +8,10 @@
         select hbtype.hong_board_type_uid as hong_board_type_uid
               ,hbtype.board_type_cd as board_type_cd
               ,hcode.code_name as board_type_name
+              ,hcode.memo_cn as board_cd
               ,hbtype.board_name as board_name
               ,hbtype.comment_yn as comment_yn
+              ,hbtype.file_atch_yn as file_atch_yn
               ,case when hbtype.comment_yn = 'Y' then '사용' else '미사용' end as comment_yn_str
               ,case when hbtype.file_atch_yn = 'Y' then '사용' else '미사용' end as file_atch_yn_str
               ,case when hbtype.use_yn = 'Y' then '사용' else '미사용' end as use_yn_str
@@ -89,4 +91,21 @@
          order by reg_dt desc
          limit 1
     </select>
+
+    <update id="ynUpdate" parameterType="HongBoardYnUpdateDto">
+        /* board-type.ynUpdate */
+        update hong_board_type
+           set mdfr_id = #{mdfrId}
+              ,mdfr_dt = now()
+            <if test="type == 'commentYn'">
+              ,comment_yn = #{ynValue}
+            </if>
+            <if test="type == 'fileAtchYn'">
+              ,file_atch_yn = #{ynValue}
+            </if>
+            <if test="type == 'useYn'">
+              ,use_yn = #{ynValue}
+            </if>
+         where hong_board_type_uid = #{uid}
+    </update>
 </mapper>

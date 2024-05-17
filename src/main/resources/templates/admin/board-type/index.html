@@ -208,13 +208,31 @@
                 .add(new Column("index").title("#").width(5).center())
                 .add(new Column("boardTypeName").title("게시판 유형").width(10).left())
                 .add(new Column("boardName").title("게시판 이름").width(10).left())
-                .add(new Column("commentYnStr").title("댓글 <br> 사용여부").width(10).center())
-                .add(new Column("fileAtchYnStr").title("첨부파일 <br> 사용여부").width(10).center())
-                .add(new Column("useYnStr").title("게시판 <br> 사용여부").width(10).center())
+                .add(new Column("commentYnStr").title("댓글 <br> 사용여부").width(10).center().formatter(function (cell) {
+                    const cellData = cell.getData()
+                    return (cellData['commentYn'] === 'Y') ?
+                        `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBoardTypeUid']}" data-yn="commentYn" data-now="${cellData['commentYn']}" style="color: green">${cellData['commentYnStr']}</a>`
+                        : `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBoardTypeUid']}" data-yn="commentYn" data-now="${cellData['commentYn']}" style="color: red">${cellData['commentYnStr']}</a>`
+                }))
+                .add(new Column("fileAtchYnStr").title("첨부파일 <br> 사용여부").width(10).center().formatter(function (cell) {
+                    const cellData = cell.getData()
+                    return (cellData['fileAtchYn'] === 'Y') ?
+                        `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBoardTypeUid']}" data-yn="fileAtchYn" data-now="${cellData['fileAtchYn']}" style="color: green">${cellData['fileAtchYnStr']}</a>`
+                        : `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBoardTypeUid']}" data-yn="fileAtchYn" data-now="${cellData['fileAtchYn']}" style="color: red">${cellData['fileAtchYnStr']}</a>`
+                }))
+                .add(new Column("useYnStr").title("게시판 <br> 사용여부").width(10).center().formatter(function (cell) {
+                    const cellData = cell.getData()
+                    return (cellData['useYn'] === 'Y') ?
+                        `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBoardTypeUid']}" data-yn="useYn" data-now="${cellData['useYn']}" style="color: green">${cellData['useYnStr']}</a>`
+                        : `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBoardTypeUid']}" data-yn="useYn" data-now="${cellData['useYn']}" style="color: red">${cellData['useYnStr']}</a>`
+                }))
                 .add(new Column("regName").title("등록자").width(10).center())
                 .add(new Column("regDt").title("등록일").width(10).center())
                 .add(new Column("hongCodeUid").title("수정하기").width(10).center().formatter(function (cell) {
                     return `<button type="button" class="btn btn-sm btn-outline-primary" data-num="${cell.getData()['hongBoardTypeUid']}" onclick="changeBoardType(this)">게시판 수정</button>`
+                }))
+                .add(new Column("hongCodeUid").title("게시글 보러가기").width(10).center().formatter(function (cell) {
+                    return `<button type="button" class="btn btn-sm btn-outline-primary" data-type="${cell.getData()['boardCd']}" data-num="${cell.getData()['hongBoardTypeUid']}" onclick="gotoReport(this)">게시글 보러가기</button>`
                 }))
                 .init()
 
@@ -295,6 +313,31 @@
                 document.getElementById("editModal-form").classList.remove('was-validated');
             });
         })
+
+        function changeYn(This) {
+            const hongBoardTypeUid = This.getAttribute("data-num")
+            const yn = This.getAttribute("data-yn")
+            const now = This.getAttribute("data-now")
+            const change = (now === 'Y') ? 'N' : 'Y'
+            const message = (yn === 'commentYn') ? '댓글 사용여부' : (yn === 'fileAtchYn') ? '첨부파일 사용여부' : '사용여부'
+            Util.confirm(`해당 게시판 유형의 ${message}를 변경하시겠습니까?`).then((isOk) => {
+                if(isOk) {
+                    Http.put('/api/admin/board/type/ynUpdate.json', {uid: hongBoardTypeUid, type: yn, ynValue: change}).then((res) => {
+                        if(res['httpStatus'] === 200) {
+                            Util.alert(`해당 게시판 유형의 ${message}가 변경되었습니다.`).then(() => {
+                                table.submit()
+                            })
+                        }  else if(res['httpStatus'] === 400) Util.alert(`해당 게시판 유형의 ${message}의 변경에 실패했습니다.`)
+                    })
+                }
+            })
+        }
+
+        function gotoReport(This) {
+            const hongBoardTypeUid = This.getAttribute("data-num")
+            const boardCd = This.getAttribute("data-type")
+            window.location.href = `/admin/board/report/${boardCd}?uid=${hongBoardTypeUid}`
+        }
 
         function changeBoardType(This) {
             const hongBoardTypeUid = This.getAttribute("data-num")

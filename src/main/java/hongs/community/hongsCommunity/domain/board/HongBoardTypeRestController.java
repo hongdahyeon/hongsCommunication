@@ -2,6 +2,7 @@ package hongs.community.hongsCommunity.domain.board;
 
 
 import hongs.community.hongsCommunity.domain.board.dto.HongBoardTypeInsertUpdateDto;
+import hongs.community.hongsCommunity.domain.board.dto.HongBoardYnUpdateDto;
 import hongs.community.hongsCommunity.domain.board.vo.HongBoardTypeListVo;
 import hongs.community.hongsCommunity.domain.board.vo.HongBoardTypeViewVo;
 import hongs.community.hongsCommunity.global.hongs.dto.response.ApiDocumentResponse;
@@ -59,5 +60,13 @@ public class HongBoardTypeRestController {
     public Response delete(@RequestParam(required = true, name = "hongBoardTypeUid") Long hongBoardTypeUid){
         Integer delete = boardTypeService.delete(hongBoardTypeUid);
         return (delete == 1) ? Response.ok() : Response.badRequest();
+    }
+
+    @PutMapping("/ynUpdate.json")
+    @Operation(summary = "게시판 유형 - yn 값들 수정", description = "게시판 유형 - yn 값들 수정 : commentYn, fileAtchYn, useYn")
+    @ApiDocumentResponse
+    public Response ynUpdate(@RequestBody HongBoardYnUpdateDto dto) {
+        Integer ynUpdate = boardTypeService.ynUpdate(dto);
+        return (ynUpdate == 1) ? Response.ok() : Response.badRequest();
     }
 }

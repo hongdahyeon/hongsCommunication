@@ -17,6 +17,7 @@ public class HongBoardTypeListVo {
     private Long hongBoardTypeUid;
     private String boardTypeCd;
     private String boardTypeName;
+    private String boardCd;
     private String boardName;
     private String commentYn;
     private String commentYnStr;

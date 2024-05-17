@@ -10,7 +10,11 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         const boardTypeUid = /*[[${boardTypeUid}]]*/ null;
+        const type = /*[[${type}]]*/ "";
+        history.replaceState({}, null, `/admin/board/report/${type}`)
+
         console.log('boardTypeUid: ', boardTypeUid)
+        console.log('type: ', type)
     </script>
 </th:block>
 
