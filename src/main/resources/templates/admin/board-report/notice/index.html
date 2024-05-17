@@ -13,7 +13,7 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        const boardTypeUid = /*[[${boardTypeUid}]]*/ null;
+        const typeUid = /*[[${typeUid}]]*/ null;
         const type = /*[[${type}]]*/ "";
         history.replaceState({}, null, `/admin/board/report/${type}`)
 
@@ -21,7 +21,7 @@
 
         $(document).ready(function() {
             table
-                .setParams({typeUid: boardTypeUid})
+                .setParams({typeUid: typeUid})
                 .get('/api/admin/board/report/list.json')
                 .usePagination()
                 .headerCenter()
@@ -32,12 +32,12 @@
             makeTable()
 
             $("#add-board").on('click', () => {
-                window.location.href = `/admin/board/report/${type}/form?uid=${boardTypeUid}`
+                window.location.href = `/admin/board/report/${type}/form?typeUid=${typeUid}`
             })
         })
 
         function makeTable() {
-            Http.get(`/api/admin/board/type/view.json?hongBoardTypeUid=${boardTypeUid}`).then((res) => {
+            Http.get(`/api/admin/board/type/view.json?hongBoardTypeUid=${typeUid}`).then((res) => {
                 if(res['httpStatus'] === 200) {
                     const data = res.message
                     if(data['commentYn'] === 'Y') table.add(new Column("commentCnt").title("댓글개수").width(5).center())
@@ -46,8 +46,31 @@
                         .add(new Column("regName").title("등록자").width(10).center())
                         .add(new Column("regDt").title("등록일").width(10).center())
                 }
-            }).then(() => { table.init() })
+            }).then(() => {
+                table
+                    .add(new Column("reportUid").title("수정하기").width(10).center().formatter(function (cell) {
+                        const cellData = cell.getData()
+                        return `<button type="button" class="btn btn-sm btn-outline-primary" data-num="${cellData['reportUid']}" onclick="editReport(this)">게시글 수정하기</button>`
+                    }))
+                    .add(new Column("reportUid").title("유저화면 <br> 보러가기").width(10).center().formatter(function (cell) {
+                        const cellData = cell.getData()
+                        return `<button type="button" class="btn btn-sm btn-outline-primary" data-num="${cellData['reportUid']}" onclick="userReport(this)">유저화면 보러가기</button>`
+                    }))
+                    .init()
+            })
         }
+
+        function editReport(This) {
+            const reportUid = This.getAttribute("data-num")
+            console.log('editReport > reportUid: ', reportUid)
+            window.location.href = `/admin/board/report/${type}/edit/${reportUid}?typeUid=${typeUid}`
+        }
+
+        function userReport(This) {
+            const reportUid = This.getAttribute("data-num")
+            console.log('userReport > reportUid: ', reportUid)
+        }
+
     </script>
 </th:block>
 

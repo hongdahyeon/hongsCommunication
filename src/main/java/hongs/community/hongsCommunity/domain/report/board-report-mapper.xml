@@ -29,4 +29,63 @@
            and hbreport.delete_yn = 'N'
     </select>
 
+    <insert id="insert" parameterType="HongBoardReportInsertUpdateDto">
+        /* board-report.insert */
+        insert into hong_board_report (
+            hong_board_type_uid
+           ,report_title
+           ,report_content
+        <if test="fileUid != null">
+           ,file_uid
+        </if>
+        <if test="noticeYn != null">
+           ,notice_yn
+        </if>
+           ,reg_id
+           ,reg_dt
+           ,mdfr_id
+           ,mdfr_dt
+        ) values (
+            #{hongBoardTypeUid}
+           ,#{reportTitle}
+           ,#{reportContent}
+        <if test="fileUid != null">
+           ,#{fileUid}
+        </if>
+        <if test="noticeYn != null">
+           ,#{noticeYn}
+        </if>
+           ,#{regId}
+           ,now()
+           ,#{mdfrId}
+           ,now()
+        )
+    </insert>
+
+    <select id="view" parameterType="Long" resultType="HongBoardReportViewVo">
+        /* board-report.view */
+        select hong_board_report_uid as report_uid
+              ,report_title as title
+              ,report_content as content
+              ,file_uid
+              ,notice_yn
+          from hong_board_report
+         where hong_board_report_uid = #{reportUid}
+    </select>
+
+    <update id="update" parameterType="HongBoardReportInsertUpdateDto">
+        /* board-report.update */
+        update hong_board_report
+           set report_title = #{reportTitle}
+              ,report_content = #{reportContent}
+            <if test="fileUid != null">
+              ,file_uid = #{fileUid}
+            </if>
+            <if test="noticeYn != null">
+              ,notice_yn = #{noticeYn}
+            </if>
+              ,mdfr_id = #{mdfrId}
+              ,mdfr_dt = now()
+        where hong_board_report_uid = #{hongBoardReportUid}
+    </update>
 </mapper>

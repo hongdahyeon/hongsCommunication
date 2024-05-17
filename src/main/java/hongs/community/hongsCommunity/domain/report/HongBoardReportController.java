@@ -1,6 +1,8 @@
 package hongs.community.hongsCommunity.domain.report;
 
 import hongs.community.hongsCommunity.domain.board.HongBoardTypeService;
+import hongs.community.hongsCommunity.domain.report.vo.HongBoardReportViewVo;
+import hongs.community.hongsCommunity.global.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,24 +17,42 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HongBoardReportController {
 
     private final HongBoardTypeService boardTypeService;
+    private final HongBoardReportService boardReportService;
 
     @GetMapping("/{type}")
-    public String index(@PathVariable(name = "type") String type, @RequestParam(name = "uid", required = false) Long uid, Model model) {
-        if(uid == null) model.addAttribute("boardTypeUid", boardTypeService.latestBoardType(type));
-        else model.addAttribute("boardTypeUid", uid);
+    public String index(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid, Model model) {
+        if(typeUid == null) model.addAttribute("typeUid", boardTypeService.latestBoardType(type));
+        else model.addAttribute("typeUid", typeUid);
         model.addAttribute("type", type);
         model.addAttribute("url", "/admin/board/report/"+type);
         return "admin/board-report/" + type + "/index";
     }
 
     @GetMapping("/{type}/form")
-    public String form(@PathVariable(name = "type") String type, @RequestParam(name = "uid", required = false) Long uid, Model model) {
-        if(uid == null) model.addAttribute("boardTypeUid", boardTypeService.latestBoardType(type));
-        else model.addAttribute("boardTypeUid", uid);
+    public String form(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid, Model model) {
+        if(typeUid == null) model.addAttribute("typeUid", boardTypeService.latestBoardType(type));
+        else model.addAttribute("typeUid", typeUid);
         model.addAttribute("type", type);
-        model.addAttribute("typeView", boardTypeService.view(uid));
+        model.addAttribute("typeView", boardTypeService.view(typeUid));
         model.addAttribute("url", "/admin/board/report/"+type);
         return "admin/board-report/" + type + "/form";
+    }
+
+    @GetMapping("/{type}/edit/{reportUid}")
+    public String edit(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid
+            , @PathVariable(name = "reportUid") Long reportUid, Model model) {
+
+        if(typeUid == null) model.addAttribute("typeUid", boardTypeService.latestBoardType(type));
+        else model.addAttribute("typeUid", typeUid);
+        model.addAttribute("type", type);
+        model.addAttribute("typeView", boardTypeService.view(typeUid));
+
+        HongBoardReportViewVo reportView = boardReportService.view(reportUid);
+        reportView.setContent(StringUtil.unescape(reportView.getContent()));
+
+        model.addAttribute("reportView", reportView);
+        model.addAttribute("url", "/admin/board/report/"+type);
+        return "admin/board-report/" + type + "/edit";
     }
 
 }
