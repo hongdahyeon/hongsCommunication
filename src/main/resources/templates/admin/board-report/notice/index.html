@@ -21,7 +21,7 @@
 
         $(document).ready(function() {
             table
-                .setParams({typeUid: typeUid})
+                .setParams({typeUid: typeUid, ordering: type})
                 .get('/api/admin/board/report/list.json')
                 .usePagination()
                 .headerCenter()

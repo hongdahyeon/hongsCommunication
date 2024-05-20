@@ -1,4 +1,4 @@
-package hongs.community.hongsCommunity.domain.board;
+package hongs.community.hongsCommunity.domain.board.controller;
 
 import hongs.community.hongsCommunity.domain.code.HongCodeService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("admin/board/type")
 @Controller
-public class HongBoardTypeController {
+public class HongAdminBoardTypeController {
 
     private final HongCodeService codeService;
 

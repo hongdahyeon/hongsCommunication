@@ -1,6 +1,7 @@
-package hongs.community.hongsCommunity.domain.board;
+package hongs.community.hongsCommunity.domain.board.restController;
 
 
+import hongs.community.hongsCommunity.domain.board.HongBoardTypeService;
 import hongs.community.hongsCommunity.domain.board.dto.HongBoardTypeInsertUpdateDto;
 import hongs.community.hongsCommunity.domain.board.dto.HongBoardYnUpdateDto;
 import hongs.community.hongsCommunity.domain.board.vo.HongBoardTypeListVo;
@@ -17,8 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping("api/admin/board/type")
 @RequiredArgsConstructor
-@Tag(name = "게시판 유형 관리", description = "ADMIN 권한에서 접근이 가능하며, 게시판 유형을 관리한다.")
-public class HongBoardTypeRestController {
+@Tag(name = "ADMIN 권한 > 게시판 유형 관리", description = "ADMIN 권한에서 접근이 가능하며, 게시판 유형을 관리한다.")
+public class HongAdminBoardTypeRestController {
 
     private final HongBoardTypeService boardTypeService;
 

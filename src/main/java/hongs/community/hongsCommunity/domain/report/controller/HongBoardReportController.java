@@ -1,7 +1,8 @@
-package hongs.community.hongsCommunity.domain.report.user;
+package hongs.community.hongsCommunity.domain.report.controller;
 
 import hongs.community.hongsCommunity.domain.board.HongBoardTypeService;
-import hongs.community.hongsCommunity.domain.report.user.vo.HongBoardReportViewVo;
+import hongs.community.hongsCommunity.domain.report.HongBoardReportService;
+import hongs.community.hongsCommunity.domain.report.vo.HongBoardReportViewVo;
 import hongs.community.hongsCommunity.global.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+/**
+* @fileName HongBoardReportController
+* @author dahyeon
+* @version 1.0.0
+* @date 2024-05-20
+* @summary  type : notice, faq, qnq
+ *          typeUid : report-type uid
+ *          reportUid : report uid
+**/
 
 @RequiredArgsConstructor
 @RequestMapping("board/report")

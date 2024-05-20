@@ -5,6 +5,7 @@
 
 <th:block layout:fragment="content">
     <th:block th:replace="~{fragments/title :: title('공지사항')}"></th:block>
+    <div id="table"></div>
 </th:block>
 
 <th:block layout:fragment="script">
@@ -12,6 +13,41 @@
         const typeUid = /*[[${typeUid}]]*/ null;
         const type = /*[[${type}]]*/ "";
         history.replaceState({}, null, `/board/report/${type}`)
+
+        let table = new Table("table")
+
+        $(document).ready(function() {
+
+            table
+                .setParams({typeUid: typeUid, ordering: type})
+                .get('/api/board/report/list.json')
+                .usePagination()
+                .headerCenter()
+                .add(new Column("index").title("#").width(5).center())
+                .add(new Column("title").title("제목").width(10).left())
+                .add(new Column("noticeYn").title("공지여부").width(5).center().formatter(function (cell) {
+                    const rowData = cell.getData()
+                    return (rowData['noticeYn'] === 'Y') ? '<span style="color: green">공지</span>' : '<span style="color: red">미공지</span>'
+                }))
+
+            makeTable()
+        })
+
+        function makeTable() {
+            Http.get(`/api/board/type/view.json?hongBoardTypeUid=${typeUid}`).then((res) => {
+                if(res['httpStatus'] === 200) {
+                    const data = res.message
+                    if(data['commentYn'] === 'Y') table.add(new Column("commentCnt").title("댓글개수").width(5).center())
+                    if(data['fileAtchYn'] === 'Y') table.add(new Column("fileCnt").title("첨부개수").width(5).center())
+                    table
+                        .add(new Column("regName").title("등록자").width(10).center())
+                        .add(new Column("regDt").title("등록일").width(10).center())
+                }
+            }).then(() => {
+                table.init()
+            })
+        }
+
     </script>
 </th:block>
 

@@ -1,11 +1,11 @@
-package hongs.community.hongsCommunity.domain.report.admin.dto;
+package hongs.community.hongsCommunity.domain.report.dto;
 
 import hongs.community.hongsCommunity.global.hongs.dto.request.FileRequest;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
-* @fileName HongAdminBoardReportInsertUpdateDto
+* @fileName HongBoardReportInsertUpdateDto
 * @author dahyeon
 * @version 1.0.0
 * @date 2024-05-17
@@ -13,7 +13,7 @@ import lombok.Setter;
 **/
 
 @Getter @Setter
-public class HongAdminBoardReportInsertUpdateDto extends FileRequest {
+public class HongBoardReportInsertUpdateDto extends FileRequest {
 
     private Long hongBoardReportUid;
     private Long hongBoardTypeUid;
