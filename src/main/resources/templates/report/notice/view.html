@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <th:block th:replace="~{fragments/title :: title('공지사항')}"></th:block>
+    <div style="text-align: right;">
+        <button type="button" class="btn btn-secondary" id="go-back">뒤로가기</button>
+    </div>
+
+    <div class="card" style="margin-top: 10px">
+        <div class="card-body" id="form-body">
+            <div class="row mb-3">
+                <div class="col-md-9">
+                    <span style="font-size: 13px; color: gray;">제목</span>
+                    <div>
+                        <span id="reportTitle" th:text="${reportView?.title}"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <span style="font-size: 13px; color: gray;">공지여부</span>
+                    <div>
+                        <span id="noticeYn" th:text="${reportView?.noticeYn == 'Y' ? '공지' : '미공지'}"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <span style="font-size: 13px; color: gray;">내용</span>
+                <div class="col-md-12" style="margin-top: 10px; overflow-y: auto; height: 500px">
+                    <div id="content"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="border p-3">
+                        <label class="form-label" for="upload-view-container">첨부파일 view</label>
+                        <div>
+                            <div id="upload-view-container" class="mt-1">
+                                사진 뷰
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        const typeUid = /*[[${typeUid}]]*/ null;
+        const type = /*[[${type}]]*/ "";
+        history.replaceState({}, null, `/board/report/${type}`)
+
+        const fileUid = /*[[${reportView.fileUid}]]*/ null;
+        const summernote = new Summernote("content", 500)
+        const uploadView = new UploadView("upload-view-container")
+
+        $(document).ready(function(e) {
+            summernote.setCode(/*[[${reportView.content}]]*/"")
+            summernote.destroy()
+            drawViewFile(fileUid)
+
+            $("#go-back").on('click', (e) => {
+                window.location.href = `/board/report/${type}?typeUid=${typeUid}`
+            })
+        })
+
+        function drawViewFile(fUid){
+            if(fUid !== null) {
+                Http.get(`/api/hong/files/list.json?fileUid=${fUid}`).then((res) => {
+                    const list = res.message
+                    uploadView.setData(list).draw()
+                })
+            } else uploadView.setData([]).draw()
+        }
+
+    </script>
+</th:block>
+
+</html>

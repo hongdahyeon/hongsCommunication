@@ -1,7 +1,7 @@
-package hongs.community.hongsCommunity.domain.report;
+package hongs.community.hongsCommunity.domain.report.admin;
 
 import hongs.community.hongsCommunity.domain.board.HongBoardTypeService;
-import hongs.community.hongsCommunity.domain.report.vo.HongBoardReportViewVo;
+import hongs.community.hongsCommunity.domain.report.admin.vo.HongAdminBoardReportViewVo;
 import hongs.community.hongsCommunity.global.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 @RequestMapping("admin/board/report")
 @Controller
-public class HongBoardReportController {
+public class HongAdminBoardReportController {
 
     private final HongBoardTypeService boardTypeService;
-    private final HongBoardReportService boardReportService;
+    private final HongAdminBoardReportService boardReportService;
 
     @GetMapping("/{type}")
     public String index(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid, Model model) {
@@ -47,7 +47,7 @@ public class HongBoardReportController {
         model.addAttribute("type", type);
         model.addAttribute("typeView", boardTypeService.view(typeUid));
 
-        HongBoardReportViewVo reportView = boardReportService.view(reportUid);
+        HongAdminBoardReportViewVo reportView = boardReportService.view(reportUid);
         reportView.setContent(StringUtil.unescape(reportView.getContent()));
 
         model.addAttribute("reportView", reportView);

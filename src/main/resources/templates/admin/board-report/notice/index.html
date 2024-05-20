@@ -27,7 +27,10 @@
                 .headerCenter()
                 .add(new Column("index").title("#").width(5).center())
                 .add(new Column("title").title("제목").width(10).left())
-                .add(new Column("noticeYn").title("공지여부").width(5).center())
+                .add(new Column("noticeYn").title("공지여부").width(5).center().formatter(function (cell) {
+                    const rowData = cell.getData()
+                    return (rowData['noticeYn'] === 'Y') ? '<span style="color: green">공지</span>' : '<span style="color: red">미공지</span>'
+                }))
 
             makeTable()
 
@@ -62,13 +65,12 @@
 
         function editReport(This) {
             const reportUid = This.getAttribute("data-num")
-            console.log('editReport > reportUid: ', reportUid)
             window.location.href = `/admin/board/report/${type}/edit/${reportUid}?typeUid=${typeUid}`
         }
 
         function userReport(This) {
             const reportUid = This.getAttribute("data-num")
-            console.log('userReport > reportUid: ', reportUid)
+            window.location.href = `/board/report/${type}/view/${reportUid}?typeUid=${typeUid}`
         }
 
     </script>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="hongs.community.hongsCommunity.domain.report.HongBoardReportMapper">
+<mapper namespace="hongs.community.hongsCommunity.domain.report.admin.HongAdminBoardReportMapper">
 
-    <select id="list" parameterType="HongBoardReportListDto" resultType="HongBoardReportListVo">
-        /* board-report.list */
+    <select id="list" parameterType="HongAdminBoardReportListDto" resultType="HongAdminBoardReportListVo">
+        /* admin-board-report.list */
         select hbreport.hong_board_report_uid as report_uid
               ,hbreport.hong_board_type_uid as type_uid
               ,hbreport.report_title as title
@@ -29,8 +29,8 @@
            and hbreport.delete_yn = 'N'
     </select>
 
-    <insert id="insert" parameterType="HongBoardReportInsertUpdateDto">
-        /* board-report.insert */
+    <insert id="insert" parameterType="HongAdminBoardReportInsertUpdateDto">
+        /* admin-board-report.insert */
         insert into hong_board_report (
             hong_board_type_uid
            ,report_title
@@ -62,8 +62,8 @@
         )
     </insert>
 
-    <select id="view" parameterType="Long" resultType="HongBoardReportViewVo">
-        /* board-report.view */
+    <select id="view" parameterType="Long" resultType="HongAdminBoardReportViewVo">
+        /* admin-board-report.view */
         select hong_board_report_uid as report_uid
               ,report_title as title
               ,report_content as content
@@ -73,8 +73,8 @@
          where hong_board_report_uid = #{reportUid}
     </select>
 
-    <update id="update" parameterType="HongBoardReportInsertUpdateDto">
-        /* board-report.update */
+    <update id="update" parameterType="HongAdminBoardReportInsertUpdateDto">
+        /* admin-board-report.update */
         update hong_board_report
            set report_title = #{reportTitle}
               ,report_content = #{reportContent}
@@ -90,7 +90,7 @@
     </update>
 
     <update id="delete" parameterType="Long">
-        /* board-report.delete */
+        /* admin-board-report.delete */
         update hong_board_report
            set delete_yn = 'Y'
          where hong_board_report_uid = #{reportUid}

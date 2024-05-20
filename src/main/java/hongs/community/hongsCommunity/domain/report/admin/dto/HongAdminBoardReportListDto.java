@@ -1,10 +1,10 @@
-package hongs.community.hongsCommunity.domain.report.dto;
+package hongs.community.hongsCommunity.domain.report.admin.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
-* @fileName HongBoardReportListDto
+* @fileName HongAdminBoardReportListDto
 * @author dahyeon
 * @version 1.0.0
 * @date 2024-05-17
@@ -12,7 +12,7 @@ import lombok.Setter;
 **/
 
 @Getter @Setter
-public class HongBoardReportListDto {
+public class HongAdminBoardReportListDto {
 
     private Long typeUid;
 }
