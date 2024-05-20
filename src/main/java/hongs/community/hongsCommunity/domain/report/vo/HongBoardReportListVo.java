@@ -21,6 +21,8 @@ public class HongBoardReportListVo {
     private Long fileUid;
     private Integer fileCnt;
     private Integer commentCnt;
+    private Integer likeCnt;
+    private Integer disLikeCnt;
     private String noticeYn;
     private String regName;
     private String regDt;

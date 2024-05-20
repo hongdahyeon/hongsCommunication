@@ -22,6 +22,14 @@
                     from hong_comment hcomment
                    where hcomment.target_id = hbreport.hong_board_report_uid
                      and hcomment.target_type = 'BOARD_REPORT_COMM' ) as comment_cnt
+               ,( select count(*)
+                    from hong_board_report_emo hbremo
+                   where hbremo.board_report_uid = hbreport.hong_board_report_uid
+                     and hbremo.emotion_code = 'LIKE_EMO' ) as like_cnt
+               ,( select count(*)
+                    from hong_board_report_emo hbremo
+                   where hbremo.board_report_uid = hbreport.hong_board_report_uid
+                     and hbremo.emotion_code = 'DISLIKE_EMO' ) as dis_like_cnt
           from hong_board_report hbreport
          inner join hong_board_type hbtype on hbtype.hong_board_type_uid = hbreport.hong_board_type_uid
           left join hong_user huser on huser.user_uid = hbreport.reg_id

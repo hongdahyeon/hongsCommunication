@@ -31,6 +31,8 @@
                     const rowData = cell.getData()
                     return (rowData['noticeYn'] === 'Y') ? '<span style="color: green">공지</span>' : '<span style="color: red">미공지</span>'
                 }))
+                .add(new Column("likeCnt").title("좋아요 <br> 개수").width(5).center())
+                .add(new Column("disLikeCnt").title("싫어요 <br> 개수").width(5).center())
 
             makeTable()
 

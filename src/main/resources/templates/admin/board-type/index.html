@@ -231,10 +231,10 @@
                 .add(new Column("hongCodeUid").title("수정하기").width(10).center().formatter(function (cell) {
                     return `<button type="button" class="btn btn-sm btn-outline-primary" data-num="${cell.getData()['hongBoardTypeUid']}" onclick="changeBoardType(this)">게시판 수정</button>`
                 }))
-                .add(new Column("hongCodeUid").title("게시글 보러가기").width(10).center().formatter(function (cell) {
+                .add(new Column("hongCodeUid").title("게시글 관리하기").width(10).center().formatter(function (cell) {
                     const cellData = cell.getData()
                     const disabled = (cellData['useYn'] === 'N') ? "disabled" : ''
-                    return `<button type="button" class="btn btn-sm btn-outline-primary" data-type="${cellData['boardCd']}" data-num="${cellData['hongBoardTypeUid']}" ${disabled} onclick="gotoReport(this)">게시글 보러가기</button>`
+                    return `<button type="button" class="btn btn-sm btn-outline-primary" data-type="${cellData['boardCd']}" data-num="${cellData['hongBoardTypeUid']}" ${disabled} onclick="gotoReport(this)">게시글 관리하기</button>`
                 }))
                 .init()
 

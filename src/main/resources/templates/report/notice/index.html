@@ -31,6 +31,11 @@
                 }))
 
             makeTable()
+
+            table
+                .rowClick((data, row) => {
+                    window.location.href = `/board/report/${type}/view/${data['reportUid']}?typeUid=${typeUid}`
+                })
         })
 
         function makeTable() {

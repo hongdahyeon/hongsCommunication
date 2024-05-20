@@ -5,8 +5,17 @@
 
 <th:block layout:fragment="content">
     <th:block th:replace="~{fragments/title :: title('공지사항')}"></th:block>
-    <div style="text-align: right;">
-        <button type="button" class="btn btn-secondary" id="go-back">뒤로가기</button>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="text-align: left;">
+            <button type="button" class="btn btn-secondary" id="go-back">뒤로가기</button>
+        </div>
+        <div style="text-align: right; display: flex; align-items: center;">
+            <input type="checkbox" class="btn-check" id="btn-check-likes" autocomplete="off" style="margin-left: 10px;" th:checked="${likes}">
+            <label class="btn btn-outline-primary" for="btn-check-likes" id="btn-check-likes-label" style="margin-left: 5px;" th:text="|좋아요 ${likesCnt}|"></label>
+
+            <input type="checkbox" class="btn-check" id="btn-check-dislikes" autocomplete="off" style="margin-left: 10px;" th:checked="${dislikes}">
+            <label class="btn btn-outline-warning" for="btn-check-dislikes" id="btn-check-dislikes-label" style="margin-left: 5px;" th:text="|싫어요 ${dislikesCnt}|"></label>
+        </div>
     </div>
 
     <div class="card" style="margin-top: 10px">
@@ -50,6 +59,7 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         const typeUid = /*[[${typeUid}]]*/ null;
+        const reportUid = /*[[${reportUid}]]*/ null;
         const type = /*[[${type}]]*/ "";
         history.replaceState({}, null, `/board/report/${type}`)
 
@@ -64,6 +74,34 @@
 
             $("#go-back").on('click', (e) => {
                 window.location.href = `/board/report/${type}?typeUid=${typeUid}`
+            })
+
+            $("#btn-check-likes").on('change', (event) => {
+                const isChecked = event.target.checked;
+                if(isChecked) {
+                    Http.post('/api/report/emo/insert.json', {boardReportUid: reportUid, emotionCode: 'LIKE_EMO'}).then((res) => {
+                        if(res['httpStatus'] === 201) $("#btn-check-likes-label").text(`좋아요 ${res.message}`)
+                    })
+                }
+                else {
+                    Http.delete('/api/report/emo/delete.json', {boardReportUid: reportUid, emotionCode: 'LIKE_EMO'}).then((res) => {
+                        if(res['httpStatus'] === 200) $("#btn-check-likes-label").text(`좋아요 ${res.message}`)
+                    })
+                }
+            })
+
+            $("#btn-check-dislikes").on('change', (event) => {
+                const isChecked = event.target.checked;
+                if(isChecked) {
+                    Http.post('/api/report/emo/insert.json', {boardReportUid: reportUid, emotionCode: 'DISLIKE_EMO'}).then((res) => {
+                        if(res['httpStatus'] === 201) $("#btn-check-dislikes-label").text(`싫어요 ${res.message}`)
+                    })
+                }
+                else {
+                    Http.delete('/api/report/emo/delete.json', {boardReportUid: reportUid, emotionCode: 'DISLIKE_EMO'}).then((res) => {
+                        if(res['httpStatus'] === 200) $("#btn-check-dislikes-label").text(`싫어요 ${res.message}`)
+                    })
+                }
             })
         })
 
