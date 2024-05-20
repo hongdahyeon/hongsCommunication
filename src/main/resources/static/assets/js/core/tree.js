@@ -87,7 +87,7 @@ class Tree {
             for (let i = 0; i < dataList.length; i++) {
                 const node = {
                     id: dataList[i]['menuUid'],
-                    text: dataList[i]['menuText'],
+                    text: dataList[i]['menuNm'],
                     data: dataList[i],
                     state: { opened: true }
                 }

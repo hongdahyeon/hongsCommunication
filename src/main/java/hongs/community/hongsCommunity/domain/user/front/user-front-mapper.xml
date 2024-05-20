@@ -8,7 +8,7 @@
         select huser.user_uid
               ,huser.user_id
               ,huser.password
-              ,huser.user_name
+              ,huser.user_nm
               ,huser.user_email
               ,huser.role
               ,huser.is_enable
@@ -18,7 +18,7 @@
               ,huser.social_user_uid
               ,hfile.file_url as profile_url
           from hong_user huser
-          left join hong_file hfile on hfile.hong_file_uid = huser.profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
+          left join hong_file hfile on hfile.hong_file_uid = huser.profile and hfile.del_yn = 'N' and hfile.saved = 'SAVED'
          where huser.user_id = #{userId}
     </select>
 
@@ -27,7 +27,7 @@
         select hu.user_uid
               ,hu.user_id
               ,hu.password
-              ,hu.user_name
+              ,hu.user_nm
               ,hu.user_email
               ,hu.role
               ,hu.is_enable
@@ -46,7 +46,7 @@
         insert into hong_user (
              user_id
             ,password
-            ,user_name
+            ,user_nm
             ,user_email
             ,role
             ,is_enable
@@ -60,7 +60,7 @@
         ) values (
              #{userId}
             ,#{password}
-            ,#{userName}
+            ,#{userNm}
             ,#{userEmail}
             ,#{role}
             ,true
@@ -105,7 +105,7 @@
         select user_uid
               ,user_id
               ,password
-              ,user_name
+              ,user_nm
               ,user_email
               ,role
               ,is_enable
@@ -126,7 +126,7 @@
         /* user-front.searchId */
         select user_id
           from hong_user
-         where user_name = #{userName}
+         where user_nm = #{userNm}
            and user_email = #{userEmail}
     </select>
 
@@ -135,7 +135,7 @@
         update hong_user
            set password = #{password}
          where user_email = #{userEmail}
-           and user_name = #{userName}
+           and user_nm = #{userNm}
     </update>
 
     <update id="chngPwd" parameterType="HongUserChngPwdDto">

@@ -15,5 +15,5 @@ import lombok.Setter;
 public class HongSearchIdPwdDto {
 
     private String userEmail;
-    private String userName;
+    private String userNm;
 }

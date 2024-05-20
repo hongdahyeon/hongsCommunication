@@ -51,8 +51,8 @@
                         <div class="row mb-3">
                             <!-- 두 번째 row: 메뉴 이름과 메뉴 URL -->
                             <div class="col-md-6">
-                                <label for="menuText" class="form-label">메뉴 이름</label>
-                                <input type="text" class="form-control" name="menuText" id="menuText" required>
+                                <label for="menuNm" class="form-label">메뉴 이름</label>
+                                <input type="text" class="form-control" name="menuNm" id="menuNm" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="menuUrl" class="form-label">메뉴 URL</label>
@@ -216,7 +216,7 @@
             $("#upperMenuUid").val((data.parent === '#') ? 0 : data.parent)
             $("#menuPath").val(data.data['menuPath'])
             $("#menuUid").val(data.data['menuUid'])
-            $("#menuText").val(data.data['menuText'])
+            $("#menuNm").val(data.data['menuNm'])
             $("#menuUrl").val(data.data['menuUrl'])
             $(`#useYn_${data.data['useYn']}`).prop("checked", true)
             $(`#landingPageYn_${data.data['landingPageYn']}`).prop("checked", true)

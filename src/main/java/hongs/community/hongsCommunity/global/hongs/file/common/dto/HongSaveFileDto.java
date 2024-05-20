@@ -16,7 +16,7 @@ import lombok.Setter;
 public class HongSaveFileDto extends CreateRequest {
 
     private Long hongFileUid;
-    private String fileName;
+    private String fileNm;
     private String fileUrl;
     private String fileId;
     private String fileType;
@@ -25,5 +25,10 @@ public class HongSaveFileDto extends CreateRequest {
     private Integer downCnt;
     private String saved;
     private String deleteYn;
+
+    public void setRegMdfr(Long userUid) {
+        this.regId = userUid;
+        this.mdfrId = userUid;
+    }
 
 }

@@ -7,7 +7,7 @@
         /* user-after.userInfo */
         select huser.user_Uid
               ,huser.user_id
-              ,huser.user_name
+              ,huser.user_nm
               ,huser.user_email
               ,huser.role
               ,huser.profile
@@ -28,10 +28,10 @@
     <update id="updateUser" parameterType="HongUserUpdteDto">
         /* user-after.updateUser */
         update hong_user
-           set user_name = #{userName}
+           set user_nm = #{userNm}
         <if test="password != null">
               ,password = #{password}
-              ,pwd_last_update = now()
+              ,pwd_last_update = date_add(now(), interval '90' day)
         </if>
         <if test="userEmail != null">
               ,user_email = #{userEmail}
@@ -46,7 +46,7 @@
         /* user-after.list */
         select huser.user_uid
               ,huser.user_id
-              ,huser.user_name
+              ,huser.user_nm
               ,huser.user_email
               ,hcode.code_name as role_name
               ,huser.is_enable
@@ -97,7 +97,7 @@
         /* getProfileUrl */
         select hfile.file_url as profile_url
           from hong_user huser
-          left join hong_file hfile on hfile.hong_file_uid = huser.profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
+          left join hong_file hfile on hfile.hong_file_uid = huser.profile and hfile.del_yn = 'N' and hfile.saved = 'SAVED'
          where huser.user_uid = #{userUid}
     </select>
 </mapper>

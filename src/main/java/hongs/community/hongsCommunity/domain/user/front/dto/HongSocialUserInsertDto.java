@@ -18,11 +18,11 @@ public class HongSocialUserInsertDto {
     private Long socialUserUid;
     private String userId;
     private String userEmail;
-    private String userName;
+    private String userNm;
 
-    public HongSocialUserInsertDto(String userId, String userName, String userEmail) {
+    public HongSocialUserInsertDto(String userId, String userNm, String userEmail) {
         this.userId = userId;
-        this.userName = userName;
+        this.userNm = userNm;
         this.userEmail = userEmail;
     }
 }

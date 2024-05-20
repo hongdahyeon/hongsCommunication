@@ -16,7 +16,7 @@ import lombok.Setter;
 public class HongTeamUserAdminListVo {
 
     private Long userUid;
-    private String userName;
+    private String userNm;
     private String userEmail;
     private Long hongTeamUid;
     private String userRole;

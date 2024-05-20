@@ -23,12 +23,12 @@
                     <th:block th:if="${#lists.contains(menu.urlList, url)}">
                         <a class="nav-link" th:id="|menu${menu.menuUid}|" href="#" data-toggle="collapse" th:data-target="|#child${menu.menuUid}|" aria-expanded="true" th:aria-controls="|child${menu.menuUid}|">
                             <i class="fas fa-fw fa-folder"></i>
-                            <span th:text="${menu.menuText}"></span>
+                            <span th:text="${menu.menuNm}"></span>
                         </a>
                         <div th:id="|child${menu.menuUid}|" class="collapse show" >
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <th:block th:each="child : ${menu.children}">
-                                    <a class="collapse-item" th:classappend="${url eq child.menuUrl} ? 'active' : ''" th:href="${child.menuUrl}" th:text="${child.menuText}"></a>
+                                    <a class="collapse-item" th:classappend="${url eq child.menuUrl} ? 'active' : ''" th:href="${child.menuUrl}" th:text="${child.menuNm}"></a>
                                 </th:block>
                             </div>
                         </div>
@@ -38,12 +38,12 @@
                     <th:block th:unless="${#lists.contains(menu.urlList, url)}">
                         <a class="nav-link collapsed" th:id="|menu${menu.menuUid}|" href="#" data-toggle="collapse" th:data-target="|#child${menu.menuUid}|" aria-expanded="false" th:aria-controls="|child${menu.menuUid}|">
                             <i class="fas fa-fw fa-folder"></i>
-                            <span th:text="${menu.menuText}"></span>
+                            <span th:text="${menu.menuNm}"></span>
                         </a>
                         <div th:id="|child${menu.menuUid}|" class="collapse" >
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <th:block th:each="child : ${menu.children}">
-                                    <a class="collapse-item" th:classappend="${url eq child.menuUrl} ? 'active' : ''" th:href="${child.menuUrl}" th:text="${child.menuText}"></a>
+                                    <a class="collapse-item" th:classappend="${url eq child.menuUrl} ? 'active' : ''" th:href="${child.menuUrl}" th:text="${child.menuNm}"></a>
                                 </th:block>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                 <li class="nav-item" th:classappend="${url eq menu.menuUrl} ? 'active' : ''">
                     <a class="nav-link" th:href="${menu.menuUrl}" th:id="|menu${menu.menuUid}|">
                         <i class="fas fa-fw fa-folder"></i>
-                        <span th:text="${menu.menuText}"></span></a>
+                        <span th:text="${menu.menuNm}"></span></a>
                 </li>
             </th:block>
 

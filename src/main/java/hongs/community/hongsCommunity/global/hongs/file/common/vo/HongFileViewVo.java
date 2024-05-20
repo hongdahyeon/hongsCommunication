@@ -9,7 +9,7 @@ public class HongFileViewVo {
     private Long hongFileUid;
     private String fileUrl;
     private String fileId;
-    private String fileName;
+    private String fileNm;
     private String fileType;
     private Long fileSize;
     private String extension;

@@ -21,7 +21,7 @@ public class HongUserInsertDto {
     private Long socialUserUid;
     private String userId;
     private String password;
-    private String userName;
+    private String userNm;
     private String userEmail;
     private String role;
     private String pwdLastUpdate = TimeUtil.daysAfter(90);
@@ -31,7 +31,7 @@ public class HongUserInsertDto {
         this.socialUserUid = dto.getSocialUserUid();
         this.userId = dto.getUserId();
         this.password = encodePassword;
-        this.userName = dto.getUserName();
+        this.userNm = dto.getUserNm();
         this.userEmail = dto.getUserEmail();
         this.role = HongUserRole.ROLE_USER.toString();
         this.pwdLastUpdate = TimeUtil.daysAfter(90);

@@ -20,10 +20,10 @@ public class HongMenuVo {
     private Long menuUid;
     private Long upperMenuUid;
     private String menuUrl;
-    private String menuText;
+    private String menuNm;
     private String menuRole;
     private String useYn;
-    private String deleteYn;
+    private String delYn;
     private Integer sortNo;
 
     private List<HongMenuVo> children;

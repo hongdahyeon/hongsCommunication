@@ -19,12 +19,12 @@ import lombok.Setter;
 public class HongDeleteFileDto extends CreateRequest {
 
     private String fileUrl;
-    private String deleteYn;
+    private String delYn;
     private String saved;
 
     public HongDeleteFileDto(String fileUrl) {
         this.fileUrl = fileUrl;
-        this.deleteYn = "Y";
+        this.delYn = "Y";
         this.saved = HongFileState.DELETED.toString();
     }
 }

@@ -18,7 +18,7 @@
                   </div>
                   <div class="col mr-2" style="margin-left: 10px;">
                     <div class="text-xl font-weight-bold mb-1">
-                      <span>{{userName}}</span>
+                      <span>{{userNm}}</span>
                       <div class="text-black-50 small">
                         <span>{{userEmail}}</span>
                       </div>
@@ -59,7 +59,7 @@
               </div>
               <div class="col mr-2" style="margin-left: 10px;">
                 <div class="text-xl font-weight-bold mb-1">
-                  <span th:text="${#authentication.principal.user.userName}"></span>
+                  <span th:text="${#authentication.principal.user.userNm}"></span>
                   <div class="text-black-50 small">
                     <span th:text="${#authentication.principal.user.userEmail}"></span>
                   </div>
@@ -85,7 +85,7 @@
             </div>
             <div class="col mr-2" style="margin-left: 10px;">
               <div class="text-xl font-weight-bold mb-1">
-                <span th:text="${#authentication.principal.user.userName}"></span>
+                <span th:text="${#authentication.principal.user.userNm}"></span>
                 <div class="text-black-50 small">
                   <span th:text="${#authentication.principal.user.userEmail}"></span>
                 </div>

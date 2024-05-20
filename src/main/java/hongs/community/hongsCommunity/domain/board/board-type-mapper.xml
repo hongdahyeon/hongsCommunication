@@ -16,7 +16,7 @@
               ,case when hbtype.file_atch_yn = 'Y' then '사용' else '미사용' end as file_atch_yn_str
               ,case when hbtype.use_yn = 'Y' then '사용' else '미사용' end as use_yn_str
               ,hbtype.use_yn as use_yn
-              ,huser.user_name as reg_name
+              ,huser.user_nm as reg_name
               ,to_char(hbtype.reg_dt, 'YYYY-MM-DD') as reg_dt
           from hong_board_type hbtype
           left join hong_user huser on huser.user_uid = hbtype.reg_id

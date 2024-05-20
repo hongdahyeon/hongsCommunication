@@ -10,7 +10,7 @@ public class HongTeamUserListVo {
     private Long hongTeamUid;
     private String teamNm;
     private Long userUid;
-    private String userName;
+    private String userNm;
     private String userEmail;
     private String userRole;
     private String joinDate;

@@ -14,7 +14,7 @@
                     and children.delete_yn = 'N'
                ) as child_code_cnt
               ,parent.use_yn as use_yn
-              ,huser.user_name as reg_name
+              ,huser.user_nm as reg_name
               ,to_char(parent.reg_dt, 'YYYY-MM-DD') as reg_dt
           from hong_code as parent
           left join hong_user as huser on huser.user_uid = parent.reg_id

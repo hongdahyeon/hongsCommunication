@@ -14,22 +14,22 @@
         /* common-file.saveFile */
         insert into hong_file (
            hong_file_uid
-          ,file_name
+          ,file_nm
           ,file_url
           ,file_id
           ,file_type
           ,file_size
           ,extension
-          ,down_cnt
+          ,dwnld_cnt
           ,saved
-          ,delete_yn
+          ,del_yn
           ,reg_id
           ,mdfr_id
           ,reg_dt
           ,mdfr_dt
         ) values (
            #{hongFileUid}
-          ,#{fileName}
+          ,#{fileNm}
           ,#{fileUrl}
           ,#{fileId}
           ,#{fileType}
@@ -49,7 +49,7 @@
         /* common-file.deleteFile */
         update hong_file
         set saved = #{saved}
-          ,delete_yn = #{deleteYn}
+          ,del_yn = #{delYn}
           ,mdfr_id = #{mdfrId}
           ,mdfr_dt = now()
         where file_url = #{fileUrl}
@@ -60,16 +60,16 @@
         select hong_file_uid
               ,file_url
               ,file_id
-              ,file_name
+              ,file_nm
               ,file_type
               ,file_size
               ,extension
-              ,down_cnt
+              ,dwnld_cnt
               ,reg_dt
               ,saved
           from hong_file
          where hong_file_uid = #{hongFileUid}
-           and delete_yn = 'N'
+           and del_yn = 'N'
            and saved = 'SAVED'
     </select>
 
@@ -78,22 +78,22 @@
         select hong_file_uid
              ,file_url
              ,file_id
-             ,file_name
+             ,file_nm
              ,file_type
              ,file_size
              ,extension
-             ,down_cnt
+             ,dwnld_cnt
              ,reg_dt
         from hong_file
         where file_url = #{fileUrl}
           and saved = 'SAVED'
-          and delete_yn = 'N'
+          and del_yn = 'N'
     </select>
 
     <update id="updateDownCnt" parameterType="HongCommonFileDownloadDto">
         /* common-file.updateDownCnt */
         update hong_file
-           set down_cnt = down_cnt + 1
+           set dwnld_cnt = dwnld_cnt + 1
          where hong_file_uid = #{hongFileUid}
            and file_url = #{fileUrl}
     </update>

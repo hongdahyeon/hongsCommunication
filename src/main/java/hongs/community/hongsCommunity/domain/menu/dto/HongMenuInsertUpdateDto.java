@@ -16,7 +16,7 @@ public class HongMenuInsertUpdateDto extends CreateRequest {
 
     private Long menuUid;
     private Long upperMenuUid;
-    private String menuText;
+    private String menuNm;
     private String menuUrl;
     private String useYn;
     private String landingPageYn;

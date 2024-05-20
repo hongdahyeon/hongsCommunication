@@ -8,15 +8,15 @@
         SELECT menu_Uid
               ,upper_menu_uid
               ,menu_url
-              ,menu_text
+              ,menu_nm
               ,menu_role
               ,use_yn
-              ,delete_yn
+              ,del_yn
               ,sort_no
          FROM hong_menu
         WHERE upper_menu_uid IS NULL
           and menu_role = #{menuRole}
-          and delete_yn = #{deleteYn}
+          and del_yn = #{delYn}
           and use_yn = #{useYn}
         order by sort_no
     </select>
@@ -26,15 +26,15 @@
         SELECT menu_Uid
              ,upper_menu_uid
              ,menu_url
-             ,menu_text
+             ,menu_nm
              ,menu_role
              ,use_yn
-             ,delete_yn
+             ,del_yn
              ,sort_no
         FROM hong_menu
         WHERE upper_menu_uid IS NOT NULL
           and upper_menu_uid = #{upperMenuUid}
-          and delete_yn = #{deleteYn}
+          and del_yn = #{delYn}
           and use_yn = #{useYn}
         order by sort_no
     </select>
@@ -45,13 +45,13 @@
             SELECT menu_uid
                   ,upper_menu_uid
                   ,menu_url
-                  ,menu_text
+                  ,menu_nm
                   ,menu_role
                   ,use_yn
-                  ,delete_yn
+                  ,del_yn
                   ,landing_page_yn
                   ,sort_no
-                  ,json_array(menu_text) as path_nm
+                  ,json_array(menu_nm) as path_nm
                   ,json_array(menu_uid) as path
                   ,0 AS level
               FROM hong_menu
@@ -60,23 +60,23 @@
                and use_yn = #{useYn}
              </if>
                and menu_role = #{menuRole}
-               and delete_yn = 'N'
+               and del_yn = 'N'
              UNION ALL
             SELECT m.menu_uid
                   ,m.upper_menu_uid
                   ,m.menu_url
-                  ,m.menu_text
+                  ,m.menu_nm
                   ,m.menu_role
                   ,m.use_yn
-                  ,m.delete_yn
+                  ,m.del_yn
                   ,m.landing_page_yn
                   ,m.sort_no
-                  ,json_array_append(mh.path_nm, '$', m.menu_text) as path_nm
+                  ,json_array_append(mh.path_nm, '$', m.menu_nm) as path_nm
                   ,json_array_append(mh.PATH, '$', m.sort_no) as path
                   ,mh.level + 1 AS level
               FROM hong_menu AS m
              INNER JOIN menu_hierarchy mh ON m.upper_menu_uid = mh.menu_Uid
-             where m.delete_yn = 'N'
+             where m.del_yn = 'N'
               <if test="useYn != null">
                and m.use_yn = #{useYn}
               </if>
@@ -85,11 +85,11 @@
         )
         SELECT  mh.menu_uid
                ,mh.upper_menu_uid
-               ,mh.menu_text
+               ,mh.menu_nm
                ,mh.menu_url
                ,mh.menu_role
                ,mh.use_yn
-               ,mh.delete_yn
+               ,mh.del_yn
                ,mh.landing_page_yn
                ,mh.sort_no
                ,mh.path
@@ -102,13 +102,13 @@
     <insert id="join" parameterType="HongMenuInsertUpdateDto">
         /* menu.join */
         insert into hong_menu (
-            menu_text
+             menu_nm
         <if test="menuUrl != null">
             ,menu_url
         </if>
            ,use_yn
            ,landing_page_yn
-           ,delete_yn
+           ,del_yn
            ,sort_no
            ,menu_role
         <if test="upperMenuUid != null">
@@ -119,7 +119,7 @@
            ,reg_dt
            ,mdfr_dt
         ) values (
-            #{menuText}
+            #{menuNm}
         <if test="menuUrl != null">
             ,#{menuUrl}
         </if>
@@ -141,7 +141,7 @@
     <update id="update" parameterType="HongMenuInsertUpdateDto">
         /* menu.update */
         update hong_menu
-           set menu_text = #{menuText}
+           set menu_nm = #{menuNm}
              <if test="menuUrl != null">
               ,menu_url = #{menuUrl}
              </if>
@@ -160,7 +160,7 @@
     <delete id="delete" parameterType="Long">
         /* menu.delete */
         update hong_menu
-           set delete_yn = 'Y'
+           set del_yn = 'Y'
          where menu_uid = #{menuUid}
     </delete>
 
@@ -169,7 +169,7 @@
         select menu_url
           from hong_menu
          where menu_role = #{menuRole}
-           and delete_yn = 'N'
+           and del_yn = 'N'
            and use_yn = 'Y'
            and landing_page_yn = 'Y'
          order by sort_no desc

@@ -8,7 +8,7 @@ public class HongUserListVo {
 
     private Long userUid;
     private String userId;
-    private String userName;
+    private String userNm;
     private String userEmail;
     private String roleName;
     private Boolean isEnable;

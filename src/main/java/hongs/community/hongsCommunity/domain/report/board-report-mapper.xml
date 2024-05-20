@@ -11,12 +11,12 @@
               ,hbreport.report_content as content
               ,hbreport.file_uid as file_uid
               ,hbreport.notice_yn as notice_yn
-              ,huser.user_name as reg_name
+              ,huser.user_nm as reg_name
               ,to_char(hbreport.reg_dt, 'YYYY-MM-DD') as reg_dt
               ,( select count(*)
                    from hong_file hfile
                   where hfile.hong_file_uid = hbreport.file_uid
-                    and hfile.delete_yn = 'N'
+                    and hfile.del_yn = 'N'
                     and hfile.saved = 'SAVED' ) as file_cnt
                ,( select count(*)
                     from hong_comment hcomment

@@ -17,11 +17,11 @@ public class HongUserUpdatePwdDto {
 
     private String password;
     private String userEmail;
-    private String userName;
+    private String userNm;
 
     public HongUserUpdatePwdDto(String password, HongSearchIdPwdDto dto){
         this.password = password;
         this.userEmail = dto.getUserEmail();
-        this.userName = dto.getUserName();
+        this.userNm = dto.getUserNm();
     }
 }

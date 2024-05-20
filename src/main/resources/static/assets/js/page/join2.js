@@ -56,7 +56,7 @@ $(function () {
                         'userId': userIdInput.val(),
                         'password': password.val(),
                         'userEmail': userEmailInput.val(),
-                        'userName': $("#userName").val()
+                        'userNm': $("#userNm").val()
                     }
 
                     Http.post('/api/front/user/insert.json', obj).then((res) => {

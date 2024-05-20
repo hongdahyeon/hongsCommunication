@@ -9,7 +9,7 @@
         select hud.user_uid
               ,to_char(hud.disable_date, 'YYYY-MM-DD') as disable_date
               ,hud.disable_msg
-              ,hu.user_name as mdfr_name
+              ,hu.user_nm as mdfr_name
           from hong_user_disable hud
           left join hong_user hu on hu.user_uid = hud.mdfr_id
          where hud.user_uid = #{userUid}

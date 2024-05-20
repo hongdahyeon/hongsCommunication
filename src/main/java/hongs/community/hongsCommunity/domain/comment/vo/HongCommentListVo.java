@@ -17,7 +17,7 @@ public class HongCommentListVo {
     private Long hongCommentUid;
     private String commentCnt;
     private Boolean canEdit;
-    private String userName;
+    private String userNm;
     private String userEmail;
     private String profileSrc;
 

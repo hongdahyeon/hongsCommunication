@@ -17,7 +17,7 @@ public class HongUserInfoVo {
 
     private Long userUid;
     private String userId;
-    private String userName;
+    private String userNm;
     private String userEmail;
     private String role;
     private String roleName;

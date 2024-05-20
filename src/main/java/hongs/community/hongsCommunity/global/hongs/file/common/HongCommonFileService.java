@@ -4,6 +4,7 @@ import hongs.community.hongsCommunity.global.hongs.file.common.dto.HongCommonFil
 import hongs.community.hongsCommunity.global.hongs.file.common.dto.HongDeleteFileDto;
 import hongs.community.hongsCommunity.global.hongs.file.common.dto.HongSaveFileDto;
 import hongs.community.hongsCommunity.global.hongs.file.common.vo.HongFileViewVo;
+import hongs.community.hongsCommunity.global.util.UserUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +54,7 @@ public class HongCommonFileService {
 
             String fileName = "";
             try {
-                fileName = URLEncoder.encode(view.getFileName(), "UTF-8");
+                fileName = URLEncoder.encode(view.getFileNm(), "UTF-8");
             } catch (UnsupportedEncodingException e) {
             }
 
@@ -80,10 +81,12 @@ public class HongCommonFileService {
     @Transactional
     public Long saveAndDelFiles(Long uid, HongSaveFileDto[] addFile, String[] delFile){
         Long fileUid = null;
+        Long userUid = UserUtil.getLoginUserUid();
         if((addFile != null && addFile.length > 0) || (delFile != null && delFile.length > 0)) {
             fileUid = (uid == null) ? generateKey() : uid;
             for (HongSaveFileDto dto : addFile){
                 dto.setHongFileUid(fileUid);
+                dto.setRegMdfr(userUid);
                 fileMapper.saveFile(dto);
             }
 

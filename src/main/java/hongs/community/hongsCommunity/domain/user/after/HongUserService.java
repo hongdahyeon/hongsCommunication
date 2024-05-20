@@ -51,7 +51,7 @@ public class HongUserService {
             String profileUrl = this.getProfileUrl(dto.getUserUid());
             if(profileUrl != null) loginUser.setProfileUrl(profileUrl);
             if(dto.getUserEmail() != null) loginUser.setUserEmail(dto.getUserEmail());
-            if(dto.getUserName() != null) loginUser.setUserName(dto.getUserName());
+            if(dto.getUserNm() != null) loginUser.setUserNm(dto.getUserNm());
         }
     }
 

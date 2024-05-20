@@ -135,7 +135,7 @@ class Upload {
     getTempFiles(){
         const allFiles = this._uppy.getFiles();
         const tempFiles = allFiles.filter(x => !x.meta.saved).map(x => ({
-            fileName: x.name,
+            fileNm: x.name,
             fileUrl: x.meta.url,
             fileId: x.meta.fileId,
             fileType: x.meta.type,
@@ -175,7 +175,7 @@ class Upload {
         let fileData;
         if( file.fileType.toString().includes('image') ) {
             options.preview = `/api/hong/files/download?fileUrl=${file.fileUrl}`
-            fileData = new File([options.preview], file.fileName, {
+            fileData = new File([options.preview], file.fileNm, {
                 lastModified: new Date(file.regDt).getTime(),
                 type: file.fileType
             });
@@ -184,7 +184,7 @@ class Upload {
 
         const id = this._uppy.addFile({
             id: file.fileId,
-            name: file.fileName,
+            name: file.fileNm,
             type: file.fileType,
             data: fileData,
             meta:{
@@ -221,7 +221,7 @@ class UploadView {
        else {
            let body = '<ul>'
            this._data.forEach(file => {
-               body += `<li style="margin-top: 10px"> <a href="/api/hong/files/download?fileUrl=${file.fileUrl}&download=Y" download="" />${file.fileName}</li>`
+               body += `<li style="margin-top: 10px"> <a href="/api/hong/files/download?fileUrl=${file.fileUrl}&download=Y" download="" />${file.fileNm}</li>`
            })
            body += '</ul>'
            dom.append(body)

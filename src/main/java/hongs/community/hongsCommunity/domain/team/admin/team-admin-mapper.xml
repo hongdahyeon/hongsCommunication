@@ -14,7 +14,7 @@
               ,hteam.team_intro
               ,hteam.team_profile
               ,hteam.represent_id
-              ,huser.user_name as represent_name
+              ,huser.user_nm as represent_name
               ,hteam.approval_yn
               ,case when hteam.approval_yn = 'Y' then '승인'
                else '미승인'
@@ -31,7 +31,7 @@
                ) as total_member_num
           from hong_team hteam
           left join hong_user huser on hteam.represent_id = huser.user_uid
-          left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.delete_yn = 'N' and hfile.saved = 'SAVED'
+          left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.del_yn = 'N' and hfile.saved = 'SAVED'
           left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY' and hcode.use_yn = 'Y' and hcode.delete_yn = 'N'
          where hteam.delete_yn = 'N'
     </select>
@@ -58,7 +58,7 @@
         /* team-admin.teamUserList */
         select hteam.hong_team_uid as hong_team_uid
               ,huser.user_uid as user_uid
-              ,huser.user_name as user_name
+              ,huser.user_nm as user_nm
               ,huser.user_email as user_email
               ,huser.role as user_role
               ,hcode.code_name as user_role_name

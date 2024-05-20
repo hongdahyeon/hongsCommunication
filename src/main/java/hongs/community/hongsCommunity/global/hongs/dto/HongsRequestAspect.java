@@ -28,7 +28,8 @@ public class HongsRequestAspect {
     }
 
     private void setUserUid(Object[] args) {
-        Long userUid = UserUtil.getLoginUserUid();
+        Long userUid = 0L;
+        if(UserUtil.getLoginUser() != null) userUid = UserUtil.getLoginUserUid();
             for (Object arg : args) {
                 setCreated(userUid, arg);
                 setUpdated(userUid, arg);

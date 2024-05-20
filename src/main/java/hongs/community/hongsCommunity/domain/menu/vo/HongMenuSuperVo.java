@@ -18,11 +18,11 @@ public class HongMenuSuperVo {
 
     private Long menuUid;
     private Long upperMenuUid;
-    private String menuText;
+    private String menuNm;
     private String menuUrl;
     private String menuRole;
     private String useYn;
-    private String deleteYn;
+    private String delYn;
     private String landingPageYn;
     private Integer sortNo;
     private String menuPath;

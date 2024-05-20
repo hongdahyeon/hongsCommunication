@@ -19,16 +19,16 @@ public class HongMenuDto {
     private Long upperMenuUid;
     private String menuRole;
     private String useYn;
-    private String deleteYn;
+    private String delYn;
 
-    public HongMenuDto(String menuRole, String useYn, String deleteYn) {
+    public HongMenuDto(String menuRole, String useYn, String delYn) {
         this.menuRole = menuRole;
         this.useYn = useYn;
-        this.deleteYn = deleteYn;
+        this.delYn = delYn;
     }
-    public HongMenuDto(Long upperMenuUid, String useYn, String deleteYn) {
+    public HongMenuDto(Long upperMenuUid, String useYn, String delYn) {
         this.upperMenuUid = upperMenuUid;
         this.useYn = useYn;
-        this.deleteYn = deleteYn;
+        this.delYn = delYn;
     }
 }

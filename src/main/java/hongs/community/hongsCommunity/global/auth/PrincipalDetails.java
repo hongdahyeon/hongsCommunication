@@ -54,7 +54,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return hongUser.getUserName();
+        return hongUser.getUserNm();
     }
 
     /* 계정 만료 여부 : 마지막 로그인 날짜가 1년이 지났는지 체크 */

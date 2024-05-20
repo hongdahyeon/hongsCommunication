@@ -16,7 +16,7 @@ import lombok.Setter;
 public class HongUserUpdteDto extends FileRequest {
 
     private Long userUid;
-    private String userName;
+    private String userNm;
     private String password;
     private String userEmail;
     private Long profile;

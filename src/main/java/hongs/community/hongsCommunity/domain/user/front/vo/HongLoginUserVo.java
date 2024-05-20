@@ -22,7 +22,7 @@ public class HongLoginUserVo {
     private Long socialUserUid;
     private String userId;
     private String password;
-    private String userName;
+    private String userNm;
     private String userEmail;
     private String profileUrl;
     private String role;
