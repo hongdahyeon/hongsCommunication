@@ -277,3 +277,5 @@ $("#view-content").html(code)
 (64) 24-05-20 : 게시글 사용자 화면
 
 (65) 24-05-20 : 게시글 좋아요/싫어요 감정 등록/삭제하기
+
+(66) 24-05-20 : menu, calendar, social-user, user, file, file-log 테이블 수정 (HongsRequestAspect는 나중에 롤백하더라도 수정해서 커밋하기)
