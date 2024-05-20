@@ -225,7 +225,7 @@ $("#view-content").html(code)
 2. $.ajax 정리
 3. aspect deletMapping 추가
 
-
+(47) 24-05-20 : 게시글 사용자 화면
 (47) 24-05-10 : menu active
 
 
