@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hongs.community.hongsCommunity.domain.post.HongBbsPostMapper">
+
+    <select id="list" parameterType="HongBbsPostListDto" resultType="HongBbsPostListVo">
+        /* admin-bbs-post.list */
+        select hbpst.hong_bbs_pst_uid as pst_uid
+              ,hbpst.hong_bbs_type_uid as type_uid
+              ,hbpst.pst_ttl as pst_ttl
+              ,hbpst.pst_cn as pst_cn
+              ,hbpst.file_uid as file_uid
+              ,hbpst.ntc_yn as ntc_yn
+              ,huser.user_nm as reg_name
+              ,to_char(hbpst.reg_dt, 'YYYY-MM-DD') as reg_dt
+              ,( select count(*)
+                   from hong_file hfile
+                  where hfile.hong_file_uid = hbpst.file_uid
+                    and hfile.del_yn = 'N'
+                    and hfile.saved = 'SAVED' ) as file_cnt
+               ,( select count(*)
+                    from hong_cmnt hcmnt
+                   where hcmnt.target_uid = hbpst.hong_bbs_pst_uid
+                     and hcmnt.target_type = 'BBS_POST_COMM' ) as comment_cnt
+               ,( select count(*)
+                    from hong_bbs_pst_aprs hbpaprs
+                   where hbpaprs.hong_bbs_pst_uid = hbpst.hong_bbs_pst_uid
+                     and hbpaprs.aprs_cd = 'LIKE_EMO' ) as like_cnt
+               ,( select count(*)
+                    from hong_bbs_pst_aprs hbpaprs
+                   where hbpaprs.hong_bbs_pst_uid = hbpst.hong_bbs_pst_uid
+                     and hbpaprs.aprs_cd = 'DISLIKE_EMO' ) as dis_like_cnt
+          from hong_bbs_pst hbpst
+         inner join hong_bbs_type hbtype on hbtype.hong_bbs_type_uid = hbpst.hong_bbs_type_uid
+          left join hong_user huser on huser.user_uid = hbpst.reg_id
+         where hbpst.hong_bbs_type_uid = #{typeUid}
+           and hbpst.del_yn = 'N'
+            <if test="ordering == 'notice'">
+         order by hbpst.ntc_yn desc
+            </if>
+            <if test="ordering == 'faq' || ordering == 'qna'">
+         order by hbpst.hong_bbs_pst_uid desc
+            </if>
+    </select>
+
+    <insert id="insert" parameterType="HongBbsPostInsertUpdateDto">
+        /* admin-bbs-post.insert */
+        insert into hong_bbs_pst (
+            hong_bbs_type_uid
+           ,pst_ttl
+           ,pst_cn
+        <if test="fileUid != null">
+           ,file_uid
+        </if>
+        <if test="ntcYn != null">
+           ,ntc_yn
+        </if>
+           ,reg_id
+           ,reg_dt
+           ,mdfr_id
+           ,mdfr_dt
+        ) values (
+            #{hongBbsTypeUid}
+           ,#{pstTtl}
+           ,#{pstCn}
+        <if test="fileUid != null">
+           ,#{fileUid}
+        </if>
+        <if test="ntcYn != null">
+           ,#{ntcYn}
+        </if>
+           ,#{regId}
+           ,now()
+           ,#{mdfrId}
+           ,now()
+        )
+    </insert>
+
+    <select id="view" parameterType="Long" resultType="HongBbsPostViewVo">
+        /* admin-bbs-post.view */
+        select hong_bbs_pst_uid as pst_uid
+              ,pst_ttl
+              ,pst_cn
+              ,file_uid
+              ,ntc_yn
+          from hong_bbs_pst
+         where hong_bbs_pst_uid = #{hongBbsPstUid}
+    </select>
+
+    <update id="update" parameterType="HongBbsPostInsertUpdateDto">
+        /* admin-bbs-post.update */
+        update hong_bbs_pst
+           set pst_ttl = #{pstTtl}
+              ,pst_cn = #{pstCn}
+            <if test="fileUid != null">
+              ,file_uid = #{fileUid}
+            </if>
+            <if test="ntcYn != null">
+              ,ntc_yn = #{ntcYn}
+            </if>
+              ,mdfr_id = #{mdfrId}
+              ,mdfr_dt = now()
+        where hong_bbs_pst_uid = #{hongBbsPstUid}
+    </update>
+
+    <update id="delete" parameterType="Long">
+        /* admin-bbs-post.delete */
+        update hong_bbs_pst
+           set del_yn = 'Y'
+         where hong_bbs_pst_uid = #{hongBbsPstUid}
+    </update>
+</mapper>

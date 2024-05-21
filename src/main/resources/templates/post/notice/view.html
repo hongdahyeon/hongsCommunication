@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <th:block th:replace="~{fragments/title :: title('공지사항')}"></th:block>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="text-align: left;">
+            <button type="button" class="btn btn-secondary" id="go-back">뒤로가기</button>
+        </div>
+        <div style="text-align: right; display: flex; align-items: center;">
+            <input type="checkbox" class="btn-check" id="btn-check-likes" autocomplete="off" style="margin-left: 10px;" th:checked="${likes}">
+            <label class="btn btn-outline-primary" for="btn-check-likes" id="btn-check-likes-label" style="margin-left: 5px;" th:text="|좋아요 ${likesCnt}|"></label>
+
+            <input type="checkbox" class="btn-check" id="btn-check-dislikes" autocomplete="off" style="margin-left: 10px;" th:checked="${dislikes}">
+            <label class="btn btn-outline-warning" for="btn-check-dislikes" id="btn-check-dislikes-label" style="margin-left: 5px;" th:text="|싫어요 ${dislikesCnt}|"></label>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top: 10px">
+        <div class="card-body" id="form-body">
+            <div class="row mb-3">
+                <div class="col-md-9">
+                    <span style="font-size: 13px; color: gray;">제목</span>
+                    <div>
+                        <span id="pstTtl" th:text="${postView?.pstTtl}"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <span style="font-size: 13px; color: gray;">공지여부</span>
+                    <div>
+                        <span id="ntcYn" th:text="${postView?.ntcYn == 'Y' ? '공지' : '미공지'}"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <span style="font-size: 13px; color: gray;">내용</span>
+                <div class="col-md-12" style="margin-top: 10px; overflow-y: auto; height: 500px">
+                    <div id="content"></div>
+                </div>
+            </div>
+            <div class="row" th:if="${typeView?.fileAtchYn == 'Y'}">
+                <div class="col-md-12">
+                    <div class="border p-3">
+                        <label class="form-label" for="upload-view-container">첨부파일</label>
+                        <div>
+                            <div id="upload-view-container" class="mt-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        const typeUid = /*[[${typeUid}]]*/ null;
+        const postUid = /*[[${postUid}]]*/ null;
+        const type = /*[[${type}]]*/ "";
+        const typeView = /*[[${typeView}]]*/ {};
+        history.replaceState({}, null, `/bbs/post/${type}`)
+
+        const fileUid = /*[[${postView.fileUid}]]*/ null;
+        const summernote = new Summernote("content", 500)
+        const uploadView = (typeView['fileAtchYn'] === 'Y') ? new UploadView("upload-view-container") : ''
+
+        $(document).ready(function(e) {
+            summernote.setCode(/*[[${postView.pstCn}]]*/"")
+            summernote.destroy()
+            if(typeView['fileAtchYn'] === 'Y') drawViewFile(fileUid)
+
+            $("#go-back").on('click', (e) => {
+                window.location.href = `/bbs/post/${type}?typeUid=${typeUid}`
+            })
+
+            $("#btn-check-likes").on('change', (event) => {
+                const isChecked = event.target.checked;
+                if(isChecked) {
+                    Http.post('/api/post/aprs/insert.json', {bbsPstUid: postUid, aprsCd: 'LIKE_EMO'}).then((res) => {
+                        if(res['httpStatus'] === 201) $("#btn-check-likes-label").text(`좋아요 ${res.message}`)
+                    })
+                }
+                else {
+                    Http.delete('/api/post/aprs/delete.json', {bbsPstUid: postUid, aprsCd: 'LIKE_EMO'}).then((res) => {
+                        if(res['httpStatus'] === 200) $("#btn-check-likes-label").text(`좋아요 ${res.message}`)
+                    })
+                }
+            })
+
+            $("#btn-check-dislikes").on('change', (event) => {
+                const isChecked = event.target.checked;
+                if(isChecked) {
+                    Http.post('/api/post/aprs/insert.json', {bbsPstUid: postUid, aprsCd: 'DISLIKE_EMO'}).then((res) => {
+                        if(res['httpStatus'] === 201) $("#btn-check-dislikes-label").text(`싫어요 ${res.message}`)
+                    })
+                }
+                else {
+                    Http.delete('/api/post/aprs/delete.json', {bbsPstUid: postUid, aprsCd: 'DISLIKE_EMO'}).then((res) => {
+                        if(res['httpStatus'] === 200) $("#btn-check-dislikes-label").text(`싫어요 ${res.message}`)
+                    })
+                }
+            })
+        })
+
+        function drawViewFile(fUid){
+            if(fUid !== null) {
+                Http.get(`/api/hong/files/list.json?fileUid=${fUid}`).then((res) => {
+                    const list = res.message
+                    uploadView.setData(list).draw()
+                })
+            } else uploadView.setData([]).draw()
+        }
+
+    </script>
+</th:block>
+
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="hongs.community.hongsCommunity.domain.postAprs.HongBbsPstAprsMapper">	<!-- mapper 인터페이스가 위치하는 풀경로 -->
+
+    <select id="bbsPstAprsCount" resultType="int" parameterType="HongBbsPstAprsListDto">
+        /* post-aprs.bbsPstAprsCount */
+        select count(*)
+          from hong_bbs_pst_aprs
+         where aprs_cd = #{aprsCd}
+           <if test="regChkTf == 'true'">
+           and reg_id = #{regId}
+           </if>
+           and hong_bbs_pst_uid = #{bbsPstUid}
+    </select>
+
+    <insert id="insert" parameterType="HongBbsPstAprsInsertDto">
+        /* post-aprs.insert */
+        insert into hong_bbs_pst_aprs (
+            hong_bbs_pst_uid
+           ,aprs_cd
+           ,reg_id
+           ,reg_dt
+        ) values (
+            #{bbsPstUid}
+           ,#{aprsCd}
+           ,#{regId}
+           ,now()
+        )
+    </insert>
+
+    <delete id="delete" parameterType="HongBbsPostAprsDeleteDto">
+        /* post-aprs.delete */
+        delete from hong_bbs_pst_aprs
+         where reg_id = #{regId}
+           and hong_bbs_pst_uid = #{bbsPstUid}
+           and aprs_cd = #{aprsCd}
+    </delete>
+</mapper>

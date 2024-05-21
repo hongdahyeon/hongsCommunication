@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <th:block th:replace="~{fragments/title :: title('공지사항')}"></th:block>
+    <div id="table"></div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        const typeUid = /*[[${typeUid}]]*/ null;
+        const type = /*[[${type}]]*/ "";
+        history.replaceState({}, null, `/bbs/post/${type}`)
+
+        let table = new Table("table")
+
+        $(document).ready(function() {
+
+            table
+                .setParams({typeUid: typeUid, ordering: type})
+                .get('/api/bbs/post/list.json')
+                .usePagination()
+                .headerCenter()
+                .add(new Column("index").title("#").width(5).center())
+                .add(new Column("pstTtl").title("제목").width(10).left())
+                .add(new Column("ntcYn").title("공지여부").width(8).center().formatter(function (cell) {
+                    const rowData = cell.getData()
+                    return (rowData['ntcYn'] === 'Y') ? '<span style="color: green">공지</span>' : '<span style="color: red">미공지</span>'
+                }))
+
+            makeTable()
+
+            table
+                .rowClick((data, row) => {
+                    window.location.href = `/bbs/post/${type}/view/${data['pstUid']}?typeUid=${typeUid}`
+                })
+        })
+
+        function makeTable() {
+            Http.get(`/api/bbs/type/view.json?hongBbsTypeUid=${typeUid}`).then((res) => {
+                if(res['httpStatus'] === 200) {
+                    const data = res.message
+                    if(data['cmntUseYn'] === 'Y') table.add(new Column("commentCnt").title("댓글 <br> 개수").width(5).center())
+                    if(data['fileAtchYn'] === 'Y') table.add(new Column("fileCnt").title("첨부 <br> 개수").width(5).center())
+                    table
+                        .add(new Column("regName").title("등록자").width(10).center())
+                        .add(new Column("regDt").title("등록일").width(10).center())
+                }
+            }).then(() => {
+                table.init()
+            })
+        }
+
+    </script>
+</th:block>
+
+</html>

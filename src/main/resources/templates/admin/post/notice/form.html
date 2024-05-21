@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <th:block th:replace="~{fragments/title :: title('공지사항 작성')}"></th:block>
+
+    <div class="card">
+        <div class="card-body" id="form-body">
+
+            <form id="form" class="needs-validation" novalidate>
+                <input type="hidden" th:value="${typeUid}" name="hongBbsTypeUid" />
+                <div class="row mb-3">
+                    <div class="col-md-9">
+                        <label for="pstTtl" class="form-label">제목</label>
+                        <input type="text" class="form-control" name="pstTtl" id="pstTtl" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">공지여부</label>
+                        <div class="mb-1 margin-10">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="ntcYn" id="ntcYn-Y" value="Y" required checked>
+                                <label class="form-check-label" for="ntcYn-Y">공지</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="ntcYn" id="ntcYn-N" value="N" required>
+                                <label class="form-check-label" for="ntcYn-N">미공지</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label class="form-label">내용</label>
+                        <div class="form-control summernote" rows="5" id="content" name="content" required></div>
+                    </div>
+                    <div class="col-md-12" style="margin-top: 20px;" th:if="${typeView?.fileAtchYn == 'Y'}">
+                        <label class="form-label">첨부파일</label>
+                        <div class="border p-3">
+                            <label class="form-label" for="upload-container"></label>
+                            <div>
+                                <div id="upload-container" class="mt-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 버튼 영역 -->
+                <div class="row mb-3">
+                    <div class="col-md-12 text-end">
+                        <button type="button" class="btn btn-secondary" id="goback-btn">뒤로가기</button>
+                        <button type="button" class="btn btn-primary" id="save-btn">저장</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        const typeUid = /*[[${typeUid}]]*/ null;
+        const typeView = /*[[${typeView}]]*/ {};
+        const type = /*[[${type}]]*/ "";
+        history.replaceState({}, null, `/admin/bbs/post/${type}`)
+
+        const fileUid = null;
+        const summernote = new Summernote("content")
+        let upload = (typeView['fileAtchYn'] === 'Y') ? new Upload("#upload-container") : ''
+
+        $(document).ready(function() {
+            if(typeView['fileAtchYn'] === 'Y') upload.setUid(fileUid)
+
+            $("#goback-btn").on('click', () => {
+                Util.confirm("작성중이던 정보는 사라집니다. <br> 뒤로 돌아가시겠습니까?").then((isOk) => {
+                    if(isOk) window.location.href = `/admin/bbs/post/${type}?typeUid=${typeUid}`
+                })
+            })
+
+            $("#save-btn").on('click', (e) => {
+                e.preventDefault()
+                const form = document.getElementById("form")
+                if (form.checkValidity() === false) form.classList.add("was-validated");
+                else {
+                    FormDataToObj.getParameter("form").then(obj => {
+
+                        if(obj['files']) delete obj['files']
+                        if(obj['files[]']) delete obj['files[]']
+
+                        if(summernote.getCode().length === 0) {
+                            Util.alert("게시글 내용을 입력해주세요")
+                            return false
+                        }
+
+                        if(typeView['fileAtchYn'] === 'Y') {
+                            obj['fileUid'] = fileUid
+                            obj['addFile'] = upload.getTempFiles()
+                            obj['delFile'] = upload.getRemoveFileUrls()
+                        }
+                        obj['pstCn'] = summernote.getCode()
+
+                        Http.post('/api/admin/bbs/post/insert.json', obj).then((res) => {
+                            if(res['httpStatus'] === 201) Util.alert("게시글 등록이 되었습니다.").then(() => window.location.href = `/admin/bbs/post/${type}?typeUid=${typeUid}`)
+                            else if(res['httpStatus'] === 400) Util.alert("게시글 등록에 실피했습니다.")
+                        })
+                    });
+                }
+            });
+
+        });
+
+    </script>
+</th:block>
+
+</html>

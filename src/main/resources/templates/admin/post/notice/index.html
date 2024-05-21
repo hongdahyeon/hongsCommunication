@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <th:block th:replace="~{fragments/title :: title('공지사항 관리')}"></th:block>
+    <div style="text-align: right;">
+        <button type="button" class="btn btn-primary" id="add-post">게시글 작성</button>
+    </div>
+    <div id="table"></div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        const typeUid = /*[[${typeUid}]]*/ null;
+        const type = /*[[${type}]]*/ "";
+        history.replaceState({}, null, `/admin/bbs/post/${type}`)
+
+        let table = new Table("table")
+
+        $(document).ready(function() {
+            table
+                .setParams({typeUid: typeUid, ordering: type})
+                .get('/api/admin/bbs/post/list.json')
+                .usePagination()
+                .headerCenter()
+                .add(new Column("index").title("#").width(5).center())
+                .add(new Column("pstTtl").title("제목").width(10).left())
+                .add(new Column("ntcYn").title("공지여부").width(8).center().formatter(function (cell) {
+                    const rowData = cell.getData()
+                    return (rowData['ntcYn'] === 'Y') ? '<span style="color: green">공지</span>' : '<span style="color: red">미공지</span>'
+                }))
+                .add(new Column("likeCnt").title("좋아요 <br> 개수").width(5).center())
+                .add(new Column("disLikeCnt").title("싫어요 <br> 개수").width(5).center())
+
+            makeTable()
+
+            $("#add-post").on('click', () => {
+                window.location.href = `/admin/bbs/post/${type}/form?typeUid=${typeUid}`
+            })
+        })
+
+        function makeTable() {
+            Http.get(`/api/admin/bbs/type/view.json?hongBbsTypeUid=${typeUid}`).then((res) => {
+                if(res['httpStatus'] === 200) {
+                    const data = res.message
+                    if(data['cmntUseYn'] === 'Y') table.add(new Column("commentCnt").title("댓글 <br> 개수").width(5).center())
+                    if(data['fileAtchYn'] === 'Y') table.add(new Column("fileCnt").title("첨부 <br> 개수").width(5).center())
+                    table
+                        .add(new Column("regName").title("등록자").width(10).center())
+                        .add(new Column("regDt").title("등록일").width(10).center())
+                }
+            }).then(() => {
+                table
+                    .add(new Column("pstUid").title("수정하기").width(10).center().formatter(function (cell) {
+                        const cellData = cell.getData()
+                        return `<button type="button" class="btn btn-sm btn-outline-primary" data-num="${cellData['pstUid']}" onclick="editPost(this)">수정하기</button>`
+                    }))
+                    .add(new Column("pstUid").title("유저화면 <br> 보러가기").width(10).center().formatter(function (cell) {
+                        const cellData = cell.getData()
+                        return `<button type="button" class="btn btn-sm btn-outline-primary" data-num="${cellData['pstUid']}" onclick="userPost(this)">보러가기</button>`
+                    }))
+                    .init()
+            })
+        }
+
+        function editPost(This) {
+            const pstUid = This.getAttribute("data-num")
+            window.location.href = `/admin/bbs/post/${type}/edit/${pstUid}?typeUid=${typeUid}`
+        }
+
+        function userPost(This) {
+            const pstUid = This.getAttribute("data-num")
+            window.location.href = `/bbs/post/${type}/view/${pstUid}?typeUid=${typeUid}`
+        }
+
+    </script>
+</th:block>
+
+</html>

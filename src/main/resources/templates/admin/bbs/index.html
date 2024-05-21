@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+    <th:block th:replace="~{fragments/title :: title('게시판 관리')}"></th:block>
+    <div style="text-align: right;">
+        <button type="button" class="btn btn-primary" id="add-bbs">게시판 추가하기</button>
+    </div>
+    <div id="table"></div>
+
+    <!-- s: add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModallLabel" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>게시판 추가하기</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="addModal-form" class="needs-validation" novalidate>
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1 margin-10">
+                                <label for="addModal-bbsNm">게시판명<span class="text-primary ms-50">*</span></label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="addModal-bbsNm" name="bbsNm" required>
+                                </div>
+                                <div class="invalid-feedback">게시판명을 입력해주세요.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1 margin-10">
+                                <label for="addModal-bbsTypeCd">게시판 유형<span class="text-primary ms-50">*</span></label>
+                                <select class="form-select" name="bbsTypeCd" id="addModal-bbsTypeCd" required>
+                                    <th:block th:each="bbs, bbsStat: ${bbsType}">
+                                        <option th:selected="${bbsStat?.first}" th:value="${bbs?.codeVal}" th:text="${bbs?.codeNm}"></option>
+                                    </th:block>
+                                </select>
+                                <div class="invalid-feedback">게시판 유형을 입력해주세요.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12" style="margin-top: 10px;">
+                            <div class="mb-1 margin-10">
+                                <label>댓글사용여부<span class="text-primary ms-50">*</span></label>
+                                <div class="mb-1 margin-10">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="cmntUseYn" id="addModal-cmntUseYn-Y" value="Y" required checked>
+                                        <label class="form-check-label" for="addModal-cmntUseYn-Y">사용</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="cmntUseYn" id="addModal-cmntUseYn-N" value="N" required>
+                                        <label class="form-check-label" for="addModal-cmntUseYn-N">미사용</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12" style="margin-top: 10px;">
+                            <div class="mb-1 margin-10">
+                                <label>첨부파일 사용여부<span class="text-primary ms-50">*</span></label>
+                                <div class="mb-1 margin-10">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="fileAtchYn" id="addModal-fileAtchYn-Y" value="Y" required checked>
+                                        <label class="form-check-label" for="addModal-fileAtchYn-Y">사용</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="fileAtchYn" id="addModal-fileAtchYn-N" value="N" required>
+                                        <label class="form-check-label" for="addModal-fileAtchYn-N">미사용</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12" style="margin-top: 10px;">
+                            <div class="mb-1 margin-10">
+                                <label>사용여부<span class="text-primary ms-50">*</span></label>
+                                <div class="mb-1 margin-10">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="useYn" id="addModal-useYn-Y" value="Y" required checked>
+                                        <label class="form-check-label" for="addModal-useYn-Y">사용</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="useYn" id="addModal-useYn-N" value="N" required>
+                                        <label class="form-check-label" for="addModal-useYn-N">미사용</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 10px" class="text-end">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-outline-primary" id="addModal-btn">추가하기</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- e: add Modal -->
+
+    <!-- s: edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>게시판 수정하기</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="editModal-form" class="needs-validation" novalidate>
+                        <input type="hidden" name="hongBbsTypeUid" id="editModal-hongBbsTypeUid" />
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1 margin-10">
+                                <label for="editModal-bbsNm">게시판명<span class="text-primary ms-50">*</span></label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="editModal-bbsNm" name="bbsNm" required>
+                                </div>
+                                <div class="invalid-feedback">게시판명을 입력해주세요.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1 margin-10">
+                                <label for="editModal-bbsTypeCd">게시판 유형<span class="text-primary ms-50">*</span></label>
+                                <select class="form-select" name="bbsTypeCd" id="editModal-bbsTypeCd" required>
+                                    <th:block th:each="bbs, bbsStat: ${bbsType}">
+                                        <option th:selected="${bbsStat?.first}" th:value="${bbs?.codeVal}" th:text="${bbs?.codeNm}"></option>
+                                    </th:block>
+                                </select>
+                                <div class="invalid-feedback">게시판 유형을 입력해주세요.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12" style="margin-top: 10px;">
+                            <div class="mb-1 margin-10">
+                                <label>댓글사용여부<span class="text-primary ms-50">*</span></label>
+                                <div class="mb-1 margin-10">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="cmntUseYn" id="editModal-cmntUseYn-Y" value="Y" required checked>
+                                        <label class="form-check-label" for="editModal-cmntUseYn-Y">사용</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="cmntUseYn" id="editModal-cmntUseYn-N" value="N" required>
+                                        <label class="form-check-label" for="editModal-cmntUseYn-N">미사용</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12" style="margin-top: 10px;">
+                            <div class="mb-1 margin-10">
+                                <label>첨부파일 사용여부<span class="text-primary ms-50">*</span></label>
+                                <div class="mb-1 margin-10">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="fileAtchYn" id="editModal-fileAtchYn-Y" value="Y" required checked>
+                                        <label class="form-check-label" for="editModal-fileAtchYn-Y">사용</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="fileAtchYn" id="editModal-fileAtchYn-N" value="N" required>
+                                        <label class="form-check-label" for="editModal-fileAtchYn-N">미사용</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-12" style="margin-top: 10px;">
+                            <div class="mb-1 margin-10">
+                                <label>사용여부<span class="text-primary ms-50">*</span></label>
+                                <div class="mb-1 margin-10">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="useYn" id="editModal-useYn-Y" value="Y" required checked>
+                                        <label class="form-check-label" for="editModal-useYn-Y">사용</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="useYn" id="editModal-useYn-N" value="N" required>
+                                        <label class="form-check-label" for="editModal-useYn-N">미사용</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 10px" class="text-end">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-outline-primary" id="del-bbs">게시판 삭제하기</button>
+                            <button type="button" class="btn btn-primary" id="editModal-btn">수정하기</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- e: edit Modal -->
+
+</th:block>
+
+<th:block layout:fragment="script">
+    <script>
+        let table = new Table("table")
+
+        $(document).ready(function() {
+            table
+                .get('/api/admin/bbs/type/list.json')
+                .usePagination()
+                .headerCenter()
+                .add(new Column("index").title("#").width(5).center())
+                .add(new Column("bbsTypeNm").title("게시판 유형").width(10).left())
+                .add(new Column("bbsNm").title("게시판 이름").width(10).left())
+                .add(new Column("cmntUseYnStr").title("댓글 <br> 사용여부").width(10).center().formatter(function (cell) {
+                    const cellData = cell.getData()
+                    return (cellData['cmntUseYn'] === 'Y') ?
+                        `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBbsTypeUid']}" data-yn="cmntUseYn" data-now="${cellData['cmntUseYn']}" style="color: green">${cellData['cmntUseYnStr']}</a>`
+                        : `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBbsTypeUid']}" data-yn="cmntUseYn" data-now="${cellData['cmntUseYn']}" style="color: red">${cellData['cmntUseYnStr']}</a>`
+                }))
+                .add(new Column("fileAtchYnStr").title("첨부파일 <br> 사용여부").width(10).center().formatter(function (cell) {
+                    const cellData = cell.getData()
+                    return (cellData['fileAtchYn'] === 'Y') ?
+                        `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBbsTypeUid']}" data-yn="fileAtchYn" data-now="${cellData['fileAtchYn']}" style="color: green">${cellData['fileAtchYnStr']}</a>`
+                        : `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBbsTypeUid']}" data-yn="fileAtchYn" data-now="${cellData['fileAtchYn']}" style="color: red">${cellData['fileAtchYnStr']}</a>`
+                }))
+                .add(new Column("useYnStr").title("게시판 <br> 사용여부").width(10).center().formatter(function (cell) {
+                    const cellData = cell.getData()
+                    return (cellData['useYn'] === 'Y') ?
+                        `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBbsTypeUid']}" data-yn="useYn" data-now="${cellData['useYn']}" style="color: green">${cellData['useYnStr']}</a>`
+                        : `<a href="#" onclick="changeYn(this)" data-num="${cellData['hongBbsTypeUid']}" data-yn="useYn" data-now="${cellData['useYn']}" style="color: red">${cellData['useYnStr']}</a>`
+                }))
+                .add(new Column("regName").title("등록자").width(10).center())
+                .add(new Column("regDt").title("등록일").width(10).center())
+                .add(new Column("hongBbsTypeUid").title("수정하기").width(10).center().formatter(function (cell) {
+                    return `<button type="button" class="btn btn-sm btn-outline-primary" data-num="${cell.getData()['hongBbsTypeUid']}" onclick="changeBbsTypeCd(this)">수정하기</button>`
+                }))
+                .add(new Column("hongBbsTypeUid").title("게시글 관리하기").width(10).center().formatter(function (cell) {
+                    const cellData = cell.getData()
+                    const disabled = (cellData['useYn'] === 'N') ? "disabled" : ''
+                    return `<button type="button" class="btn btn-sm btn-outline-primary" data-type="${cellData['bbsCd']}" data-num="${cellData['hongBbsTypeUid']}" ${disabled} onclick="gotoPost(this)">관리하기</button>`
+                }))
+                .init()
+
+            /* 게시판 유형 추가 모달 띄우기 */
+            $("#add-bbs").on('click', () => {
+                $("#addModal").modal('show')
+            })
+
+            /* 게시판 유형 추가하기 */
+            $("#addModal-btn").on('click', (e) => {
+                e.preventDefault()
+                const form = document.getElementById("addModal-form")
+                if (form.checkValidity() === false) form.classList.add("was-validated")
+                else {
+                    FormDataToObj.getParameter("addModal-form").then(obj => {
+                        Http.post('/api/admin/bbs/type/insert.json', obj).then(res => {
+                            if(res['httpStatus'] === 201) {
+                                Util.alert("게시판 유형이 등록되었습니다.").then(() => {
+                                    table.submit()
+                                    $("#addModal").modal('hide')
+                                })
+                            } else if(res['httpStatus'] === 400) Util.alert("게시판 유형 등록에 실패했습니다.")
+                        })
+                    });
+                }
+            })
+
+            /* 게시판 유형 수정하기 */
+            $("#editModal-btn").on('click', (e) => {
+                e.preventDefault()
+                const form = document.getElementById("editModal-form")
+                if (form.checkValidity() === false) form.classList.add("was-validated")
+                else {
+                    FormDataToObj.getParameter("editModal-form").then(obj => {
+                        Http.put('/api/admin/bbs/type/update.json', obj).then((res) => {
+                            if(res['httpStatus'] === 200) {
+                                Util.alert("게시판 유형이 수정되었습니다.").then(() => {
+                                    table.submit()
+                                    $("#editModal").modal('hide')
+                                })
+                            }  else if(res['httpStatus'] === 400) Util.alert("게시판 유형 등록에 실패했습니다.")
+                        })
+                    });
+                }
+            })
+
+            /* 게시판 유형 삭제하기 */
+            $("#del-bbs").on('click', () => {
+                const hongBbsTypeUid = $("#editModal-hongBbsTypeUid").val()
+                Http.delete(`/api/admin/bbs/type/delete.json?hongBbsTypeUid=${hongBbsTypeUid}`).then((res) => {
+                    if(res['httpStatus'] === 200) {
+                        Util.alert("게시판 유형이 삭제되었습니다.").then(() => {
+                            table.submit()
+                            $("#editModal").modal('hide')
+                        })
+                    }  else if(res['httpStatus'] === 400) Util.alert("게시판 유형 삭제에 실패했습니다.")
+                })
+            })
+
+            /* 게시판 유형 등록 모달 닫힐때 */
+            $("#addModal").on('hidden.bs.modal', (e) => {
+                e.preventDefault();
+                $("#addModal-bbsNm").val('')
+                $("#addModal-useYn-Y").prop('checked', true)
+                $("#addModal-cmntUseYn-Y").prop('checked', true)
+                $("#addModal-fileAtchYn-Y").prop('checked', true)
+                document.getElementById("addModal-form").classList.remove('was-validated');
+            });
+
+            /* 게시판 유형 수정 모달 닫힐때 */
+            $("#editModal").on('hidden.bs.modal', (e) => {
+                e.preventDefault();
+                $("#editModal-hongBbsTypeUid").val(0)
+                $("#editModal-bbsNm").val('')
+                $("#editModal-useYn-Y").prop('checked', true)
+                $("#editModal-cmntUseYn-Y").prop('checked', true)
+                $("#editModal-fileAtchYn-Y").prop('checked', true)
+                document.getElementById("editModal-form").classList.remove('was-validated');
+            });
+        })
+
+        function changeYn(This) {
+            const hongBbsTypeUid = This.getAttribute("data-num")
+            const yn = This.getAttribute("data-yn")
+            const now = This.getAttribute("data-now")
+            const change = (now === 'Y') ? 'N' : 'Y'
+            const message = (yn === 'cmntUseYn') ? '댓글 사용여부' : (yn === 'fileAtchYn') ? '첨부파일 사용여부' : '사용여부'
+            Util.confirm(`해당 게시판 유형의 ${message}를 변경하시겠습니까?`).then((isOk) => {
+                if(isOk) {
+                    Http.put('/api/admin/bbs/type/ynUpdate.json', {uid: hongBbsTypeUid, type: yn, ynValue: change}).then((res) => {
+                        if(res['httpStatus'] === 200) {
+                            Util.alert(`해당 게시판 유형의 ${message}가 변경되었습니다.`).then(() => {
+                                table.submit()
+                            })
+                        }  else if(res['httpStatus'] === 400) Util.alert(`해당 게시판 유형의 ${message}의 변경에 실패했습니다.`)
+                    })
+                }
+            })
+        }
+
+        function gotoPost(This) {
+            const hongBbsTypeUid = This.getAttribute("data-num")
+            const bbsTypeCd = This.getAttribute("data-type")
+            window.location.href = `/admin/bbs/post/${bbsTypeCd}?typeUid=${hongBbsTypeUid}`
+        }
+
+        function changeBbsTypeCd(This) {
+            const hongBbsTypeUid = This.getAttribute("data-num")
+            Http.get(`/api/admin/bbs/type/view.json?hongBbsTypeUid=${hongBbsTypeUid}`).then(res => {
+                if(res['httpStatus'] === 200) {
+                    const data = res.message
+                    $("#editModal-hongBbsTypeUid").val(data['hongBbsTypeUid'])
+                    $('#editModal-bbsTypeCd').val(data['bbsTypeCd'])
+                    $("#editModal-bbsNm").val(data['bbsNm'])
+                    $(`#editModal-useYn-${data['useYn']}`).prop('checked', true)
+                    $(`#editModal-cmntUseYn-${data['cmntUseYn']}`).prop('checked', true)
+                    $(`#editModal-fileAtchYn-${data['fileAtchYn']}`).prop('checked', true)
+                    $("#editModal").modal('show')
+                }
+            })
+        }
+    </script>
+</th:block>
+
+</html>

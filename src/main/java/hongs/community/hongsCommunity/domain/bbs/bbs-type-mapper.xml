@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hongs.community.hongsCommunity.domain.bbs.HongBbsTypeMapper">
+
+    <select id="list" resultType="HongBbsTypeListVo">
+        /* bbs-type.list */
+        select hbtype.hong_bbs_type_uid as hong_bbs_type_uid
+              ,hbtype.bbs_type_cd as bbs_type_cd
+              ,hcode.code_nm as bbs_type_nm
+              ,hcode.memo_cn as bbs_cd          -- notice, faq, qna
+              ,hbtype.bbs_nm as bbs_nm
+              ,hbtype.cmnt_use_yn as cmnt_use_yn
+              ,hbtype.file_atch_yn as file_atch_yn
+              ,case when hbtype.cmnt_use_yn = 'Y' then '사용' else '미사용' end as cmnt_use_yn_str
+              ,case when hbtype.file_atch_yn = 'Y' then '사용' else '미사용' end as file_atch_yn_str
+              ,case when hbtype.use_yn = 'Y' then '사용' else '미사용' end as use_yn_str
+              ,hbtype.use_yn as use_yn
+              ,huser.user_nm as reg_name
+              ,to_char(hbtype.reg_dt, 'YYYY-MM-DD') as reg_dt
+          from hong_bbs_type hbtype
+          left join hong_user huser on huser.user_uid = hbtype.reg_id
+          left join hong_code hcode on hcode.code_val = hbtype.bbs_type_cd and hcode.upper_code_val = 'BBS_TYPE' and hcode.use_yn = 'Y' and hcode.del_yn = 'N'
+         where hbtype.del_yn = 'N'
+    </select>
+
+    <insert id="insert" parameterType="HongBbsTypeInsertUpdateDto">
+        /* bbs-type.insert */
+        insert into hong_bbs_type (
+            bbs_type_cd
+           ,bbs_nm
+           ,cmnt_use_yn
+           ,file_atch_yn
+           ,use_yn
+           ,del_yn
+           ,reg_id
+           ,reg_dt
+           ,mdfr_id
+           ,mdfr_dt
+        ) values (
+             #{bbsTypeCd}
+            ,#{bbsNm}
+            ,#{cmntUseYn}
+            ,#{fileAtchYn}
+            ,#{useYn}
+            ,'N'
+            ,#{regId}
+            ,now()
+            ,#{mdfrId}
+            ,now()
+        )
+    </insert>
+
+    <select id="view" resultType="HongBbsTypeViewVo" parameterType="Long">
+        /* bbs-type.view */
+        select hong_bbs_type_uid
+              ,bbs_type_cd
+              ,bbs_nm
+              ,cmnt_use_yn
+              ,file_atch_yn
+              ,use_yn
+          from hong_bbs_type
+         where hong_bbs_type_uid = #{hongBbsTypeUid}
+    </select>
+
+    <update id="update" parameterType="HongBbsTypeInsertUpdateDto">
+        /* bbs-type.update */
+        update hong_bbs_type
+           set bbs_nm = #{bbsNm}
+              ,bbs_type_cd = #{bbsTypeCd}
+              ,cmnt_use_yn = #{cmntUseYn}
+              ,file_atch_yn = #{fileAtchYn}
+              ,use_yn = #{useYn}
+          where hong_bbs_type_uid = #{hongBbsTypeUid}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        /* bbs-type.delete */
+        update hong_bbs_type
+           set del_yn = 'Y'
+         where hong_bbs_type_uid = #{hongBbsTypeUid}
+    </delete>
+    
+    <select id="latestBbsType" parameterType="String" resultType="Long">
+        /* bbs-type.latestBbsType */
+        select hong_bbs_type_uid
+          from hong_bbs_type
+         where bbs_type_cd = #{bbsTypeCd}
+           and use_yn = 'Y'
+           and del_yn = 'N'
+         order by reg_dt desc
+         limit 1
+    </select>
+
+    <update id="ynUpdate" parameterType="HongBbsYnUpdateDto">
+        /* bbs-type.ynUpdate */
+        update hong_bbs_type
+           set mdfr_id = #{mdfrId}
+              ,mdfr_dt = now()
+            <if test="type == 'cmntUseYn'">
+              ,cmnt_use_yn = #{ynValue}
+            </if>
+            <if test="type == 'fileAtchYn'">
+              ,file_atch_yn = #{ynValue}
+            </if>
+            <if test="type == 'useYn'">
+              ,use_yn = #{ynValue}
+            </if>
+         where hong_bbs_type_uid = #{uid}
+    </update>
+</mapper>
