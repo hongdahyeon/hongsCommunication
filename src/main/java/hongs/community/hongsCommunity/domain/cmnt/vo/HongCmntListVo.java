@@ -1,10 +1,10 @@
-package hongs.community.hongsCommunity.domain.comment.vo;
+package hongs.community.hongsCommunity.domain.cmnt.vo;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
-* @fileName HongCommentListVo
+* @fileName HongCmntListVo
 * @author dahyeon
 * @version 1.0.0
 * @date 2024-05-16
@@ -12,10 +12,10 @@ import lombok.Setter;
 **/
 
 @Getter @Setter
-public class HongCommentListVo {
+public class HongCmntListVo {
 
-    private Long hongCommentUid;
-    private String commentCnt;
+    private Long hongCmntUid;
+    private String cmntCn;
     private Boolean canEdit;
     private String userNm;
     private String userEmail;

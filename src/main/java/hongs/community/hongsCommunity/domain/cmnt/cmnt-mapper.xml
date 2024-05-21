@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="hongs.community.hongsCommunity.domain.cmnt.HongCmntMapper">	<!-- mapper 인터페이스가 위치하는 풀경로 -->
+
+    <select id="list" resultType="HongCmntListVo" parameterType="HongCmntListDto">
+        /* comment.list */
+        select hcmnt.hong_cmnt_uid as hong_cmnt_uid
+              ,hcmnt.cmnt_cn as cmnt_cn
+              ,huser.user_nm as user_nm
+              ,huser.user_email as user_email
+              ,hfile.file_url as profile_src
+              ,case when hcmnt.reg_id = #{loginUser} then true else false end as can_edit
+          from hong_cmnt hcmnt
+          left join hong_user huser on huser.user_uid = hcmnt.reg_id
+          left join hong_file hfile on hfile.hong_file_uid = huser.profile and hfile.del_yn = 'N' and hfile.saved = 'SAVED'
+         where hcmnt.del_yn = 'N'
+           and hcmnt.target_type = #{type}
+           and hcmnt.target_uid = #{targetUid}
+    </select>
+
+    <insert id="insert" parameterType="HongCmntInsertDto">
+        /* comment.insert */
+        insert into hong_cmnt (
+            cmnt_cn
+           ,target_type
+           ,target_uid
+           ,del_yn
+           ,reg_id
+           ,reg_dt
+           ,mdfr_id
+           ,mdfr_dt
+        ) values (
+            #{cmntCn}
+           ,#{targetType}
+           ,#{targetUid}
+           ,'N'
+           ,#{regId}
+           ,now()
+           ,#{mdfrId}
+           ,now()
+        )
+    </insert>
+
+    <delete id="delete" parameterType="Long">
+        /* comment.delete */
+        update hong_cmnt
+           set del_yn = 'Y'
+         where hong_cmnt_uid = #{commentUid}
+    </delete>
+
+    <update id="update" parameterType="HongCmntUpdateDto">
+        /* comment.update */
+        update hong_cmnt
+           set cmnt_cn = #{cmntCn}
+              ,mdfr_id = #{mdfrId}
+              ,mdfr_dt = now()
+         where hong_cmnt_uid = #{commentUid}
+    </update>
+</mapper>

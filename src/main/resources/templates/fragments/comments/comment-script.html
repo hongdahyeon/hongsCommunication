@@ -19,12 +19,12 @@
       const comment = textarea.value
 
       if(uid == 0) {
-          Http.post('/api/comment/insert.json', {targetType: parentType, targetId: parentUid, commentCnt: comment}).then((res) => {
+          Http.post('/api/cmnt/insert.json', {targetType: parentType, targetUid: parentUid, cmntCn: comment}).then((res) => {
               if(res['httpStatus'] === 201) drawComments()
               else if(res['httpStatus'] === 400) Util.alert('댓글 등록에 실피했습니다.')
           })
       } else {
-        Http.put('/api/comment/update.json', {commentUid: uid, commentCnt: comment}).then(res => {
+        Http.put('/api/cmnt/update.json', {commentUid: uid, cmntCn: comment}).then(res => {
             if(res['httpStatus'] === 200) drawComments()
             else if(res['httpStatus'] === 400) Util.alert("댓글 수정에 실패했습니다.")
         })
@@ -34,7 +34,7 @@
   function commentDelete(uid) {
       Util.confirm('해당 댓글을 삭제하시겠습니까?').then((isOk) => {
           if(isOk) {
-              Http.delete(`/api/comment/delete.json?uid=${uid}`).then(res => {
+              Http.delete(`/api/cmnt/delete.json?uid=${uid}`).then(res => {
                   if(res['httpStatus'] === 200) drawComments()
                   else if(res['httpStatus'] === 400) Util.alert("댓글 삭제에 실패했습니다.")
               })
@@ -50,7 +50,7 @@
   async function drawComments() {
       const parentType = /*[[${type}]]*/ "";
       const parentUid = /*[[${uid}]]*/ null;
-      const res = await Http.get(`/api/comment/list.json?type=${parentType}&targetId=${parentUid}`)
+      const res = await Http.get(`/api/cmnt/list.json?type=${parentType}&targetUid=${parentUid}`)
       if (res['httpStatus'] === 201) getHandlebars("comment-div-template", "comment-div", res)
       else getHandlebars("comment-div-template", "comment-div", res)
   }

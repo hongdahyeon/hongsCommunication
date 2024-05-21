@@ -1,11 +1,11 @@
-package hongs.community.hongsCommunity.domain.comment.dto;
+package hongs.community.hongsCommunity.domain.cmnt.dto;
 
 import hongs.community.hongsCommunity.global.hongs.dto.request.UpdateRequest;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
-* @fileName HongCommentUpdateDto
+* @fileName HongCmntUpdateDto
 * @author dahyeon
 * @version 1.0.0
 * @date 2024-05-16
@@ -13,8 +13,8 @@ import lombok.Setter;
 **/
 
 @Getter @Setter
-public class HongCommentUpdateDto extends UpdateRequest {
+public class HongCmntUpdateDto extends UpdateRequest {
 
-    private String commentCnt;
+    private String cmntCn;
     private Long commentUid;
 }
