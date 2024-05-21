@@ -285,3 +285,5 @@ $("#view-content").html(code)
 (68) 24-05-21 : code 테이블 수정
 
 (69) 24-05-21 : team, team-user 테이블 수정
+
+(70) 24-05-21 : comment -> cmnt 테이블 수정
