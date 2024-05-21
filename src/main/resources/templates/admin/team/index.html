@@ -48,18 +48,18 @@
                 .headerCenter()
                 .resizeable()
                 .add(new Column("index").title("#").width(5).center())
-                .add(new Column("teamCategoryName").title("팀유형").width(10).center())
+                .add(new Column("teamCtgryNm").title("팀유형").width(10).center())
                 .add(new Column("teamNm").title("팀이름").width(15).center())
                 .add(new Column("memberNum").title("팀인원수").width(10).center().formatter(function (cell) {
                     const rowData = cell.getData()
                     return `${rowData['totalMemberNum']} / ${rowData['memberNum']}`
                 }))
                 .add(new Column("teamShortIntro").title("팀소개").width(20).center())
-                .add(new Column("representName").title("팀대표명").width(10).center())
-                .add(new Column("approvalStr").title("승인여부").width(10).center().formatter(function (cell) {
+                .add(new Column("rprsvNm").title("팀대표명").width(10).center())
+                .add(new Column("aprvYnStr").title("승인여부").width(10).center().formatter(function (cell) {
                     const rowData = cell.getData()
-                    const color = (rowData['approvalYn'] === 'N') ? 'red': 'green'
-                    return `<a style="color: ${color}" href="#" data-num="${rowData['hongTeamUid']}" data-now="${rowData['approvalYn']}" onclick="teamApproval(this)">${rowData['approvalStr']}</a>`
+                    const color = (rowData['aprvYn'] === 'N') ? 'red': 'green'
+                    return `<a style="color: ${color}" href="#" data-num="${rowData['hongTeamUid']}" data-now="${rowData['aprvYn']}" onclick="teamApproval(this)">${rowData['aprvYnStr']}</a>`
                 }))
                 .add(new Column("useStr").title("사용여부").width(10).center().formatter(function (cell) {
                     const rowData = cell.getData()
@@ -77,19 +77,19 @@
                 .add(new Column("userNm").title("사용자 이름").width(20).center())
                 .add(new Column("userEmail").title("사용자 이메일").width(30).center())
                 .add(new Column("userRoleName").title("사용자 권한").width(20).center())
-                .add(new Column("representYn").title("대표 여부").width(20).center())
-                .add(new Column("approvalYnStr").title("승인 여부").width(20).center())
-                .add(new Column("joinDate").title("가입/신청날짜").width(20).center())
+                .add(new Column("rprsvYnStr").title("대표 여부").width(20).center())
+                .add(new Column("aprvYnStr").title("승인 여부").width(20).center())
+                .add(new Column("joinDt").title("가입/신청날짜").width(20).center())
         });
 
         function teamApproval(This) {
             const teamUid = This.getAttribute("data-num")
-            const nowApproval = This.getAttribute("data-now")
-            const message = (nowApproval === 'N') ? '현재 해당 팀은 미승인 상태입니다. <br> 승인 상태로 변경하시겠습니까?' : '현재 해당 팀은 승인 상태입니다. <br> 미승인 상태로 변경하시겠습니까?'
-            const changeApproval = (nowApproval === 'Y') ? 'N' : 'Y'
+            const nowAprvYn = This.getAttribute("data-now")
+            const message = (nowAprvYn === 'N') ? '현재 해당 팀은 미승인 상태입니다. <br> 승인 상태로 변경하시겠습니까?' : '현재 해당 팀은 승인 상태입니다. <br> 미승인 상태로 변경하시겠습니까?'
+            const changeAprvYn = (nowAprvYn === 'Y') ? 'N' : 'Y'
             Util.confirm(message).then((isOk) => {
                 if(isOk) {
-                    Http.put('/api/admin/team/change-approval.json', {hongTeamUid: teamUid, approvalYn: changeApproval}).then((res) => {
+                    Http.put('/api/admin/team/change-approval.json', {hongTeamUid: teamUid, aprvYn: changeAprvYn}).then((res) => {
                         if(res['httpStatus'] === 200) Util.alert("팀의 승인상태를 변경하였습니다.").then(() => table.submit())
                         else if(res['httpStatus'] === 400) Util.alert("팀의 승인상태 변경에 실패했습니다.")
                     })

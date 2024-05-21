@@ -2,7 +2,7 @@ package hongs.community.hongsCommunity.domain.team.team;
 
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamInsertDto;
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUpdateDto;
-import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUserApprovalDto;
+import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUserAprvDto;
 import hongs.community.hongsCommunity.domain.team.team.dto.HongTeamUserInsertDto;
 import hongs.community.hongsCommunity.domain.team.team.vo.HongTeamUserListVo;
 import hongs.community.hongsCommunity.global.hongs.dto.response.ApiDocumentResponse;
@@ -59,7 +59,7 @@ public class HongTeamRestController {
     @PutMapping("/user-approval.json")
     @Operation(summary = "팀 정보 수정하기", description = "팀 정보 수정하기")
     @ApiDocumentResponse
-    public Response userApproval(@RequestBody HongTeamUserApprovalDto dto) {
+    public Response userApproval(@RequestBody HongTeamUserAprvDto dto) {
         Integer userApproval = teamService.userApproval(dto);
         return (userApproval == 1) ? Response.ok() : Response.badRequest();
     }

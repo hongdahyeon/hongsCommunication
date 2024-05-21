@@ -16,18 +16,18 @@ import lombok.Setter;
 public class HongTeamAdminListVo {
 
     private Long hongTeamUid;
-    private String teamCategory;
-    private String teamCategoryName;
+    private String teamCtgry;
+    private String teamCtgryNm;
     private String teamNm;
     private Integer memberNum;
     private String teamShortIntro;
     private Long teamProfile;
-    private Long representId;
-    private String representName;
-    private String approvalYn;
-    private String approvalStr;
+    private Long rprsvUid;              // 대표자 uid
+    private String rprsvNm;           // 대표자명
+    private String aprvYn;              // 승인여부
+    private String aprvYnStr;           // 승인여부 str
     private String useYn;
     private String useStr;
-    private String deletYn;
+    private String delYn;
     private Integer totalMemberNum;
 }

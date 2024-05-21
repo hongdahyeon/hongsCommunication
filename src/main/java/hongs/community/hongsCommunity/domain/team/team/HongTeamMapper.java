@@ -23,5 +23,5 @@ public interface HongTeamMapper {
 
     List<HongTeamUserListVo> userList(Long hongTeamUid);
 
-    Integer userApproval(HongTeamUserApprovalDto dto);
+    Integer userApproval(HongTeamUserAprvDto dto);
 }

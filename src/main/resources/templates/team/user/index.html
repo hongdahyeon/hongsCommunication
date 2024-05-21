@@ -29,12 +29,11 @@
                 .add(new Column("userNm").title("참가신청자 <br> 이름").width(15).left())
                 .add(new Column("userEmail").title("참가신청자 <br> 이메일").width(15).left())
                 .add(new Column("userRole").title("참가신청자 <br> 권한").width(15).left())
-                .add(new Column("joinDate").title("참가신청자 <br> 날짜").width(15).left())
-                .add(new Column("approvalYnStr").title("승인여부").width(15).left().formatter(function (cell) {
+                .add(new Column("joinDt").title("참가신청자 <br> 날짜").width(15).left())
+                .add(new Column("aprvYnStr").title("승인여부").width(15).left().formatter(function (cell) {
                     const rowData = cell.getData()
-                    const color = (rowData['approvalYn'] === 'N') ? 'red': 'green'
-                    if(rowData['approvalYn'] === 'N') return `<a style="color: red" href="#" data-num="${rowData['hongTeamUserUid']}" onclick="userApproval(this)">${rowData['approvalYnStr']}</a>`
-                    else return `<span style="color: green">${rowData['approvalYnStr']}</span>`
+                    if(rowData['aprvYn'] === 'N') return `<a style="color: red" href="#" data-num="${rowData['hongTeamUserUid']}" onclick="userApproval(this)">${rowData['aprvYnStr']}</a>`
+                    else return `<span style="color: green">${rowData['aprvYnStr']}</span>`
 
                 }))
                 .init()

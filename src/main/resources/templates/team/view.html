@@ -9,12 +9,12 @@
     <div class="d-flex justify-content-end">
         <button type="button" class="btn btn-sm btn-outline-secondary" style="margin-right: 5px"
                 th:onclick="'showJoinUser(\'' + ${teamView?.hongTeamUid} + '\')'"
-                th:if="${#authentication.principal.user.userUid == teamView?.representId}">
+                th:if="${#authentication.principal.user.userUid == teamView?.rprsvUid}">
             신청한 사용자 보러가기
         </button>
         <button type="button" class="btn btn-sm btn-primary" style="margin-right: 5px"
                 th:onclick="'updateTeam(\'' + ${teamView?.hongTeamUid} + '\')'"
-                th:if="${#authentication.principal.user.userUid == teamView?.representId}">
+                th:if="${#authentication.principal.user.userUid == teamView?.rprsvUid}">
             수정하기
         </button>
         <button type="button" class="btn btn-sm btn-outline-primary" style="margin-right: 5px"
@@ -45,13 +45,13 @@
                 <div class="col-md-3">
                     <span style="font-size: 13px; color: gray;">팀 대표</span>
                     <div>
-                        <span th:text="${teamView?.representName}"></span>
+                        <span th:text="${teamView?.rprsvNm}"></span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <span style="font-size: 13px; color: gray;">팀 분류</span>
                     <div>
-                        <span th:text="${teamView?.teamCategoryName}"></span>
+                        <span th:text="${teamView?.teamCtgryNm}"></span>
                     </div>
                 </div>
 
@@ -112,7 +112,7 @@
         function joinTeam(teamUid) {
             Util.confirm('해당 팀에 신청하시겠습니까? <br> 팀대표의 승인을 통해 팀에 참여하실 수 있습니다.').then((isOk) => {
                 if(isOk) {
-                    Http.post('/api/team/join-team.json', {approvalYn: 'N', hongTeamUid: teamUid}).then((res) => {
+                    Http.post('/api/team/join-team.json', {aprvYn: 'N', hongTeamUid: teamUid}).then((res) => {
                         if(res['httpStatus'] === 201) Util.alert("팀 신청을 완료하였습니다.").then(() => window.location.href = '/team')
                     })
                 }

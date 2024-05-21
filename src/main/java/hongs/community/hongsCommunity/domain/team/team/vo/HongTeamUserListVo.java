@@ -13,7 +13,7 @@ public class HongTeamUserListVo {
     private String userNm;
     private String userEmail;
     private String userRole;
-    private String joinDate;
-    private String approvalYn;
-    private String approvalYnStr;
+    private String joinDt;
+    private String aprvYn;
+    private String aprvYnStr;
 }

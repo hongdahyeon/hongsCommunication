@@ -16,11 +16,11 @@ import lombok.Setter;
 public class HongTeamUpdateDto extends FileRequest {
 
     private Long hongTeamUid;
-    private String teamCategory;
+    private String teamCtgry;
     private String teamNm;
     private Integer memberNum;
     private String teamShortIntro;
     private String teamIntro;
     private Long teamProfile;
-    private Long representId;
+    private Long rprsvUid;
 }

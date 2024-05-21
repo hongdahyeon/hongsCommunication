@@ -21,7 +21,7 @@ public class HongTeamUserAdminListVo {
     private Long hongTeamUid;
     private String userRole;
     private String userRoleName;
-    private String representYn;
-    private String joinDate;
-    private String approvalYnStr;
+    private String rprsvYnStr;         // 대표자 or 팀원
+    private String aprvYnStr;          // 승인여부 str
+    private String joinDt;
 }

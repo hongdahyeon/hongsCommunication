@@ -17,6 +17,6 @@ import lombok.Setter;
 public class HongTeamAdminChangeDto extends UpdateRequest {
 
     private Long hongTeamUid;
-    private String approvalYn;
+    private String aprvYn;
     private String useYn;
 }

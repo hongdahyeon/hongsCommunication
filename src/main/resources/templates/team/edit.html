@@ -17,10 +17,10 @@
                         <input type="text" class="form-control" name="teamNm" id="teamNm" th:value="${teamEdit?.teamNm}" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="teamCategory" class="form-label">팀분류</label>
-                        <select class="form-select" name="teamCategory" id="teamCategory" required>
+                        <label for="teamCtgry" class="form-label">팀분류</label>
+                        <select class="form-select" name="teamCtgry" id="teamCtgry" required>
                             <th:block th:each="teamCat, teamCatStat: ${teamCategory}">
-                                <option th:selected="${teamCat?.codeVal == teamEdit?.teamCategory}" th:value="${teamCat?.codeVal}" th:text="${teamCat?.codeNm}"></option>
+                                <option th:selected="${teamCat?.codeVal == teamEdit?.teamCtgry}" th:value="${teamCat?.codeVal}" th:text="${teamCat?.codeNm}"></option>
                             </th:block>
                         </select>
                     </div>

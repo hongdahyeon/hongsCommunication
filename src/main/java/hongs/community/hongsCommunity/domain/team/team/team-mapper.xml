@@ -6,55 +6,55 @@
     <select id="list" resultType="HongTeamListVo" parameterType="HongTeamListDto">
         /* team.list */
         select hteam.hong_team_uid
-              ,hteam.team_category
-              ,hcode.code_nm as team_category_name
+              ,hteam.team_ctgry
+              ,hcode.code_nm as team_ctgry_nm
               ,hteam.team_nm
               ,hteam.member_num
               ,hteam.team_short_intro
               ,hteam.team_intro
               ,hteam.team_profile
               ,hfile.file_url as team_profile_url
-              ,hteam.represent_id
-              ,huser.user_nm as represent_name
-              ,hteam.approval_yn
+              ,hteam.rprsv_uid
+              ,huser.user_nm as rprsv_nm
+              ,hteam.aprv_yn
               ,hteam.use_yn
-              ,hteam.delete_yn
+              ,hteam.del_yn
               ,case when htuser.hong_team_user_uid is not null then true
                     else false end as if_joined
-              ,case when hteam.represent_id = #{loginUser} then '팀대표'
-                    when htuser.approval_yn = 'Y' then '팀원'
-                    when htuser.approval_yn = 'N' then '승인대기중'
+              ,case when hteam.rprsv_uid = #{loginUser} then '팀대표'
+                    when htuser.aprv_yn = 'Y' then '팀원'
+                    when htuser.aprv_yn = 'N' then '승인대기중'
                     else '신청가능' end as joined_status
               ,( select count(*)
                    from hong_team_user htuser
                   where htuser.hong_team_uid = hteam.hong_team_uid
-                    and htuser.delete_yn = 'N'
-                    and htuser.approval_yn = 'Y'
+                    and htuser.del_yn = 'N'
+                    and htuser.aprv_yn = 'Y'
                ) as total_member_num
           from hong_team hteam
-          left join hong_user huser on hteam.represent_id = huser.user_uid
+          left join hong_user huser on hteam.rprsv_uid = huser.user_uid
           left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.del_yn = 'N' and hfile.saved = 'SAVED'
-          left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY' and hcode.use_yn = 'Y' and hcode.del_yn = 'N'
-          left join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid and htuser.delete_yn = 'N' and htuser.user_uid = #{loginUser}
-         where hteam.delete_yn = 'N'
-           and hteam.approval_yn = 'Y'
+          left join hong_code hcode on hcode.code_val = hteam.team_ctgry and hcode.upper_code_val = 'TEAM_CATEGORY' and hcode.use_yn = 'Y' and hcode.del_yn = 'N'
+          left join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid and htuser.del_yn = 'N' and htuser.user_uid = #{loginUser}
+         where hteam.del_yn = 'N'
+           and hteam.aprv_yn = 'Y'
            and hteam.use_yn = 'Y'
         <if test="search == 'wait'">
-           and htuser.approval_yn = 'N'
+           and htuser.aprv_yn = 'N'
         </if>
         <if test="search == 'member'">
-           and htuser.approval_yn = 'Y'
-           and hteam.represent_id != #{loginUser}
+           and htuser.aprv_yn = 'Y'
+           and hteam.rprsv_uid != #{loginUser}
         </if>
-        <if test="search == 'repre'">
-           and hteam.represent_id = #{loginUser}
+        <if test="search == 'rprsv'">
+           and hteam.rprsv_uid = #{loginUser}
         </if>
     </select>
 
     <insert id="insertTeam" parameterType="HongTeamInsertDto" useGeneratedKeys="true" keyProperty="hongTeamUid">
         /* team.insertTeam */
         insert into hong_team (
-            team_category
+            team_ctgry
            ,team_nm
            ,member_num
            ,team_short_intro
@@ -64,16 +64,16 @@
            <if test="teamProfile != null">
            ,team_profile
            </if>
-           ,represent_id
-           ,approval_yn
+           ,rprsv_uid
+           ,aprv_yn
            ,use_yn
-           ,delete_yn
+           ,del_yn
            ,reg_id
            ,reg_dt
            ,mdfr_id
            ,mdfr_dt
         ) values (
-            #{teamCategory}
+            #{teamCtgry}
            ,#{teamNm}
            ,#{memberNum}
            ,#{teamShortIntro}
@@ -83,7 +83,7 @@
           <if test="teamProfile != null">
            ,#{teamProfile}
           </if>
-           ,#{representId}
+           ,#{rprsvUid}
            ,'N'
            ,'Y'
            ,'N'
@@ -99,51 +99,51 @@
         insert into hong_team_user (
              user_uid
             ,hong_team_uid
-            ,delete_yn
-            ,join_date
-            ,approval_yn
+            ,del_yn
+            ,join_dt
+            ,aprv_yn
         ) values (
              #{userUid}
             ,#{hongTeamUid}
             ,'N'
             ,now()
-            ,#{approvalYn}
+            ,#{aprvYn}
         )
     </insert>
 
     <select id="view" parameterType="HongTeamViewDto" resultType="HongTeamViewVo">
         /* team.view */
         select hteam.hong_team_uid
-              ,hteam.team_category
-              ,hcode.code_nm as team_category_name
+              ,hteam.team_ctgry
+              ,hcode.code_nm as team_ctgry_nm
               ,hteam.team_nm
               ,hteam.member_num
               ,hteam.team_short_intro
               ,hteam.team_intro
               ,hteam.team_profile
               ,hfile.file_url as team_profile_url
-              ,hteam.represent_id
-              ,huser.user_nm as represent_name
-              ,hteam.approval_yn
+              ,hteam.rprsv_uid
+              ,huser.user_nm as rprsv_nm
+              ,hteam.aprv_yn
               ,hteam.use_yn
-              ,hteam.delete_yn
+              ,hteam.del_yn
               ,case when htuser.hong_team_user_uid is not null then true
                     else false end as if_joined
-              ,case when hteam.represent_id = #{loginUser} then '팀대표'
-                    when htuser.approval_yn = 'Y' then '팀원'
-                    when htuser.approval_yn = 'N' then '승인대기중'
+              ,case when hteam.rprsv_uid = #{loginUser} then '팀대표'
+                    when htuser.aprv_yn = 'Y' then '팀원'
+                    when htuser.aprv_yn = 'N' then '승인대기중'
                     else '신청가능' end as joined_status
               ,( select count(*)
                    from hong_team_user htuser
                   where htuser.hong_team_uid = hteam.hong_team_uid
-                    and htuser.delete_yn = 'N'
-                    and htuser.approval_yn = 'Y'
+                    and htuser.del_yn = 'N'
+                    and htuser.aprv_yn = 'Y'
                ) as total_member_num
           from hong_team hteam
-          left join hong_user huser on hteam.represent_id = huser.user_uid
+          left join hong_user huser on hteam.rprsv_uid = huser.user_uid
           left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.del_yn = 'N' and hfile.saved = 'SAVED'
-          left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY' and hcode.use_yn = 'Y' and hcode.del_yn = 'N'
-          left join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid and htuser.delete_yn = 'N' and htuser.user_uid = #{loginUser}
+          left join hong_code hcode on hcode.code_val = hteam.team_ctgry and hcode.upper_code_val = 'TEAM_CATEGORY' and hcode.use_yn = 'Y' and hcode.del_yn = 'N'
+          left join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid and htuser.del_yn = 'N' and htuser.user_uid = #{loginUser}
          where hteam.hong_team_uid = #{hongTeamUid}
     </select>
 
@@ -151,7 +151,7 @@
         /* team.update */
         update hong_team
            set team_nm = #{teamNm}
-              ,team_category = #{teamCategory}
+              ,team_ctgry = #{teamCtgry}
               ,team_short_intro = #{teamShortIntro}
               <if test="teamIntro != null">
               ,team_intro = #{teamIntro}
@@ -174,21 +174,21 @@
               ,huser.user_nm as user_nm
               ,huser.user_email as user_email
               ,hcode.code_nm as user_role
-              ,to_char(htuser.join_date, 'YYYY-MM-DD') as join_date
-              ,htuser.approval_yn as approval_yn
-              ,case when htuser.approval_yn = 'Y' then '승인' else '미승인' end as approval_yn_str
+              ,to_char(htuser.join_dt, 'YYYY-MM-DD') as join_dt
+              ,htuser.aprv_yn as aprv_yn
+              ,case when htuser.aprv_yn = 'Y' then '승인' else '미승인' end as aprv_yn_str
           from hong_team_user htuser
          inner join hong_team hteam on hteam.hong_team_uid = htuser.hong_team_uid
          inner join hong_user huser on huser.user_uid = htuser.user_uid
           left join hong_code hcode on hcode.code_val = huser.role and hcode.upper_code_val = 'USER_ROLE' and hcode.use_yn = 'Y' and hcode.del_yn = 'N'
          where htuser.hong_team_uid = #{hongTeamUid}
-           and htuser.user_uid != hteam.represent_id
+           and htuser.user_uid != hteam.rprsv_uid
     </select>
 
-    <update id="userApproval" parameterType="HongTeamUserApprovalDto">
+    <update id="userApproval" parameterType="HongTeamUserAprvDto">
         /* team.userApproval */
         update hong_team_user
-           set approval_yn = 'Y'
+           set aprv_yn = 'Y'
          where hong_team_user_uid = #{hongTeamUserUid}
     </update>
 </mapper>

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
-* @fileName HongTeamUserApprovalDto
+* @fileName HongTeamUserAprvDto
 * @author dahyeon
 * @version 1.0.0
 * @date 2024-05-14
@@ -12,7 +12,7 @@ import lombok.Setter;
 **/
 
 @Getter @Setter
-public class HongTeamUserApprovalDto {
+public class HongTeamUserAprvDto {
 
     private Long hongTeamUserUid;
 }

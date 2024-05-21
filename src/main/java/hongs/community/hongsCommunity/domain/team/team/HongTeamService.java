@@ -26,10 +26,10 @@ public class HongTeamService {
     @Transactional(readOnly = false)
     public Integer insertTeam(HongTeamInsertDto dto) {
         Long fUid = hongCommonFileService.saveAndDelFiles(dto.getTeamProfile(), dto.getAddFile(), dto.getDelFile());
-        Long representId = UserUtil.getLoginUserUid();
-        dto.setRepresent_Profile(fUid, representId);
+        Long rprsvUid = UserUtil.getLoginUserUid();
+        dto.setRprsv_Profile(fUid, rprsvUid);
         Integer insertTeam = teamMapper.insertTeam(dto);
-        Integer insertTeamUser = this.insertTeamUser(new HongTeamUserInsertDto(representId, dto.getHongTeamUid(), "Y"));
+        Integer insertTeamUser = this.insertTeamUser(new HongTeamUserInsertDto(rprsvUid, dto.getHongTeamUid(), "Y"));
         return (insertTeam + insertTeamUser);
     }
 
@@ -53,7 +53,7 @@ public class HongTeamService {
         return teamMapper.userList(hongTeamUid);
     }
 
-    public Integer userApproval(HongTeamUserApprovalDto dto) {
+    public Integer userApproval(HongTeamUserAprvDto dto) {
         return teamMapper.userApproval(dto);
     }
 }

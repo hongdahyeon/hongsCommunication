@@ -6,40 +6,40 @@
     <select id="list" resultType="HongTeamAdminListVo">
         /* team-admin.list */
         select hteam.hong_team_uid
-              ,hteam.team_category
-              ,hcode.code_nm as team_category_name
+              ,hteam.team_ctgry
+              ,hcode.code_nm as team_ctgry_nm
               ,hteam.team_nm
               ,hteam.member_num
               ,hteam.team_short_intro
               ,hteam.team_intro
               ,hteam.team_profile
-              ,hteam.represent_id
-              ,huser.user_nm as represent_name
-              ,hteam.approval_yn
-              ,case when hteam.approval_yn = 'Y' then '승인'
+              ,hteam.rprsv_uid
+              ,huser.user_nm as rprsv_nm
+              ,hteam.aprv_yn
+              ,case when hteam.aprv_yn = 'Y' then '승인'
                else '미승인'
-                end as approval_str
+                end as aprv_yn_str
               ,hteam.use_yn
               ,case when hteam.use_yn = 'Y' then '사용'
                else '미사용'
                 end as use_str
-              ,hteam.delete_yn
+              ,hteam.del_yn
               ,( select count(*)
                    from hong_team_user htuser
                   where htuser.hong_team_uid = hteam.hong_team_uid
-                    and htuser.delete_yn = 'N'
+                    and htuser.del_yn = 'N'
                ) as total_member_num
           from hong_team hteam
-          left join hong_user huser on hteam.represent_id = huser.user_uid
+          left join hong_user huser on hteam.rprsv_uid = huser.user_uid
           left join hong_file hfile on hfile.hong_file_uid = hteam.team_profile and hfile.del_yn = 'N' and hfile.saved = 'SAVED'
-          left join hong_code hcode on hcode.code_val = hteam.team_category and hcode.upper_code_val = 'TEAM_CATEGORY' and hcode.use_yn = 'Y' and hcode.del_yn = 'N'
-         where hteam.delete_yn = 'N'
+          left join hong_code hcode on hcode.code_val = hteam.team_ctgry and hcode.upper_code_val = 'TEAM_CATEGORY' and hcode.use_yn = 'Y' and hcode.del_yn = 'N'
+         where hteam.del_yn = 'N'
     </select>
 
     <update id="changeApproval" parameterType="HongTeamAdminChangeDto">
         /* team-admin.changeApproval */
         update hong_team
-           set approval_yn = #{approvalYn}
+           set aprv_yn = #{aprvYn}
               ,mdfr_id = #{mdfrId}
               ,mdfr_dt = now()
          where hong_team_uid = #{hongTeamUid}
@@ -62,13 +62,13 @@
               ,huser.user_email as user_email
               ,huser.role as user_role
               ,hcode.code_nm as user_role_name
-              ,case when hteam.represent_id = htuser.user_uid then '대표'
+              ,case when hteam.rprsv_uid = htuser.user_uid then '대표'
                else '팀원'
-                end as represent_yn
-              ,to_char(htuser.join_date, 'YYYY-MM-DD') as join_date
-              ,case when htuser.approval_yn = 'Y' then '승인'
+                end as rprsv_yn_str
+              ,to_char(htuser.join_dt, 'YYYY-MM-DD') as join_dt
+              ,case when htuser.aprv_yn = 'Y' then '승인'
                else '미승인'
-                end as approval_yn_str
+                end as aprv_yn_str
           from hong_team hteam
          inner join hong_team_user htuser on htuser.hong_team_uid = hteam.hong_team_uid
          inner join hong_user huser on huser.user_uid = htuser.user_uid

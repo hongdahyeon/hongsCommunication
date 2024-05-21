@@ -15,19 +15,19 @@ import lombok.Setter;
 public class HongTeamViewVo {
 
     private Long hongTeamUid;
-    private String teamCategory;
-    private String teamCategoryName;
+    private String teamCtgry;
+    private String teamCtgryNm;
     private String teamNm;
     private Integer memberNum;
     private String teamShortIntro;
     private String teamIntro;
     private Long teamProfile;
     private String teamProfileUrl;
-    private Long representId;
-    private String representName;
-    private String approvalYn;
+    private Long rprsvUid;
+    private String rprsvNm;
+    private String aprvYn;
     private String useYn;
-    private String deleteYn;
+    private String delYn;
     private Integer totalMemberNum;
     private String joinedStatus;
     private Boolean ifJoined;

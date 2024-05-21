@@ -16,16 +16,16 @@ import lombok.Setter;
 public class HongTeamInsertDto extends FileRequest {
 
     private Long hongTeamUid;
-    private String teamCategory;
+    private String teamCtgry;
     private String teamNm;
     private Integer memberNum;
     private String teamShortIntro;
     private String teamIntro;
     private Long teamProfile;
-    private Long representId;
+    private Long rprsvUid;
 
-    public void setRepresent_Profile(Long teamProfile, Long representId) {
+    public void setRprsv_Profile(Long teamProfile, Long rprsvUid) {
         this.teamProfile = teamProfile;
-        this.representId = representId;
+        this.rprsvUid = rprsvUid;
     }
 }
