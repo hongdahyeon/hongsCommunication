@@ -283,3 +283,5 @@ $("#view-content").html(code)
 (67) 24-05-21 : cert-cd, user-disable 테이블 수정
 
 (68) 24-05-21 : code 테이블 수정
+
+(69) 24-05-21 : team, team-user 테이블 수정
