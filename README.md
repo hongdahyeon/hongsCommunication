@@ -281,3 +281,5 @@ $("#view-content").html(code)
 (66) 24-05-20 : menu, calendar, social-user, user, file, file-log 테이블 수정 (HongsRequestAspect는 나중에 롤백하더라도 수정해서 커밋하기)
 
 (67) 24-05-21 : cert-cd, user-disable 테이블 수정
+
+(680 24-05-21 : code 테이블 수정
