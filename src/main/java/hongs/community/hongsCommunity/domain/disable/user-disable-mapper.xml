@@ -13,13 +13,13 @@
           from hong_user_disable hud
           left join hong_user hu on hu.user_uid = hud.mdfr_id
          where hud.user_uid = #{userUid}
-           and hud.delete_yn = 'N'
+           and hud.del_yn = 'N'
     </select>
 
     <update id="toEnable" parameterType="HongUserEnableDto">
         /* user-disable.toEnable */
         update hong_user_disable
-           set delete_yn = 'Y'
+           set del_yn = 'Y'
               ,mdfr_id = #{mdfrId}
               ,mdfr_dt = now()
          where user_uid = #{userUid}
@@ -31,7 +31,7 @@
             user_uid
            ,disable_date
            ,disable_msg
-           ,delete_yn
+           ,del_yn
            ,reg_id
            ,reg_dt
            ,mdfr_id
@@ -47,4 +47,16 @@
            ,now()
         )
     </insert>
+    
+    <select id="viewMsg" parameterType="String" resultType="HongUserDisableViewVo">
+        /* user-disable.viewMsg */
+        select huser.user_uid
+              ,to_char(hudisable.disable_date, 'YYYY-MM-DD') as disable_date
+              ,hudisable.disable_msg
+              ,huser.user_nm as mdfr_name
+          from hong_user huser
+         inner join hong_user_disable hudisable on hudisable.user_uid = huser.user_uid
+         where huser.user_id = #{userId}
+           and hudisable.del_yn = 'N'
+    </select>
 </mapper>

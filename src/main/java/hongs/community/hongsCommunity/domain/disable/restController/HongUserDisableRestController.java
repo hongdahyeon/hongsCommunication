@@ -1,5 +1,6 @@
-package hongs.community.hongsCommunity.domain.disable;
+package hongs.community.hongsCommunity.domain.disable.restController;
 
+import hongs.community.hongsCommunity.domain.disable.HongUserDisableService;
 import hongs.community.hongsCommunity.domain.disable.dto.HongUserDisableDto;
 import hongs.community.hongsCommunity.domain.disable.dto.HongUserEnableDto;
 import hongs.community.hongsCommunity.domain.disable.vo.HongUserDisableViewVo;

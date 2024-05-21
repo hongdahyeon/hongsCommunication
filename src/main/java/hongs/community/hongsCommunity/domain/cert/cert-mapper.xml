@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hongs.community.hongsCommunity.domain.cert.HongCertCdMapper">
+
+    <insert id="join" parameterType="HongCertCdInsertDto">
+        /* front-cert.join */
+        insert into hong_cert_code (
+            user_email
+           ,cert_cd_use_yn
+           ,cert_cd
+           ,cert_cd_crt_ymd
+           ,cert_cd_expry_ymd
+        ) values (
+            #{userEmail}
+           ,#{certCdUseYn}
+           ,#{certCd}
+           ,#{certCdCrtYmd}
+           ,#{certCdExpryYmd}
+        )
+    </insert>
+
+    <select id="checkCertCd" parameterType="HongCertCheckDto" resultType="String">
+        /* front-cert.checkCertCd */
+        select cert_cd
+          from hong_cert_code
+         where user_email = #{userEmail}
+           and cert_cd_expry_ymd > now()
+           and cert_cd_use_yn is false
+         order by cert_cd_crt_ymd desc
+         limit 1;
+    </select>
+
+    <update id="changeCertCdUseYn" parameterType="String">
+        /* front-cert.changeCertCdUseYn */
+        update hong_cert_code
+           set cert_cd_use_yn = true
+         where user_email = #{userEmail}
+    </update>
+
+    <update id="changeUserLastLoginDate" parameterType="String">
+        /* front-cert.changeUserLastLoginDate */
+        update hong_user
+           set last_login_date = now()
+         where user_id = #{userId}
+    </update>
+</mapper>

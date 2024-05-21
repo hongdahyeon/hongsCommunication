@@ -32,7 +32,12 @@ $(document).ready(function(e) {
         if(type === "error") Util.alert(errorMessage.replace("\n", "<br>"))
 
         /* [계정 비활성화] : 관리자가 계정을 비활성화 시킴 */
-        if(type === "disable") Util.alert(errorMessage.replace("\n", "<br>"))
+        if(type === "disable") {
+            Http.get(`/api/front/user-disable/viewMsg.json?userId=${userId}`).then(res => {
+                const data = res.message
+                Util.alert(`사용자의 계정은 비활성화 되었습니다. <br> 비활성화 사유: ${data['disableMsg']} <br> 비활성화일시: ${data['disableDate']}`)
+            })
+        }
 
         /* [계정 만료] : 로그인 1년이상 안해서 휴면 계정된 경우 */
         if(type === "account") {
@@ -46,7 +51,12 @@ $(document).ready(function(e) {
         if(type === "socialEmailDuplicate") Util.alert(errorMessage.replace("\n", "<br>"))
 
         /* [소셜로그인 오류] : 소셜 아이디를 비활성화한 경우 */
-        if(type === "socialEnable") Util.alert(errorMessage.replace("\n", "<br>"))
+        if(type === "socialEnable") {
+            Http.get(`/api/front/user-disable/viewMsg.json?userId=${userId}`).then(res => {
+                const data = res.message
+                Util.alert(`사용자의 계정은 비활성화 되었습니다. <br> 비활성화 사유: ${data['disableMsg']} <br> 비활성화일시: ${data['disableDate']}`)
+            })
+        }
 
         /* [소셜로그인 오류] : 소셜 아이디를 잠근 경우 */
         if(type === "socialLock") Util.alert(errorMessage.replace("\n", "<br>"))
@@ -157,12 +167,12 @@ $(document).ready(function(e) {
     $("#email-validate-chk").on('click', function(e) {
         const userId = $("#validateEmailModal-loginUserId").val()
         const userEmail = $("#chkEmail").val()
-        const verifyCode = $("#verify-code").val()
+        const certCd = $("#cert-code").val()
 
-        if(!verifyCode.length) Util.alert("이메일로 받으신 인증번호를 입력해주세요.")
+        if(!certCd.length) Util.alert("이메일로 받으신 인증번호를 입력해주세요.")
         else {
-            const obj = {userId: userId, userEmail: userEmail, verifyCode: verifyCode}
-            Http.get('/api/front/verify/check-verify.json', obj).then((res) => {
+            const obj = {userId: userId, userEmail: userEmail, certCd: certCd}
+            Http.get('/api/front/cert/check-cert.json', obj).then((res) => {
                 if(res['httpStatus'] === 400) Util.alert(res.message.replace("\n", "<br>"))
                 else if(res['httpStatus'] === 200) {
                     Util.alert(res.message.replace("\n", "<br>")).then(() => {

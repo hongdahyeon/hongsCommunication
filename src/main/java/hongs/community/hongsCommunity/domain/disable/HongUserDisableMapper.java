@@ -13,4 +13,6 @@ public interface HongUserDisableMapper {
     Integer toEnable(HongUserEnableDto dto);
 
     Integer toDisable(HongUserDisableDto dto);
+
+    HongUserDisableViewVo viewMsg(String userId);
 }

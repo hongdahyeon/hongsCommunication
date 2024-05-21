@@ -1,10 +1,10 @@
-package hongs.community.hongsCommunity.domain.verify.dto;
+package hongs.community.hongsCommunity.domain.cert.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
-* @fileName HongVerifyCheckDto
+* @fileName HongCertCheckDto
 * @author dahyeon
 * @version 1.0.0
 * @date 2024-04-26
@@ -12,9 +12,9 @@ import lombok.Setter;
 **/
 
 @Getter @Setter
-public class HongVerifyCheckDto {
+public class HongCertCheckDto {
 
     private String userId;
     private String userEmail;
-    private String verifyCode;
+    private String certCd;
 }

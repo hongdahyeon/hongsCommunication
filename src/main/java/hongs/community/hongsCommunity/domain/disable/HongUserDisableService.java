@@ -32,4 +32,8 @@ public class HongUserDisableService {
         Integer disable = disableMapper.toDisable(dto);
         return (disableUser + disable);
     }
+
+    public HongUserDisableViewVo viewMsg(String userId) {
+        return disableMapper.viewMsg(userId);
+    }
 }
