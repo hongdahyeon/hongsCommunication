@@ -25,8 +25,8 @@ public class HongCmntService {
         return cmntMapper.insert(dto);
     }
 
-    public Integer delete(Long commentUid) {
-        return cmntMapper.delete(commentUid);
+    public Integer delete(Long hongCmntUid) {
+        return cmntMapper.delete(hongCmntUid);
     }
 
     public Integer update(HongCmntUpdateDto dto) {

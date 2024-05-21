@@ -47,7 +47,7 @@
         /* comment.delete */
         update hong_cmnt
            set del_yn = 'Y'
-         where hong_cmnt_uid = #{commentUid}
+         where hong_cmnt_uid = #{hongCmntUid}
     </delete>
 
     <update id="update" parameterType="HongCmntUpdateDto">
@@ -56,6 +56,6 @@
            set cmnt_cn = #{cmntCn}
               ,mdfr_id = #{mdfrId}
               ,mdfr_dt = now()
-         where hong_cmnt_uid = #{commentUid}
+         where hong_cmnt_uid = #{hongCmntUid}
     </update>
 </mapper>

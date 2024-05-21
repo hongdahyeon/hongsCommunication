@@ -15,7 +15,7 @@ public interface HongCmntMapper {
 
     Integer insert(HongCmntInsertDto dto);
 
-    Integer delete(Long commentUid);
+    Integer delete(Long hongCmntUid);
 
     Integer update(HongCmntUpdateDto dto);
 }

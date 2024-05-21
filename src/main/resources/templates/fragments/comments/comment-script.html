@@ -24,7 +24,7 @@
               else if(res['httpStatus'] === 400) Util.alert('댓글 등록에 실피했습니다.')
           })
       } else {
-        Http.put('/api/cmnt/update.json', {commentUid: uid, cmntCn: comment}).then(res => {
+        Http.put('/api/cmnt/update.json', {hongCmntUid: uid, cmntCn: comment}).then(res => {
             if(res['httpStatus'] === 200) drawComments()
             else if(res['httpStatus'] === 400) Util.alert("댓글 수정에 실패했습니다.")
         })

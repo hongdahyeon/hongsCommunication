@@ -16,5 +16,5 @@ import lombok.Setter;
 public class HongCmntUpdateDto extends UpdateRequest {
 
     private String cmntCn;
-    private Long commentUid;
+    private Long hongCmntUid;
 }
