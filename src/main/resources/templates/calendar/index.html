@@ -25,7 +25,7 @@
                             <label for="addCalendar-color" class="col-form-label">일정 색깔</label>
                             <select class="form-select" id="addCalendar-color" required>
                                 <th:block th:each="color, colorStat: ${colors}">
-                                    <option th:selected="${colorStat?.first}" th:value="${color?.codeVal}" th:data-text="${color?.memoCn}" th:text="${color?.codeName}"></option>
+                                    <option th:selected="${colorStat?.first}" th:value="${color?.codeVal}" th:data-text="${color?.memoCn}" th:text="${color?.codeNm}"></option>
                                 </th:block>
                             </select>
                         </div>
@@ -62,7 +62,7 @@
                             <label for="updateCalendar-color" class="col-form-label">일정 색깔</label>
                             <select class="form-select" id="updateCalendar-color" required>
                                 <th:block th:each="color, colorStat: ${colors}">
-                                    <option th:selected="${colorStat?.first}" th:value="${color?.codeVal}" th:data-text="${color?.memoCn}" th:text="${color?.codeName}"></option>
+                                    <option th:selected="${colorStat?.first}" th:value="${color?.codeVal}" th:data-text="${color?.memoCn}" th:text="${color?.codeNm}"></option>
                                 </th:block>
                             </select>
                         </div>

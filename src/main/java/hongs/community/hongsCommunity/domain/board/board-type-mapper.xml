@@ -7,7 +7,7 @@
         /* board-type.list */
         select hbtype.hong_board_type_uid as hong_board_type_uid
               ,hbtype.board_type_cd as board_type_cd
-              ,hcode.code_name as board_type_name
+              ,hcode.code_nm as board_type_name
               ,hcode.memo_cn as board_cd
               ,hbtype.board_name as board_name
               ,hbtype.comment_yn as comment_yn
@@ -20,7 +20,7 @@
               ,to_char(hbtype.reg_dt, 'YYYY-MM-DD') as reg_dt
           from hong_board_type hbtype
           left join hong_user huser on huser.user_uid = hbtype.reg_id
-          left join hong_code hcode on hcode.code_val = hbtype.board_type_cd and hcode.upper_code_val = 'BOARD_TYPE' and hcode.use_yn = 'Y' and hcode.delete_yn = 'N'
+          left join hong_code hcode on hcode.code_val = hbtype.board_type_cd and hcode.upper_code_val = 'BOARD_TYPE' and hcode.use_yn = 'Y' and hcode.del_yn = 'N'
          where hbtype.delete_yn = 'N'
     </select>
 

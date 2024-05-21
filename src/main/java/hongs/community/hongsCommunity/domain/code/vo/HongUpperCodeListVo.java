@@ -17,7 +17,7 @@ public class HongUpperCodeListVo {
 
     private Long hongCodeUid;
     private String codeVal;
-    private String codeName;
+    private String codeNm;
     private Integer childCodeCnt;
     private String useYn;
     private String regName;

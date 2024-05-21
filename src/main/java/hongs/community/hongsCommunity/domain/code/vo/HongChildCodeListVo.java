@@ -16,7 +16,7 @@ public class HongChildCodeListVo {
 
     private Long hongCodeUid;
     private String codeVal;
-    private String codeName;
+    private String codeNm;
     private String memoCn;
     private String useYn;
 }

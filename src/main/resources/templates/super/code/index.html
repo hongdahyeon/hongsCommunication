@@ -36,9 +36,9 @@
 
                         <div class="col-md-12 col-12">
                             <div class="mb-1 margin-10">
-                                <label for="addModal-codeName">코드이름<span class="text-primary ms-50">*</span></label>
+                                <label for="addModal-codeNm">코드이름<span class="text-primary ms-50">*</span></label>
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="addModal-codeName" name="codeName" required>
+                                    <input type="text" class="form-control" id="addModal-codeNm" name="codeNm" required>
                                 </div>
                                 <div class="invalid-feedback">코드 이름을 입력해주세요.</div>
                             </div>
@@ -99,9 +99,9 @@
 
                         <div class="col-md-12 col-12">
                             <div class="mb-1 margin-10">
-                                <label for="editModal-codeName">코드이름<span class="text-primary ms-50">*</span></label>
+                                <label for="editModal-codeNm">코드이름<span class="text-primary ms-50">*</span></label>
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="editModal-codeName" name="codeName" required>
+                                    <input type="text" class="form-control" id="editModal-codeNm" name="codeNm" required>
                                 </div>
                                 <div class="invalid-feedback">코드 이름을 입력해주세요.</div>
                             </div>
@@ -156,7 +156,7 @@
                 .headerCenter()
                 .add(new Column("index").title("#").width(5).center())
                 .add(new Column("codeVal").title("상위코드명").width(15).left())
-                .add(new Column("codeName").title("상위코드이름").width(15).left())
+                .add(new Column("codeNm").title("상위코드이름").width(15).left())
                 .add(new Column("childCodeCnt").title("자식코드개수").width(10).center().formatter(function (cell) {
                     return `${cell.getData()['childCodeCnt']}개`
                 }))
@@ -270,7 +270,7 @@
                 codeValChk = false
                 $("#addModal-codeVal").val('')
                 $("#addModal-codeVal").attr('readonly', false)
-                $("#addModal-codeName").val('')
+                $("#addModal-codeNm").val('')
                 $("#addModal-useYn-Y").prop('checked', true)
                 $("#addModal-memoCn").val('')
                 document.getElementById("addModal-form").classList.remove('was-validated');
@@ -281,7 +281,7 @@
             $("#editModal").on('hidden.bs.modal', (e) => {
                 e.preventDefault()
                 $("#editModal-codeVal").val('')
-                $("#editModal-codeName").val('')
+                $("#editModal-codeNm").val('')
                 $("#editModal-useYn-Y").prop('checked', true)
                 $("#editModal-memoCn").val('')
                 $("#editModal-hongCodeUid").val('')
@@ -298,7 +298,7 @@
                     $("#editModal-hongCodeUid").val(data['hongCodeUid'])
                     $("#editModal-childCodeCnt").val(data['childCodeCnt'])
                     $("#editModal-codeVal").val(data['codeVal'])
-                    $("#editModal-codeName").val(data['codeName'])
+                    $("#editModal-codeNm").val(data['codeNm'])
                     $(`#editModal-useYn-${data['useYn']}`).prop('checked', true)
                     $("#editModal-memoCn").val(data['memoCn'])
                     $("#editModal").modal('show')

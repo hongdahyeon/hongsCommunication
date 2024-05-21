@@ -16,7 +16,7 @@ import lombok.Setter;
 public class HongCodeInsertDto extends CreateRequest {
 
     private String codeVal;
-    private String codeName;
+    private String codeNm;
     private String memoCn;
     private String useYn;
 }

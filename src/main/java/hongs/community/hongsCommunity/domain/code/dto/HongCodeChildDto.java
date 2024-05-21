@@ -1,6 +1,5 @@
 package hongs.community.hongsCommunity.domain.code.dto;
 
-import hongs.community.hongsCommunity.global.hongs.dto.request.CreateRequest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +16,7 @@ public class HongCodeChildDto {
 
     private Long hongCodeUid;
     private String codeVal;
-    private String codeName;
+    private String codeNm;
     private String memoCn;
     private String useYn;
 

@@ -18,7 +18,7 @@ public class HongCodeViewVo {
     private Long hongCodeUid;
     private String upperCodeVal;
     private String codeVal;
-    private String codeName;
+    private String codeNm;
     private String memoCn;
     private String useYn;
     private Integer childCodeCnt;

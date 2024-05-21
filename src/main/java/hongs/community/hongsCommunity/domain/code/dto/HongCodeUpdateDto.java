@@ -17,7 +17,7 @@ import lombok.Setter;
 public class HongCodeUpdateDto extends UpdateRequest {
 
     private Long hongCodeUid;
-    private String codeName;
+    private String codeNm;
     private String memoCn;
     private String useYn;
 

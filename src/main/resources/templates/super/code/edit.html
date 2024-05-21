@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-md-6 col-6">
                     <div class="mb-1 margin-10">
-                        <label for="addModal-codeVal">코드명</label>
+                        <label for="upper-codeVal">코드명</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" id="upper-codeVal" name="codeVal" th:value="${upperView?.codeVal}" disabled>
                         </div>
@@ -26,9 +26,9 @@
                 </div>
                 <div class="col-md-6 col-6">
                     <div class="mb-1 margin-10">
-                        <label for="editModal-codeName">코드이름</label>
+                        <label for="upper-codeNm">코드이름</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="upper-codeName" name="codeName" th:value="${upperView?.codeName}" readonly>
+                            <input type="text" class="form-control" id="upper-codeNm" name="codeNm" th:value="${upperView?.codeNm}" readonly>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                 <div class="col-md-6 col-6">
                     <label>사용여부</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="upper-useYn" name="codeName" th:value="${(upperView?.useYn eq 'Y') ? '사용' : '미사용'}" readonly>
+                        <input type="text" class="form-control" id="upper-useYn" name="useYn" th:value="${(upperView?.useYn eq 'Y') ? '사용' : '미사용'}" readonly>
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@
                                     <input type="text" class="form-control" id="codeVal" name="codeVal" required >
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="codeName" name="codeName" required >
+                                    <input type="text" class="form-control" id="codeNm" name="codeNm" required >
                                 </td>
                                 <td>
                                     <select class="form-select form-select-sm" name="useYn" required>
@@ -108,7 +108,7 @@
                                     <input type="text" class="form-control" id="codeVal" name="codeVal" th:value="${child?.codeVal}" required >
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="codeName" name="codeName" th:value="${child?.codeName}" required >
+                                    <input type="text" class="form-control" id="codeNm" name="codeNm" th:value="${child?.codeNm}" required >
                                 </td>
                                 <td>
                                     <select class="form-select form-select-sm" name="useYn" required>
@@ -183,7 +183,7 @@
 
             if(Array.isArray(obj['hongCodeUid'])) {
                 for(let i=0; i < obj['hongCodeUid'].length; i++) {
-                    const rtnObj = { codeName: obj['codeName'][i], codeVal: obj['codeVal'][i], hongCodeUid: obj['hongCodeUid'][i], memoCn: obj['memoCn'][i], useYn: obj['useYn'][i] }
+                    const rtnObj = { codeNm: obj['codeNm'][i], codeVal: obj['codeVal'][i], hongCodeUid: obj['hongCodeUid'][i], memoCn: obj['memoCn'][i], useYn: obj['useYn'][i] }
                     if(obj['hongCodeUid'][i] == 0) insertLst.push(rtnObj)
                     else updateLst.push(rtnObj)
                 }

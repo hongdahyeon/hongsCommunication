@@ -7,11 +7,11 @@
         /* code.upperList */
         select parent.hong_code_uid as hong_code_uid
               ,parent.code_val as code_val
-              ,parent.code_name as code_name
+              ,parent.code_nm as code_nm
               ,( select count(*)
                    from hong_code as children
                   where parent.code_val = children.upper_code_val
-                    and children.delete_yn = 'N'
+                    and children.del_yn = 'N'
                ) as child_code_cnt
               ,parent.use_yn as use_yn
               ,huser.user_nm as reg_name
@@ -19,14 +19,14 @@
           from hong_code as parent
           left join hong_user as huser on huser.user_uid = parent.reg_id
          where parent.upper_code_val is null
-           and parent.delete_yn = 'N'
+           and parent.del_yn = 'N'
     </select>
 
     <select id="checkIfDuplicate" resultType="int" parameterType="String">
         /* code.checkIfDuplicate */
         select count(*)
           from hong_code
-         where delete_yn = 'N'
+         where del_yn = 'N'
            and code_val = #{codeVal}
     </select>
 
@@ -34,19 +34,19 @@
         /* code.insert */
         insert into hong_code (
             code_val
-           ,code_name
+           ,code_nm
          <if test="memoCn != null">
            ,memo_cn
          </if>
            ,use_yn
-           ,delete_yn
+           ,del_yn
            ,reg_id
            ,reg_dt
            ,mdfr_id
            ,mdfr_dt
         ) values (
             #{codeVal}
-           ,#{codeName}
+           ,#{codeNm}
          <if test="memoCn != null">
            ,#{memoCn}
          </if>
@@ -64,13 +64,13 @@
         select parent.hong_code_uid
               ,parent.upper_code_val
               ,parent.code_val
-              ,parent.code_name
+              ,parent.code_nm
               ,parent.memo_cn
               ,parent.use_yn
               ,( select count(*)
                  from hong_code as children
                  where parent.code_val = children.upper_code_val
-                   and children.delete_yn = 'N'
+                   and children.del_yn = 'N'
                 ) as child_code_cnt
           from hong_code as parent
          where parent.hong_code_uid = #{hongCodeUid}
@@ -79,7 +79,7 @@
     <delete id="delete" parameterType="HongCodeDeleteDto">
         /* code.delete */
         update hong_code
-           set delete_yn = 'Y'
+           set del_yn = 'Y'
               ,mdfr_id = #{mdfrId}
               ,mdfr_dt = now()
          where hong_code_uid = #{hongCodeUid}
@@ -88,7 +88,7 @@
     <update id="update" parameterType="HongCodeUpdateDto">
         /* update */
         update hong_code
-           set code_name = #{codeName}
+           set code_nm = #{codeNm}
               ,use_yn = #{useYn}
             <if test="memoCn != null">
               ,memo_cn = #{memoCn}
@@ -102,10 +102,10 @@
         /* code.insertEach */
         <foreach collection="insertChild" separator=";" item="item" index="index">
             insert into hong_code (
-                upper_code_val, code_val, code_name, use_yn,memo_cn
-                ,reg_id, reg_dt, mdfr_id, mdfr_dt, delete_yn
+                upper_code_val, code_val, code_nm, use_yn, memo_cn
+                ,reg_id, reg_dt, mdfr_id, mdfr_dt, del_yn
             ) values (
-                #{upperCodeVal}, #{item.codeVal}, #{item.codeName}, #{item.useYn},#{item.memoCn}
+                #{upperCodeVal}, #{item.codeVal}, #{item.codeNm}, #{item.useYn},#{item.memoCn}
                 ,#{regId}, now(), #{mdfrId}, now(), 'N'
             )
         </foreach>
@@ -116,7 +116,7 @@
         <foreach collection="updateChild" separator=";" item="item" index="index">
             update hong_code
                set code_val = #{item.codeVal}
-                  ,code_name = #{item.codeName}
+                  ,code_nm = #{item.codeNm}
                   ,use_yn = #{item.useYn}
                   ,memo_cn = #{item.memoCn}
                   ,mdfr_id = #{mdfrId}
@@ -130,7 +130,7 @@
         /* code.deleteEach */
         <foreach collection="delUids" separator=";" item="item" index="index">
             update hong_code
-               set delete_yn = 'Y'
+               set del_yn = 'Y'
                   ,mdfr_id = #{mdfrId}
                   ,mdfr_dt = now()
              where hong_code_uid = #{item}
@@ -142,23 +142,23 @@
         /* code.childList */
         select child.hong_code_uid
               ,child.code_val
-              ,child.code_name
+              ,child.code_nm
               ,child.memo_cn
               ,child.use_yn
           from hong_code child
          inner join hong_code parent on parent.code_val = child.upper_code_val and parent.hong_code_uid = #{hongCodeUid}
-         where child.delete_yn = 'N'
+         where child.del_yn = 'N'
     </select>
 
     <select id="childListByVal" parameterType="String" resultType="HongChildCodeListVo">
         /* code.childListByVal */
         select child.hong_code_uid
               ,child.code_val
-              ,child.code_name
+              ,child.code_nm
               ,child.memo_cn
               ,child.use_yn
           from hong_code child
-         where child.delete_yn = 'N'
+         where child.del_yn = 'N'
            and child.upper_code_val = #{upperCodeVal}
     </select>
 </mapper>

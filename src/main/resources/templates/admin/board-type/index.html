@@ -34,7 +34,7 @@
                                 <label for="addModal-boardTypeCd">게시판 유형<span class="text-primary ms-50">*</span></label>
                                 <select class="form-select" name="boardTypeCd" id="addModal-boardTypeCd" required>
                                     <th:block th:each="board, boardStat: ${boardType}">
-                                        <option th:selected="${boardStat?.first}" th:value="${board?.codeVal}" th:text="${board?.codeName}"></option>
+                                        <option th:selected="${boardStat?.first}" th:value="${board?.codeVal}" th:text="${board?.codeNm}"></option>
                                     </th:block>
                                 </select>
                                 <div class="invalid-feedback">게시판 유형을 입력해주세요.</div>
@@ -126,7 +126,7 @@
                                 <label for="editModal-boardTypeCd">게시판 유형<span class="text-primary ms-50">*</span></label>
                                 <select class="form-select" name="boardTypeCd" id="editModal-boardTypeCd" required>
                                     <th:block th:each="board, boardStat: ${boardType}">
-                                        <option th:selected="${boardStat?.first}" th:value="${board?.codeVal}" th:text="${board?.codeName}"></option>
+                                        <option th:selected="${boardStat?.first}" th:value="${board?.codeVal}" th:text="${board?.codeNm}"></option>
                                     </th:block>
                                 </select>
                                 <div class="invalid-feedback">게시판 유형을 입력해주세요.</div>
