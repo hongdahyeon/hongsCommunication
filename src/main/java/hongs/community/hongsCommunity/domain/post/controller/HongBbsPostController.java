@@ -61,6 +61,9 @@ public class HongBbsPostController {
         model.addAttribute("dislikes", bbsPstAprsService.bbsPstAprsTF(new HongBbsPstAprsListDto(postUid, "DISLIKE_EMO", "true")));
         model.addAttribute("dislikesCnt", bbsPstAprsService.bbsPstAprsCount(new HongBbsPstAprsListDto(postUid, "DISLIKE_EMO", "false")));
 
+        model.addAttribute("commentParentType", "BBS_POST_COMM");
+        model.addAttribute("commentParentUid", postUid);
+
         return "post/" + type + "/view";
     }
 }

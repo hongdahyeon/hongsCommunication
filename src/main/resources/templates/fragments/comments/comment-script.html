@@ -7,8 +7,8 @@
   })
 
   function commentAdd(This) {
-      const parentType = /*[[${type}]]*/ "";
-      const parentUid = /*[[${uid}]]*/ null;
+      const parentType = /*[[${commentParentType}]]*/ "";
+      const parentUid = /*[[${commentParentUid}]]*/ null;
 
       const container = This.closest('.contents');
 
@@ -48,8 +48,8 @@
   }
 
   async function drawComments() {
-      const parentType = /*[[${type}]]*/ "";
-      const parentUid = /*[[${uid}]]*/ null;
+      const parentType = /*[[${commentParentType}]]*/ "";
+      const parentUid = /*[[${commentParentUid}]]*/ null;
       const res = await Http.get(`/api/cmnt/list.json?type=${parentType}&targetUid=${parentUid}`)
       if (res['httpStatus'] === 201) getHandlebars("comment-div-template", "comment-div", res)
       else getHandlebars("comment-div-template", "comment-div", res)

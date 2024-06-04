@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="card" style="margin-top: 10px">
+    <div class="card shadow mb-4" style="margin-top: 10px">
         <div class="card-body" id="form-body">
             <div class="row mb-3">
                 <div class="col-md-9">
@@ -52,10 +52,14 @@
             </div>
         </div>
     </div>
+
+    <th:block th:replace="fragments/comments/comment :: comment"></th:block>
 </th:block>
 
 <th:block layout:fragment="script">
+    <th:block th:replace="fragments/comments/comment-script :: script"></th:block>
     <script th:inline="javascript">
+
         const typeUid = /*[[${typeUid}]]*/ null;
         const postUid = /*[[${postUid}]]*/ null;
         const type = /*[[${type}]]*/ "";
