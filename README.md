@@ -289,3 +289,5 @@ $("#view-content").html(code)
 (70) 24-05-21 : comment -> cmnt 테이블 수정
 
 (71) 24-05-21 : bbs, bbs-post, post-aprs 테이블 수정
+
+(72) 24-06-04 : 댓글 기능 게시글 쪽에도 붙이기
