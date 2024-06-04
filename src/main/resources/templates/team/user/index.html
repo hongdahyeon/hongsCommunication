@@ -34,7 +34,6 @@
                     const rowData = cell.getData()
                     if(rowData['aprvYn'] === 'N') return `<a style="color: red" href="#" data-num="${rowData['hongTeamUserUid']}" onclick="userApproval(this)">${rowData['aprvYnStr']}</a>`
                     else return `<span style="color: green">${rowData['aprvYnStr']}</span>`
-
                 }))
                 .init()
 

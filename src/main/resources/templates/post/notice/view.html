@@ -53,7 +53,6 @@
         </div>
     </div>
 
-
     <th:block th:if="${typeView?.cmntUseYn == 'Y'}">
         <th:block th:replace="fragments/comments/comment :: comment"></th:block>
     </th:block>
@@ -72,12 +71,10 @@
         history.replaceState({}, null, `/bbs/post/${type}`)
 
         const fileUid = /*[[${postView.fileUid}]]*/ null;
-        const summernote = new Summernote("content", 500)
+        const summernote = new Summernote("content", 500).setCode(/*[[${postView.pstCn}]]*/"").destroy()
         const uploadView = (typeView['fileAtchYn'] === 'Y') ? new UploadView("upload-view-container") : ''
 
         $(document).ready(function(e) {
-            summernote.setCode(/*[[${postView.pstCn}]]*/"")
-            summernote.destroy()
             if(typeView['fileAtchYn'] === 'Y') drawViewFile(fileUid)
 
             $("#go-back").on('click', (e) => {

@@ -97,13 +97,10 @@
     <th:block th:replace="fragments/comments/comment-script :: script"></th:block>
     <script th:inline="javascript">
 
-        const summernote = new Summernote("content")
         const teamView = /*[[${teamView}]]*/ {};
+        const summernote = new Summernote("content").setCode(teamView.teamIntro).destroy()
 
         $(document).ready(function() {
-            summernote.setCode(teamView.teamIntro)
-            summernote.destroy()
-
             $("#goback-btn").on('click', () => {
                 window.location.href = '/team'
             })

@@ -45,6 +45,8 @@ class Summernote {
                 onMediaDelete: (target) => this.onMediaDelete(target)
             }
         })
+
+        return this
     }
 
     onImageUpload(files) {
@@ -92,10 +94,12 @@ class Summernote {
 
     destroy() {
         this._editor.summernote('destroy')
+        return this
     }
 
     setCode(code){
         this._editor.summernote('code', code)
+        return this
     }
 
 }
