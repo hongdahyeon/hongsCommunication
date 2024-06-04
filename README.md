@@ -293,3 +293,5 @@ $("#view-content").html(code)
 (72) 24-06-04 : 댓글 기능 게시글 쪽에도 붙이기
 
 (73) 24-06-04 : summernote setCode.destroy
+
+(74) 24-06-04 : faq index.edit.form admin page
