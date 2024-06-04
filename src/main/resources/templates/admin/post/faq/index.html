@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<th:block layout:fragment="content">
+  <th:block th:replace="~{fragments/title :: title('FAQ 관리')}"></th:block>
+  <div style="text-align: right;">
+    <button type="button" class="btn btn-primary" id="add-post">게시글 작성</button>
+  </div>
+
+  <div class="accordion" id="faq-accordion" style="margin-top: 10px;">
+      <div class="accordion-item" th:each="faqs, faqStat : ${faqList}">
+        <h2 class="accordion-header" th:id="|heading${faqs?.pstUid}|">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="|#collapse${faqs?.pstUid}|" aria-expanded="false" th:aria-controls="|collapse${faqs?.pstUid}|"
+            th:text="${faqs?.pstTtl}"></button>
+        </h2>
+        <div th:id="|collapse${faqs?.pstUid}|" class="accordion-collapse collapse" th:aria-labelledby="|heading${faqs?.pstUid}|">
+          <div class="accordion-body">
+            <div class="row">
+              <div class="col-md-12" style="margin-top: 10px; overflow-y: auto; height: 300px">
+                <div th:id="|content${faqs?.pstUid}|"></div>
+              </div>
+            </div>
+            <div class="row" th:if="${typeView?.fileAtchYn == 'Y'}">
+              <div class="col-md-12">
+                <div class="border p-3">
+                  <label class="form-label" th:for="|upload-view-container${faqs?.pstUid}|">첨부파일</label>
+                  <div>
+                    <div th:id="|upload-view-container${faqs?.pstUid}|" class="mt-1"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" style="margin-top: 5px;">
+              <div style="text-align: right;">
+                <button type="button" class="btn btn-secondary upd-post" th:data-num="${faqs?.pstUid}">게시글 수정</button>
+                <button type="button" class="btn btn-outline-warning del-post" th:data-num="${faqs?.pstUid}">게시글 삭제</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+</th:block>
+
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+
+    let summernoteList = []
+    const typeView = /*[[${typeView}]]*/ {};
+    const typeUid = /*[[${typeUid}]]*/ null;
+    const type = /*[[${type}]]*/ "";
+    history.replaceState({}, null, `/admin/bbs/post/${type}`)
+
+    $(document).ready(function(e) {
+
+      const faqList = /*[[${faqList}]]*/ [];
+      faqList.forEach(faqs => {
+        const summernote = new Summernote(`content${faqs['pstUid']}`, 300).setCode(faqs['pstCn']).destroy()
+        summernoteList.push(summernote)
+
+        if(typeView['fileAtchYn'] === 'Y') {
+          const uploadView = new UploadView(`upload-view-container${faqs['pstUid']}`)
+          drawViewFile(uploadView, faqs['fileUid'])
+        }
+      })
+
+      $("#add-post").on('click', () => {
+        window.location.href = `/admin/bbs/post/${type}/form?typeUid=${typeUid}`
+      })
+
+      $('.upd-post').click(function() {
+        const pstUid = $(this).attr('data-num');
+        window.location.href= `/admin/bbs/post/${type}/edit/${pstUid}?typeUid=${typeUid}`
+      })
+
+      $('.del-post').click(function() {
+        const hongBbsPstUid = $(this).attr('data-num');
+        Http.delete(`/api/admin/bbs/post/delete.json?hongBbsPstUid=${hongBbsPstUid}`).then((res) => {
+          if(res['httpStatus'] === 200) Util.alert("게시글이 삭제되었습니다.").then(() => window.location.href = `/admin/bbs/post/${type}?typeUid=${typeUid}`)
+          else if(res['httpStatus'] === 400) Util.alert("게시글 삭제에 실피했습니다.")
+        })
+      })
+
+    })
+
+    function drawViewFile(upload, fUid){
+      if(fUid !== null) {
+        Http.get(`/api/hong/files/list.json?fileUid=${fUid}`).then((res) => {
+          const list = res.message
+          upload.setData(list).draw()
+        })
+      } else upload.setData([]).draw()
+    }
+
+  </script>
+</th:block>
+
+</html>

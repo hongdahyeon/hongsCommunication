@@ -41,7 +41,6 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        console.log("test edit page")
 
         const uid = /*[[${uid}]]*/ null;
         const fileUid = /*[[${fUid}]]*/ null;
@@ -73,7 +72,6 @@
         $("#edit-btn").on('click', () => {
             const obj = { uid: uid, name: summernote.getCode(), fileUid: fileUid, addFile: editUpload.getTempFiles(), delFile: editUpload.getRemoveFileUrls() }
             Http.put('/api/test/edit.json', obj).then((res) => {
-                console.log('res: ', res)
                 const uid = res.message
                 window.location.href = `/test/edit/${uid}`
             })

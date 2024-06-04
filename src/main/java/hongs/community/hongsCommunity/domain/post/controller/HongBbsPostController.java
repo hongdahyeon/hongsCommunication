@@ -35,8 +35,10 @@ public class HongBbsPostController {
 
     @GetMapping("/{type}")
     public String index(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid, Model model) {
-        if(typeUid == null) model.addAttribute("typeUid", bbsTypeService.latestBbsType(type));
-        else model.addAttribute("typeUid", typeUid);
+        if(typeUid == null) {
+            typeUid = bbsTypeService.latestBbsType(type);
+            model.addAttribute("typeUid", typeUid);
+        } else model.addAttribute("typeUid", typeUid);
         model.addAttribute("type", type);
         model.addAttribute("url", "/bbs/post/"+type);
         return "post/" + type + "/index";

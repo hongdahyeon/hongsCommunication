@@ -1,6 +1,7 @@
 package hongs.community.hongsCommunity.domain.post.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -12,8 +13,14 @@ import lombok.Setter;
 **/
 
 @Getter @Setter
+@NoArgsConstructor
 public class HongBbsPostListDto {
 
     private Long typeUid;
     private String ordering;
+
+    public HongBbsPostListDto(Long typeUid, String ordering) {
+        this.typeUid = typeUid;
+        this.ordering = ordering;
+    }
 }
