@@ -295,3 +295,5 @@ $("#view-content").html(code)
 (73) 24-06-04 : summernote setCode.destroy
 
 (74) 24-06-04 : faq index.edit.form admin page
+
+(75) 24-06-04 : faq index USER page
