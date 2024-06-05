@@ -14,6 +14,11 @@ $(document).ready(function(e) {
 
         pwdError.html(errorMessage.replace("\n", "<br>"))
 
+        /* 사용자가 없을떄 */
+        if(type === "none") {
+            Util.alert(errorMessage.replace("\n", "<br>"))
+        }
+
         /* [비밀번호 만료] : 비밀번호 변경한지 90일이 지났을때 */
         if(type === "expired") {
             Util.alert(errorMessage.replace("\n", "<br>")).then(() => {

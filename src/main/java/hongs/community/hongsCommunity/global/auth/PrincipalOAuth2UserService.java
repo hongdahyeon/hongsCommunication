@@ -62,7 +62,7 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
         }
 
-        log.info("provider: {} -> userId : {}, name : {}, email : {}", provider, userId, name, email);
+        log.info("provider [{}] -> userId : {}, name : {}, email : {}", provider, userId, name, email);
 
         HongLoginUserVo socialUser = socialUserFrontService.findSocialUser(userId);
 
@@ -74,12 +74,12 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
                 this.customUser(socialUser);
                 return new PrincipalDetails(socialUser, userInfo);
 
-            } else throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialEmailDuplicate, email, ""), FailureException.OAuth2AuthenticationExceptionEmailDuplicateMsg.message);
+            } else throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialEmailDuplicate, email, ""));
 
         } else {
-            if(!socialUser.getIsEnable()) throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialEnable, email, userId), FailureException.DisabledException.message);
-            if(!socialUser.getIsNonLocked()) throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialLock, email, userId), FailureException.OAuth2AuthenticationLockedException.message);
-            if(!TimeUtil.isXYearAfter(socialUser.getLastLoginDate(), 1)) throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialExpired, email, userId), FailureException.AccountExpiredException.message);
+            if(!socialUser.getIsEnable()) throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialEnable, email, userId));
+            if(!socialUser.getIsNonLocked()) throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialLock, email, userId));
+            if(!TimeUtil.isXYearAfter(socialUser.getLastLoginDate(), 1)) throw new OAuth2AuthenticationException(new OAuth2ErrorCustom(OAuth2ErrorCode.socialExpired, email, userId));
         }
 
         this.customUser(socialUser);
