@@ -35,10 +35,8 @@ public class HongAdminBbsPostController {
 
     @GetMapping("/{type}")
     public String index(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid, Model model) {
-        if(typeUid == null) {
-            typeUid = bbsTypeService.latestBbsType(type);
-            model.addAttribute("typeUid", typeUid);
-        } else model.addAttribute("typeUid", typeUid);
+        if(typeUid == null) typeUid = bbsTypeService.latestBbsType(type);
+        model.addAttribute("typeUid", typeUid);
         model.addAttribute("type", type);
         model.addAttribute("url", "/admin/bbs/post/"+type);
 
@@ -56,8 +54,8 @@ public class HongAdminBbsPostController {
 
     @GetMapping("/{type}/form")
     public String form(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid, Model model) {
-        if(typeUid == null) model.addAttribute("typeUid", bbsTypeService.latestBbsType(type));
-        else model.addAttribute("typeUid", typeUid);
+        if(typeUid == null) typeUid = bbsTypeService.latestBbsType(type);
+        model.addAttribute("typeUid", typeUid);
         model.addAttribute("type", type);
         model.addAttribute("typeView", bbsTypeService.view(typeUid));
         model.addAttribute("url", "/admin/bbs/post/"+type);
@@ -68,8 +66,8 @@ public class HongAdminBbsPostController {
     public String edit(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid
             , @PathVariable(name = "postUid") Long postUid, Model model) {
 
-        if(typeUid == null) model.addAttribute("typeUid", bbsTypeService.latestBbsType(type));
-        else model.addAttribute("typeUid", typeUid);
+        if(typeUid == null) typeUid = bbsTypeService.latestBbsType(type);
+        model.addAttribute("typeUid", typeUid);
         model.addAttribute("type", type);
         model.addAttribute("typeView", bbsTypeService.view(typeUid));
 
