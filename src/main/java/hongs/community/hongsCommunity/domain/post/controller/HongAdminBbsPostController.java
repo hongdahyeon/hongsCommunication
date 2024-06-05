@@ -33,12 +33,19 @@ public class HongAdminBbsPostController {
     private final HongBbsTypeService bbsTypeService;
     private final HongBbsPostService bbsPostService;
 
-    @GetMapping("/{type}")
-    public String index(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid, Model model) {
+    public Long setModel(Long typeUid, String type, final Model model) {
+        model.addAttribute("menuUrl", "/admin/bbs/post/"+type);
+        model.addAttribute("type", type);
+
         if(typeUid == null) typeUid = bbsTypeService.latestBbsType(type);
         model.addAttribute("typeUid", typeUid);
-        model.addAttribute("type", type);
-        model.addAttribute("menuUrl", "/admin/bbs/post/"+type);
+
+        return typeUid;
+    }
+
+    @GetMapping("/{type}")
+    public String index(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid, Model model) {
+        typeUid = this.setModel(typeUid, type, model);
 
         if("faq".equals(type)) {
             List<HongBbsPostListVo> faqList = bbsPostService.list(new HongBbsPostListDto(typeUid, type)).stream().map(post -> {
@@ -54,11 +61,8 @@ public class HongAdminBbsPostController {
 
     @GetMapping("/{type}/form")
     public String form(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid, Model model) {
-        if(typeUid == null) typeUid = bbsTypeService.latestBbsType(type);
-        model.addAttribute("typeUid", typeUid);
-        model.addAttribute("type", type);
+        typeUid = this.setModel(typeUid, type, model);
         model.addAttribute("typeView", bbsTypeService.view(typeUid));
-        model.addAttribute("menuUrl", "/admin/bbs/post/"+type);
         return "admin/post/" + type + "/form";
     }
 
@@ -66,16 +70,13 @@ public class HongAdminBbsPostController {
     public String edit(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid
             , @PathVariable(name = "postUid") Long postUid, Model model) {
 
-        if(typeUid == null) typeUid = bbsTypeService.latestBbsType(type);
-        model.addAttribute("typeUid", typeUid);
-        model.addAttribute("type", type);
+        typeUid = this.setModel(typeUid, type, model);
         model.addAttribute("typeView", bbsTypeService.view(typeUid));
 
         HongBbsPostViewVo postView = bbsPostService.view(postUid);
         postView.setPstCn(StringUtil.unescape(postView.getPstCn()));
         model.addAttribute("postView", postView);
 
-        model.addAttribute("menuUrl", "/admin/bbs/post/"+type);
         return "admin/post/" + type + "/edit";
     }
 

@@ -37,12 +37,19 @@ public class HongBbsPostController {
     private final HongBbsPostService bbsPostService;
     private final HongBbsPstAprsService bbsPstAprsService;
 
-    @GetMapping("/{type}")
-    public String index(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid, Model model) {
+    public Long setModel(Long typeUid, String type, final Model model) {
+        model.addAttribute("menuUrl", "/bbs/post/"+type);
+        model.addAttribute("type", type);
+
         if(typeUid == null) typeUid = bbsTypeService.latestBbsType(type);
         model.addAttribute("typeUid", typeUid);
-        model.addAttribute("type", type);
-        model.addAttribute("menuUrl", "/bbs/post/"+type);
+
+        return typeUid;
+    }
+
+    @GetMapping("/{type}")
+    public String index(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid, Model model) {
+        typeUid = this.setModel(typeUid, type, model);
 
         if("faq".equals(type)) {
             List<HongBbsPostListVo> faqList = bbsPostService.list(new HongBbsPostListDto(typeUid, type)).stream().map(post -> {
@@ -60,10 +67,7 @@ public class HongBbsPostController {
     public String view(@PathVariable(name = "type") String type, @RequestParam(name = "typeUid", required = false) Long typeUid
             , @PathVariable(name = "postUid") Long postUid, Model model) {
 
-        if(typeUid == null) typeUid = bbsTypeService.latestBbsType(type);
-        model.addAttribute("typeUid", typeUid);
-        model.addAttribute("type", type);
-        model.addAttribute("menuUrl", "/bbs/post/"+type);
+        typeUid = this.setModel(typeUid, type, model);
 
         HongBbsPostViewVo postView = bbsPostService.view(postUid);
         postView.setPstCn(StringUtil.unescape(postView.getPstCn()));
