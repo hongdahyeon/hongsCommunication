@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HongTeamAdminController {
 
     private void setModalUrl(final Model model) {
-        model.addAttribute("url", "/admin/team");
+        model.addAttribute("menuUrl", "/admin/team");
     }
 
     @GetMapping({"", "/"})

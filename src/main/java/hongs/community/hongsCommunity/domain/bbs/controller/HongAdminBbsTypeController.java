@@ -15,7 +15,7 @@ public class HongAdminBbsTypeController {
     private final HongCodeService codeService;
 
     private void setModalUrl(final Model model) {
-        model.addAttribute("url", "/admin/bbs/type");
+        model.addAttribute("menuUrl", "/admin/bbs/type");
     }
 
     @GetMapping({"", "/"})

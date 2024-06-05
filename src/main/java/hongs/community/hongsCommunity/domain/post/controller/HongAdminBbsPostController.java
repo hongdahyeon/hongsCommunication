@@ -38,7 +38,7 @@ public class HongAdminBbsPostController {
         if(typeUid == null) typeUid = bbsTypeService.latestBbsType(type);
         model.addAttribute("typeUid", typeUid);
         model.addAttribute("type", type);
-        model.addAttribute("url", "/admin/bbs/post/"+type);
+        model.addAttribute("menuUrl", "/admin/bbs/post/"+type);
 
         if("faq".equals(type)) {
             List<HongBbsPostListVo> faqList = bbsPostService.list(new HongBbsPostListDto(typeUid, type)).stream().map(post -> {
@@ -58,7 +58,7 @@ public class HongAdminBbsPostController {
         model.addAttribute("typeUid", typeUid);
         model.addAttribute("type", type);
         model.addAttribute("typeView", bbsTypeService.view(typeUid));
-        model.addAttribute("url", "/admin/bbs/post/"+type);
+        model.addAttribute("menuUrl", "/admin/bbs/post/"+type);
         return "admin/post/" + type + "/form";
     }
 
@@ -75,7 +75,7 @@ public class HongAdminBbsPostController {
         postView.setPstCn(StringUtil.unescape(postView.getPstCn()));
         model.addAttribute("postView", postView);
 
-        model.addAttribute("url", "/admin/bbs/post/"+type);
+        model.addAttribute("menuUrl", "/admin/bbs/post/"+type);
         return "admin/post/" + type + "/edit";
     }
 

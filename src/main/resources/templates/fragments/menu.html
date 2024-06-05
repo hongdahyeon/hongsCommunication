@@ -17,10 +17,10 @@
 
             <!-- 1-1. 부모 메뉴 + 자식메뉴가 있을 경우 -->
             <th:block th:if="${menu.upperMenuUid == null and #lists.size(menu.children) > 0}">
-                <li class="nav-item" th:classappend="${#lists.contains(menu.urlList, url) ? 'active' : ''}">
+                <li class="nav-item" th:classappend="${#lists.contains(menu.urlList, menuUrl) ? 'active' : ''}">
 
                     <!-- 1-1-1. 자식 메뉴들 중에 현재 active 메뉴가 있을 경우 -->
-                    <th:block th:if="${#lists.contains(menu.urlList, url)}">
+                    <th:block th:if="${#lists.contains(menu.urlList, menuUrl)}">
                         <a class="nav-link" th:id="|menu${menu.menuUid}|" href="#" data-toggle="collapse" th:data-target="|#child${menu.menuUid}|" aria-expanded="true" th:aria-controls="|child${menu.menuUid}|">
                             <i class="fas fa-fw fa-folder"></i>
                             <span th:text="${menu.menuNm}"></span>
@@ -28,14 +28,14 @@
                         <div th:id="|child${menu.menuUid}|" class="collapse show" >
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <th:block th:each="child : ${menu.children}">
-                                    <a class="collapse-item" th:classappend="${url eq child.menuUrl} ? 'active' : ''" th:href="${child.menuUrl}" th:text="${child.menuNm}"></a>
+                                    <a class="collapse-item" th:classappend="${menuUrl eq child.menuUrl} ? 'active' : ''" th:href="${child.menuUrl}" th:text="${child.menuNm}"></a>
                                 </th:block>
                             </div>
                         </div>
                     </th:block>
 
                     <!-- 1-1-2. 자식 메뉴들 중에 현재 active 메뉴가 없을 경우 -->
-                    <th:block th:unless="${#lists.contains(menu.urlList, url)}">
+                    <th:block th:unless="${#lists.contains(menu.urlList, menuUrl)}">
                         <a class="nav-link collapsed" th:id="|menu${menu.menuUid}|" href="#" data-toggle="collapse" th:data-target="|#child${menu.menuUid}|" aria-expanded="false" th:aria-controls="|child${menu.menuUid}|">
                             <i class="fas fa-fw fa-folder"></i>
                             <span th:text="${menu.menuNm}"></span>
@@ -43,7 +43,7 @@
                         <div th:id="|child${menu.menuUid}|" class="collapse" >
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <th:block th:each="child : ${menu.children}">
-                                    <a class="collapse-item" th:classappend="${url eq child.menuUrl} ? 'active' : ''" th:href="${child.menuUrl}" th:text="${child.menuNm}"></a>
+                                    <a class="collapse-item" th:classappend="${menuUrl eq child.menuUrl} ? 'active' : ''" th:href="${child.menuUrl}" th:text="${child.menuNm}"></a>
                                 </th:block>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
 
             <!-- 1-2. 부모 메뉴 + 자식메뉴가 없을 경우 -->
             <th:block th:if="${menu.upperMenuUid == null and #lists.size(menu.children) == 0}">
-                <li class="nav-item" th:classappend="${url eq menu.menuUrl} ? 'active' : ''">
+                <li class="nav-item" th:classappend="${menuUrl eq menu.menuUrl} ? 'active' : ''">
                     <a class="nav-link" th:href="${menu.menuUrl}" th:id="|menu${menu.menuUid}|">
                         <i class="fas fa-fw fa-folder"></i>
                         <span th:text="${menu.menuNm}"></span></a>

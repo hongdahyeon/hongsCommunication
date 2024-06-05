@@ -17,7 +17,7 @@ public class TestController {
     private final TestService testService;
 
     private void setModalUrl(final Model model) {
-        model.addAttribute("url", "/test");
+        model.addAttribute("menuUrl", "/test");
     }
 
     @GetMapping({"/", ""})

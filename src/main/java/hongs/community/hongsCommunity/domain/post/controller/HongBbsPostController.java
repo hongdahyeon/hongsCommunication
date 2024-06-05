@@ -42,7 +42,7 @@ public class HongBbsPostController {
         if(typeUid == null) typeUid = bbsTypeService.latestBbsType(type);
         model.addAttribute("typeUid", typeUid);
         model.addAttribute("type", type);
-        model.addAttribute("url", "/bbs/post/"+type);
+        model.addAttribute("menuUrl", "/bbs/post/"+type);
 
         if("faq".equals(type)) {
             List<HongBbsPostListVo> faqList = bbsPostService.list(new HongBbsPostListDto(typeUid, type)).stream().map(post -> {
@@ -63,7 +63,7 @@ public class HongBbsPostController {
         if(typeUid == null) typeUid = bbsTypeService.latestBbsType(type);
         model.addAttribute("typeUid", typeUid);
         model.addAttribute("type", type);
-        model.addAttribute("url", "/bbs/post/"+type);
+        model.addAttribute("menuUrl", "/bbs/post/"+type);
 
         HongBbsPostViewVo postView = bbsPostService.view(postUid);
         postView.setPstCn(StringUtil.unescape(postView.getPstCn()));

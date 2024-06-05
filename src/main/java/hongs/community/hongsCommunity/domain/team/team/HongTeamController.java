@@ -21,7 +21,7 @@ public class HongTeamController {
     private final HongCodeService codeService;
 
     private void setModalUrl(final Model model) {
-        model.addAttribute("url", "/team");
+        model.addAttribute("menuUrl", "/team");
     }
 
     @GetMapping({"", "/"})

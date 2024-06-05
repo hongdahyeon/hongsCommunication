@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HongMenuController {
 
     private void setModalUrl(final Model model) {
-        model.addAttribute("url", "/super/menu");
+        model.addAttribute("menuUrl", "/super/menu");
     }
 
     @GetMapping({"/", ""})

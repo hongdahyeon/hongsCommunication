@@ -20,7 +20,7 @@ public class HongCodeController {
     private final HongCodeService hongCodeService;
 
     private void setModalUrl(final Model model) {
-        model.addAttribute("url", "/super/code");
+        model.addAttribute("menuUrl", "/super/code");
     }
 
     @GetMapping({"", "/"})

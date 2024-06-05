@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HongAdminUserController {
 
     private void setModalUrl(final Model model) {
-        model.addAttribute("url", "/admin/user");
+        model.addAttribute("menuUrl", "/admin/user");
     }
 
     @GetMapping({"", "/"})
