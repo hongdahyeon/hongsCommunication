@@ -302,4 +302,6 @@ $("#view-content").html(code)
 
 (77) 24-06-05 : faq 댓글 팝업창으로 띄우기
 
-(78-79) 24-06-05 : master → origin/master
+(78) 24-06-05 : 메뉴 active url model 내릴때 url -> menuUrl
+
+(79) 24-06-05 : 중복 코드 제거
