@@ -301,3 +301,5 @@ $("#view-content").html(code)
 (76) 24-06-05 : 로그인 실패 error-code를 폼 로그인이랑 소셜 로그인 분리하기
 
 (77) 24-06-05 : faq 댓글 팝업창으로 띄우기
+
+(78-79) 24-06-05 : master → origin/master
