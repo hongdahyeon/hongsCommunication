@@ -297,3 +297,5 @@ $("#view-content").html(code)
 (74) 24-06-04 : faq index.edit.form admin page
 
 (75) 24-06-04 : faq index USER page
+
+(76) 24-06-05 : 로그인 실패 error-code를 폼 로그인이랑 소셜 로그인 분리하기
