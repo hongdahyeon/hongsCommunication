@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/popupDefault}">
+
+<th:block layout:fragment="content">
+  <th:block th:replace="~{fragments/title :: title('FAQ 답변')}"></th:block>
+
+  <div style="margin-top: 10px;">
+    <input type="hidden" id="commentParentUid" value="" />
+    <th:block th:replace="~{fragments/comments/comment :: comment}"></th:block>
+  </div>
+
+</th:block>
+
+<th:block layout:fragment="script">
+  <th:block th:replace="~{fragments/comments/comment-script :: script}"></th:block>
+  <script th:inline="javascript"></script>
+</th:block>
+
+</html>

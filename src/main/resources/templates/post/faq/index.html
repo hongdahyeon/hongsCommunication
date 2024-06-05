@@ -29,6 +29,11 @@
                 </div>
               </div>
             </div>
+            <div class="row" style="margin-top: 5px;" th:if="${typeView?.cmntUseYn == 'Y'}">
+              <div style="text-align: right;">
+                <button type="button" class="btn btn-secondary comment-post" th:data-num="${faqs?.pstUid}" >답변 달기</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -37,13 +42,15 @@
 </th:block>
 
 <th:block layout:fragment="script">
+  <th:block th:replace="~{fragments/comments/comment-script :: script}"></th:block>
   <script th:inline="javascript">
 
     let summernoteList = []
+    let commentPopup = null
     const typeView = /*[[${typeView}]]*/ {};
     const typeUid = /*[[${typeUid}]]*/ null;
     const type = /*[[${type}]]*/ "";
-    history.replaceState({}, null, `/admin/bbs/post/${type}`)
+    history.replaceState({}, null, `/bbs/post/${type}`)
 
     $(document).ready(function(e) {
 
@@ -55,6 +62,15 @@
         if(typeView['fileAtchYn'] === 'Y') {
           const uploadView = new UploadView(`upload-view-container${faqs['pstUid']}`)
           drawViewFile(uploadView, faqs['fileUid'])
+        }
+      })
+
+      $('.comment-post').click(function() {
+        const pstUid = $(this).attr('data-num');
+        if(commentPopup && !commentPopup.closed) Util.alert("이미 열려있는 팝업창이 있습니다. <br> 확인해주세요.")
+        else {
+          commentPopup = window.open(`/cmnt/${type}/comment/${pstUid}`, '답변팝업', 'width=900,height=600')
+          if(commentPopup) commentPopup.focus()
         }
       })
     })

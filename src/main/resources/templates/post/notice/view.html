@@ -54,13 +54,13 @@
     </div>
 
     <th:block th:if="${typeView?.cmntUseYn == 'Y'}">
-        <th:block th:replace="fragments/comments/comment :: comment"></th:block>
+        <th:block th:replace="~{fragments/comments/comment :: comment}"></th:block>
     </th:block>
 </th:block>
 
 <th:block layout:fragment="script">
     <th:block th:if="${typeView?.cmntUseYn == 'Y'}">
-        <th:block th:replace="fragments/comments/comment-script :: script"></th:block>
+        <th:block th:replace="~{fragments/comments/comment-script :: script}"></th:block>
     </th:block>
     <script th:inline="javascript">
 
